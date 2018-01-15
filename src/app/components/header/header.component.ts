@@ -11,7 +11,7 @@ export class HeaderComponent implements OnInit {
   username: string;
 
   constructor(private authService: AuthService, private router: Router) {
-    this.username = this.authService.getUser().displayName.split(' ')[0];
+    this.username = this.authService.getUser().username;
   }
 
   ngOnInit() {

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs/Observable';
+import { IPlayer } from '../interfaces/IPlayer';
+import { IGame } from '../interfaces/IGame';
 
 @Injectable()
 export class GameService {
@@ -20,11 +22,17 @@ export class GameService {
     return this.gamesCollection.valueChanges();
   }
 
-  addGame(user): Promise<firebase.firestore.DocumentReference> {
-    return this.gamesCollection.add({
+  addGame(user: IPlayer): Promise<firebase.firestore.DocumentReference> {
+    const game = this.createGame(user);
+    return this.gamesCollection.add(game);
+  }
+
+  private createGame(host: IPlayer): IGame {
+    return {
       hasStarted: false,
-      players: [user]
-    });
+      players: [host],
+      turn: 0
+    }
   }
 
   findOpenGameId(): Observable<string> {

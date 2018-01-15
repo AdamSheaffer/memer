@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
 
   hostGame() {
     const user = this.authService.getUser();
-    this.gameService.addGame({ name: user.displayName, uid: user.uid })
+    this.gameService.addGame(user)
       .then(ref => {
         this.router.navigate([`game/${ref.id}`]);
       });
