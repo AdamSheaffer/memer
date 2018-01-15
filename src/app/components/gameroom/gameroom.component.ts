@@ -6,6 +6,7 @@ import { IGame } from '../../interfaces/IGame';
 import { ActivatedRoute } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @Component({
   selector: 'app-gameroom',
@@ -30,21 +31,31 @@ export class GameroomComponent implements OnInit {
       return this.gameService.getGameById(params.get('id'));
     });
 
+    this.setup();
+  }
+
+  setup() {
     this.game$.subscribe(game => {
       this.game = game;
       const authUser = this.authService.getUser();
       this.currentUser = this.findGameUserById(authUser.uid, game);
+
+      if (!this.currentUser) {
+        authUser.isHost = false;
+        this.game.players.push(authUser);
+        this.updateGame();
+      }
     });
-  }
-
-  setup() {
-
   }
 
   beginGame() {
     if (!this.currentUser.isHost) return;
 
     this.game.hasStarted = true;
+    this.updateGame();
+  }
+
+  private updateGame() {
     this.gameService.updateGame(this.game);
   }
 
