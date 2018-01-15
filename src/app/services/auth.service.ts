@@ -39,7 +39,9 @@ export class AuthService {
       fullName: fbuser.displayName,
       uid: fbuser.uid,
       photoURL: fbuser.photoURL,
-      username: fbuser.displayName.split(' ')[0]
+      username: fbuser.displayName.split(' ')[0],
+      isActive: true,
+      isHost: false
     }
   }
 }

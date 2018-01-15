@@ -27,10 +27,11 @@ export class GameService {
     return this.gamesCollection.add(game);
   }
 
-  private createGame(host: IPlayer): IGame {
+  private createGame(player: IPlayer): IGame {
+    player.isHost = true;
     return {
       hasStarted: false,
-      players: [host],
+      players: [player],
       turn: 0
     }
   }
