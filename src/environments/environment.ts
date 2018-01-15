@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
+  giphy: "qEa9PRz9I3z9tOubAtepqn0va4M9dss0",
   firebase: {
     apiKey: "AIzaSyBX_rzZD1WEtUQtcuT2xfjHbYnU-duoNbY",
     authDomain: "thirteenisonline.firebaseapp.com",

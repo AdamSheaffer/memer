@@ -9,7 +9,7 @@ export class AuthService {
   private user: firebase.User;
 
   constructor(private afAuth: AngularFireAuth) {
-    this.afAuth.authState.subscribe(user => this.user = user);
+    this.afAuth.authState.subscribe(user => { this.user = user });
   }
 
   login(): Promise<firebase.User> {
@@ -20,11 +20,11 @@ export class AuthService {
     return this.afAuth.auth.signOut();
   }
 
-  isLoggedIn() {
-    return !!this.user;
+  isLoggedIn(): Observable<firebase.User> {
+    return this.afAuth.authState;
   }
 
-  getUser() {
+  getUser(): firebase.User {
     return this.user;
   }
 
