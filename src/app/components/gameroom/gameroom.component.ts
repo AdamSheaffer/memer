@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { IPlayer } from '../../interfaces/IPlayer';
+import { AuthService } from '../../services/auth.service';
+import { GameService } from '../../services/game.service';
+import { IGame } from '../../interfaces/IGame';
+import { ActivatedRoute } from '@angular/router';
+import { ParamMap } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-gameroom',
@@ -7,9 +14,44 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameroomComponent implements OnInit {
 
-  constructor() { }
+  currentUser: IPlayer;
+  game$: Observable<IGame>;
+  game: IGame;
+
+  constructor(
+    private authService: AuthService,
+    private gameService: GameService,
+    private route: ActivatedRoute) {
+  }
 
   ngOnInit() {
+    this.game$ = this.route.paramMap.switchMap((params: ParamMap) => {
+      const gameId = params.get('id')
+      return this.gameService.getGameById(params.get('id'));
+    });
+
+    this.game$.subscribe(game => {
+      this.game = game;
+      const authUser = this.authService.getUser();
+      this.currentUser = this.findGameUserById(authUser.uid, game);
+    });
+  }
+
+  setup() {
+
+  }
+
+  beginGame() {
+    if (!this.currentUser.isHost) return;
+
+    this.game.hasStarted = true;
+    this.gameService.updateGame(this.game);
+  }
+
+  private findGameUserById(uid: string, game: IGame): IPlayer {
+    if (!game || !game.players) return;
+
+    return game.players.find(p => p.uid === uid);
   }
 
 }

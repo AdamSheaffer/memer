@@ -1,3 +1,4 @@
 <p>
   gameroom works!
 </p>
+<button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()">Start Game</button>
