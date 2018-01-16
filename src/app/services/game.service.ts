@@ -51,7 +51,9 @@ export class GameService {
   private createGame(): IGame {
     return {
       hasStarted: false,
-      players: []
+      players: [],
+      tagOptions: [],
+      gifOptionURLs: []
     }
   }
 }

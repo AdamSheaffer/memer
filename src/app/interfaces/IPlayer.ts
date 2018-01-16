@@ -5,4 +5,7 @@ export interface IPlayer {
   photoURL: string;
   isActive: boolean;
   isHost: boolean;
+  score: number;
+  captions: string[];
+  captionPlayed?: string;
 }

@@ -41,7 +41,9 @@ export class AuthService {
       photoURL: fbuser.photoURL,
       username: fbuser.displayName.split(' ')[0],
       isActive: true,
-      isHost: false
+      isHost: false,
+      score: 0,
+      captions: ['caption 1', 'caption 2', 'caption 3']
     }
   }
 }

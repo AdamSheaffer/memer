@@ -6,6 +6,8 @@ import { IGame } from '../../interfaces/IGame';
 import { ActivatedRoute } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { GiphyService } from '../../services/giphy.service';
+import 'rxjs/add/operator/single';
 
 @Component({
   selector: 'app-gameroom',
@@ -18,10 +20,12 @@ export class GameroomComponent implements OnInit {
   game$: Observable<IGame>;
   gameId: string;
   game: IGame;
+  get isUpForVoting() { return !!this.game.gifSelectionURL }
 
   constructor(
     private authService: AuthService,
     private gameService: GameService,
+    private giphyService: GiphyService,
     private route: ActivatedRoute) {
     this.currentUser = this.authService.getUser();
   }
@@ -34,6 +38,7 @@ export class GameroomComponent implements OnInit {
 
     this.game$.subscribe(g => this.game = g);
     this.join();
+    this.trackUserChanges();
   }
 
   join() {
@@ -42,9 +47,21 @@ export class GameroomComponent implements OnInit {
         this.currentUser.isHost = true;
         g.turn = this.currentUser.uid;
       }
-      g.players.push(this.currentUser);
-      this.gameService.updateGame(g);
+      const existingPlayer = g.players.find(p => this.currentUser.uid === p.uid);
+      if (existingPlayer) {
+        this.currentUser = existingPlayer;
+      } else {
+        g.players.push(this.currentUser);
+        this.gameService.updateGame(g);
+      }
     });
+  }
+
+  trackUserChanges() {
+    this.game$.map(g => g.players.find(p => p.uid === this.currentUser.uid))
+      .subscribe(player => {
+        this.currentUser = player;
+      });
   }
 
   beginGame() {
@@ -57,7 +74,44 @@ export class GameroomComponent implements OnInit {
   changeTurns() {
     const id = this.findIdOfNextPlayer();
     this.game.turn = id;
+    this.resetRound();
     this.updateGame();
+  }
+
+  beginTurn() {
+    if (!this.isCurrentUsersTurn()) return;
+
+    this.game.tagOptions = this.giphyService.getRandomTags();
+    this.updateGame();
+  }
+
+  selectTag(tag: string) {
+    if (!this.isCurrentUsersTurn()) return;
+
+    this.game.tagSelection = tag;
+    this.giphyService.getRandomImages(tag).then(images => {
+      this.game.gifOptionURLs = images;
+      this.updateGame();
+    });
+  }
+
+  selectGif(gifUrl: string) {
+    this.game.gifSelectionURL = gifUrl;
+    this.updateGame();
+  }
+
+  selectCaption(caption: string) {
+    if (!this.isUpForVoting || this.isCurrentUsersTurn()) return;
+
+    const user = this.findGamePlayerById(this.currentUser.uid);
+    user.captionPlayed = caption;
+    const captionIndex = user.captions.indexOf(caption);
+    user.captions.splice(captionIndex, 1);
+    this.updateGame();
+  }
+
+  private isCurrentUsersTurn() {
+    return this.currentUser.uid === this.game.turn;
   }
 
   private findIdOfNextPlayer(): string {
@@ -75,10 +129,23 @@ export class GameroomComponent implements OnInit {
     return this.gameService.updateGame(this.game);
   }
 
+  private findGamePlayerById(id: string) {
+    return this.game.players.find(p => p.uid === id);
+  }
+
   private findGameUserById(uid: string, game: IGame): IPlayer {
     if (!game || !game.players) return;
 
     return game.players.find(p => p.uid === uid);
   }
 
+  private resetRound() {
+    this.game.gifOptionURLs = [];
+    this.game.gifSelectionURL = null;
+    this.game.tagOptions = [];
+    this.game.tagSelection = null;
+    this.game.players.forEach(p => {
+      p.captionPlayed = null;
+    });
+  }
 }

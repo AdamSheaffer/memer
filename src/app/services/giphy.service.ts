@@ -23,13 +23,15 @@ export class GiphyService {
   }
 
   getRandomImages(tagName: string): Promise<any> {
-    const args = this.buildParams(tagName, this.randomWithMax(100));
     const imageRequests = [];
     for (let i = 0; i < this.imageCount; i++) {
-      const req = this.http.get(this.baseURL, args);
+      const args = this.buildParams(tagName, this.randomWithMax(100));
+      const req = this.http.get(this.baseURL, args).toPromise().then(res => res.json());
       imageRequests.push(req)
     }
-    return Promise.all(imageRequests);
+    return Promise.all(imageRequests).then(responses => {
+      return responses.map(r => r.data[0].images.fixed_height.url);
+    });
   }
 
   private buildParams(tagName: string, offset: number): RequestOptionsArgs {
