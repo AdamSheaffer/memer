@@ -6,7 +6,6 @@ import { IGame } from '../../interfaces/IGame';
 import { ActivatedRoute } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { AuthGuard } from '../../guards/auth.guard';
 
 @Component({
   selector: 'app-gameroom',
@@ -17,34 +16,34 @@ export class GameroomComponent implements OnInit {
 
   currentUser: IPlayer;
   game$: Observable<IGame>;
+  gameId: string;
   game: IGame;
 
   constructor(
     private authService: AuthService,
     private gameService: GameService,
     private route: ActivatedRoute) {
+    this.currentUser = this.authService.getUser();
   }
 
   ngOnInit() {
     this.game$ = this.route.paramMap.switchMap((params: ParamMap) => {
-      const gameId = params.get('id')
-      return this.gameService.getGameById(params.get('id'));
+      this.gameId = params.get('id');
+      return this.gameService.getGameById(this.gameId);
     });
 
-    this.setup();
+    this.game$.subscribe(g => this.game = g);
+    this.join();
   }
 
-  setup() {
-    this.game$.subscribe(game => {
-      this.game = game;
-      const authUser = this.authService.getUser();
-      this.currentUser = this.findGameUserById(authUser.uid, game);
-
-      if (!this.currentUser) {
-        authUser.isHost = false;
-        this.game.players.push(authUser);
-        this.updateGame();
+  join() {
+    this.game$.take(1).subscribe(g => {
+      if (!g.players || !g.players.length) {
+        this.currentUser.isHost = true;
+        g.turn = this.currentUser.uid;
       }
+      g.players.push(this.currentUser);
+      this.gameService.updateGame(g);
     });
   }
 
@@ -55,8 +54,25 @@ export class GameroomComponent implements OnInit {
     this.updateGame();
   }
 
+  changeTurns() {
+    const id = this.findIdOfNextPlayer();
+    this.game.turn = id;
+    this.updateGame();
+  }
+
+  private findIdOfNextPlayer(): string {
+    const index = this.game.players.findIndex(p => {
+      return this.game.turn === p.uid;
+    });
+
+    if (index === this.game.players.length - 1) {
+      return this.game.players[0].uid;
+    }
+    return this.game.players[index + 1].uid;
+  }
+
   private updateGame() {
-    this.gameService.updateGame(this.game);
+    return this.gameService.updateGame(this.game);
   }
 
   private findGameUserById(uid: string, game: IGame): IPlayer {

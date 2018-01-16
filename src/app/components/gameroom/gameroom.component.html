@@ -1,4 +1,14 @@
 <p>
   gameroom works!
 </p>
+<p>{{game?.players.length}} Players in the game</p>
+<ul *ngIf="game?.players.length">
+  <li *ngFor="let player of game.players">
+    <img [src]="player.photoURL" alt="">
+  </li>
+</ul>
+<div *ngIf="game?.hasStarted && game.turn === currentUser.uid">
+  <h5>It's your turn</h5>
+  <button (click)="changeTurns()">Change Turns</button>
+</div>
 <button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()">Start Game</button>

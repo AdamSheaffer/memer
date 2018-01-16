@@ -24,8 +24,8 @@ export class GameService {
     return this.gamesCollection.valueChanges();
   }
 
-  addGame(user: IPlayer): Promise<firebase.firestore.DocumentReference> {
-    const game = this.createGame(user);
+  addGame(): Promise<firebase.firestore.DocumentReference> {
+    const game = this.createGame();
     return this.gamesCollection.add(game);
   }
 
@@ -41,20 +41,17 @@ export class GameService {
 
   getGameById(id: string): Observable<IGame> {
     this.gameDoc = this.afs.doc<IGame>(`games/${id}`);
-    this.game$ = this.gameDoc.valueChanges();
-    return this.game$;
+    return this.gameDoc.valueChanges();
   }
 
   updateGame(game: IGame): Promise<void> {
     return this.gameDoc.update(game);
   }
 
-  private createGame(player: IPlayer): IGame {
-    player.isHost = true;
+  private createGame(): IGame {
     return {
       hasStarted: false,
-      players: [player],
-      turn: 0
+      players: []
     }
   }
 }
