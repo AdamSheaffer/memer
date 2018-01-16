@@ -58,10 +58,9 @@ export class GameroomComponent implements OnInit {
   }
 
   trackUserChanges() {
-    this.game$.map(g => g.players.find(p => p.uid === this.currentUser.uid))
-      .subscribe(player => {
-        this.currentUser = player;
-      });
+    this.game$
+      .map(g => g.players.find(p => p.uid === this.currentUser.uid))
+      .subscribe(player => this.currentUser = player || this.currentUser);
   }
 
   beginGame() {
@@ -96,17 +95,19 @@ export class GameroomComponent implements OnInit {
   }
 
   selectGif(gifUrl: string) {
+    if (!this.isCurrentUsersTurn()) return;
+
     this.game.gifSelectionURL = gifUrl;
     this.updateGame();
   }
 
   selectCaption(caption: string) {
-    if (!this.isUpForVoting || this.isCurrentUsersTurn()) return;
+    if (!this.isUpForVoting || this.isCurrentUsersTurn() || this.currentUser.captionPlayed) return;
 
     const user = this.findGamePlayerById(this.currentUser.uid);
-    user.captionPlayed = caption;
     const captionIndex = user.captions.indexOf(caption);
     user.captions.splice(captionIndex, 1);
+    user.captionPlayed = caption;
     this.updateGame();
   }
 

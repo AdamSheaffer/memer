@@ -14,18 +14,15 @@ export class GiphyService {
   constructor(private http: Http) { }
 
   getRandomTags(): string[] {
-    const tags = [];
-    for (let i = 0; i < this.tagCount; i++) {
-      const rand = this.randomWithMax(GiphyService.tags.length);
-      tags.push(GiphyService.tags[rand]);
-    }
-    return tags;
+    const rands = this.randomWithMax(GiphyService.tags.length, this.tagCount);
+    return rands.map(n => GiphyService.tags[n]);
   }
 
   getRandomImages(tagName: string): Promise<any> {
     const imageRequests = [];
-    for (let i = 0; i < this.imageCount; i++) {
-      const args = this.buildParams(tagName, this.randomWithMax(100));
+    const randomNums = this.randomWithMax(100, this.imageCount);
+    for (let i = 0; i < randomNums.length; i++) {
+      const args = this.buildParams(tagName, randomNums[i]);
       const req = this.http.get(this.baseURL, args).toPromise().then(res => res.json());
       imageRequests.push(req)
     }
@@ -49,8 +46,14 @@ export class GiphyService {
     return tagName.replace(' ', '+');
   }
 
-  private randomWithMax(max: number) {
-    return Math.round(Math.random() * max);
+  private randomWithMax(max: number, count: number, ): number[] {
+    const rands = [];
+    while (rands.length < count) {
+      const rand = Math.round(Math.random() * max);
+      if (rands.includes(rand)) continue;
+      rands.push(rand);
+    }
+    return rands;
   }
 
   private static tags: string[] = [
