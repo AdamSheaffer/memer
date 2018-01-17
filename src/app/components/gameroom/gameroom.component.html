@@ -1,25 +1,38 @@
+<!-- Player images and scores -->
 <div *ngIf="game?.players.length">
   <div *ngFor="let player of game.players">
     <img [src]="player.photoURL">
     <span>{{player.username}}</span>
   </div>
 </div>
+
+<!-- Giphy Tags to choose from -->
 <div *ngIf="game?.tagOptions && !game.selectedTag">
-  <button class="ui button" *ngFor="let tag of game.tagOptions" (click)="selectTag(tag)">{{tag}}</button>
+  <button *ngFor="let tag of game.tagOptions" (click)="selectTag(tag)">{{tag}}</button>
 </div>
+
+<!-- Gif Options to choose from -->
 <div *ngIf="game?.gifOptionURLs && !game.gifSelectionURL">
   <img class="ui centered bordered medium image" *ngFor="let gif of game.gifOptionURLs" [src]="gif" alt="{{game.selectedTag}}"
     (click)="selectGif(gif)">
 </div>
+
+<!-- Gif that judge has selected -->
 <div *ngIf="game?.gifSelectionURL">
   <h5>Submit a caption for:</h5>
   <img class="ui centered bordered medium image" [src]="game.gifSelectionURL">
 </div>
+
+<!-- Button to begin when it's your turn -->
 <div *ngIf="game?.hasStarted && game.turn === currentUser.uid && !game.tagOptions.length">
   <h5>It's your turn</h5>
   <button class="ui button" (click)="beginTurn()">Begin Turn</button>
 </div>
+
+<!-- Hand of Caption Cards -->
 <div *ngIf="currentUser?.captions">
   <button class="ui button" *ngFor="let caption of currentUser.captions" (click)="selectCaption(caption)">{{caption}}</button>
 </div>
+
+<!-- Button for Host to start the game -->
 <button class="ui button" *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()">Start Game</button>
