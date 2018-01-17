@@ -20,7 +20,7 @@ export class GameroomComponent implements OnInit {
   game$: Observable<IGame>;
   gameId: string;
   game: IGame;
-  get isUpForVoting() { return !!this.game.gifSelectionURL }
+  get isUpForVoting() { return !!this.game && this.game.gifSelectionURL }
 
   constructor(
     private authService: AuthService,

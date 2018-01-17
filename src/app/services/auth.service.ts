@@ -35,15 +35,19 @@ export class AuthService {
 
   private toPlayerModel(fbuser: firebase.User): IPlayer {
     if (!fbuser) return null;
+
+    const facebook = fbuser.providerData.find(p => p.providerId.includes('facebook'));
+    const photoURL = `https://graph.facebook.com/${facebook.uid}/picture?height=400&width=400`;
+
     return {
       fullName: fbuser.displayName,
       uid: fbuser.uid,
-      photoURL: fbuser.photoURL,
-      username: fbuser.displayName.split(' ')[0],
+      username: facebook.displayName.split(' ')[0],
       isActive: true,
       isHost: false,
       score: 0,
-      captions: ['caption 1', 'caption 2', 'caption 3']
+      captions: ['caption 1', 'caption 2', 'caption 3'],
+      photoURL
     }
   }
 }

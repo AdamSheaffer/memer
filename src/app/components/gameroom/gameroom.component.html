@@ -1,28 +1,25 @@
-<p>
-  gameroom works!
-</p>
-<p>{{game?.players.length}} Players in the game</p>
-<ul *ngIf="game?.players.length">
-  <li *ngFor="let player of game.players">
-    <p>{{player.username}}</p>
-    <img [src]="player.photoURL" alt="">
-  </li>
-</ul>
+<div *ngIf="game?.players.length">
+  <div *ngFor="let player of game.players">
+    <img [src]="player.photoURL">
+    <span>{{player.username}}</span>
+  </div>
+</div>
 <div *ngIf="game?.tagOptions && !game.selectedTag">
-  <button *ngFor="let tag of game.tagOptions" (click)="selectTag(tag)">{{tag}}</button>
+  <button class="ui button" *ngFor="let tag of game.tagOptions" (click)="selectTag(tag)">{{tag}}</button>
 </div>
 <div *ngIf="game?.gifOptionURLs && !game.gifSelectionURL">
-  <img *ngFor="let gif of game.gifOptionURLs" [src]="gif" alt="{{game.selectedTag}}" (click)="selectGif(gif)">
+  <img class="ui centered bordered medium image" *ngFor="let gif of game.gifOptionURLs" [src]="gif" alt="{{game.selectedTag}}"
+    (click)="selectGif(gif)">
 </div>
 <div *ngIf="game?.gifSelectionURL">
   <h5>Submit a caption for:</h5>
-  <img [src]="game.gifSelectionURL">
+  <img class="ui centered bordered medium image" [src]="game.gifSelectionURL">
 </div>
 <div *ngIf="game?.hasStarted && game.turn === currentUser.uid && !game.tagOptions.length">
   <h5>It's your turn</h5>
-  <button (click)="beginTurn()">Begin Turn</button>
+  <button class="ui button" (click)="beginTurn()">Begin Turn</button>
 </div>
 <div *ngIf="currentUser?.captions">
-  <button *ngFor="let caption of currentUser.captions" (click)="selectCaption(caption)">{{caption}}</button>
+  <button class="ui button" *ngFor="let caption of currentUser.captions" (click)="selectCaption(caption)">{{caption}}</button>
 </div>
-<button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()">Start Game</button>
+<button class="ui button" *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()">Start Game</button>
