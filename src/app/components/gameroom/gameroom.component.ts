@@ -12,7 +12,7 @@ import 'rxjs/add/operator/single';
 @Component({
   selector: 'app-gameroom',
   templateUrl: './gameroom.component.html',
-  styleUrls: ['./gameroom.component.sass']
+  styleUrls: ['./gameroom.component.scss']
 })
 export class GameroomComponent implements OnInit {
 
