@@ -6,7 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
 
 @Component({
-  selector: 'app-home',
+  selector: 'memer-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })

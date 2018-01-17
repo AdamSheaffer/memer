@@ -10,7 +10,7 @@ import { GiphyService } from '../../services/giphy.service';
 import 'rxjs/add/operator/single';
 
 @Component({
-  selector: 'app-gameroom',
+  selector: 'memer-gameroom',
   templateUrl: './gameroom.component.html',
   styleUrls: ['./gameroom.component.scss']
 })
