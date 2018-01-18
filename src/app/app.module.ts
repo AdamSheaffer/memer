@@ -15,6 +15,10 @@ import { GiphyService } from './services/giphy.service';
 import { HeaderComponent } from './components/header/header.component';
 import { GameroomComponent } from './components/gameroom/gameroom.component';
 import { GameService } from './services/game.service';
+import { PlayerListComponent } from './components/gameroom/player-list/player-list.component';
+import { TagSelectionComponent } from './components/gameroom/tag-selection/tag-selection.component';
+import { GifOptionsComponent } from './components/gameroom/gif-options/gif-options.component';
+import { PlayerHandComponent } from './components/gameroom/player-hand/player-hand.component';
 
 
 @NgModule({
@@ -23,7 +27,11 @@ import { GameService } from './services/game.service';
     LoginComponent,
     HomeComponent,
     HeaderComponent,
-    GameroomComponent
+    GameroomComponent,
+    PlayerListComponent,
+    TagSelectionComponent,
+    GifOptionsComponent,
+    PlayerHandComponent
   ],
   imports: [
     BrowserModule,

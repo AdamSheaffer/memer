@@ -3,21 +3,17 @@
 
 <!-- Player images and scores -->
 <div *ngIf="game?.players.length">
-  <div *ngFor="let player of game.players">
-    <img [src]="player.photoURL">
-    <span>{{player.username}}</span>
-  </div>
+  <memer-player-list [players]="game.players"></memer-player-list>
 </div>
 
 <!-- Giphy Tags to choose from -->
 <div *ngIf="game?.tagOptions && !game.selectedTag">
-  <button *ngFor="let tag of game.tagOptions" (click)="selectTag(tag)">{{tag}}</button>
+  <memer-tag-selection [tags]="game.tagOptions" (onTagSelect)="selectTag($event)"></memer-tag-selection>
 </div>
 
 <!-- Gif Options to choose from -->
 <div *ngIf="game?.gifOptionURLs && !game.gifSelectionURL">
-  <img class="ui centered bordered medium image" *ngFor="let gif of game.gifOptionURLs" [src]="gif" alt="{{game.selectedTag}}"
-    (click)="selectGif(gif)">
+  <memer-gif-options [optionUrls]="game.gifOptionURLs" (onOptionSelect)="selectGif($event)"></memer-gif-options>
 </div>
 
 <!-- Gif that judge has selected -->
@@ -34,8 +30,8 @@
 
 <!-- Hand of Caption Cards -->
 <div *ngIf="currentUser?.captions">
-  <button class="ui button" *ngFor="let caption of currentUser.captions" (click)="selectCaption(caption)">{{caption}}</button>
+  <memer-player-hand [playerHand]="currentUser.captions" (onCardSelect)="selectCaption($event)"></memer-player-hand>
 </div>
 
 <!-- Button for Host to start the game -->
-<button class="ui button" *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()">Start Game</button>
+<button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()">Start Game</button>
