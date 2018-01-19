@@ -7,7 +7,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { GiphyService } from '../../services/giphy.service';
-import 'rxjs/add/operator/single';
 
 @Component({
   selector: 'memer-gameroom',
@@ -20,7 +19,8 @@ export class GameroomComponent implements OnInit {
   game$: Observable<IGame>;
   gameId: string;
   game: IGame;
-  get isUpForVoting() { return !!this.game && this.game.gifSelectionURL }
+  get isUpForVoting(): boolean { return !!this.game && !!this.game.gifSelectionURL }
+  get isCurrentUsersTurn(): boolean { return this.currentUser.uid === this.game.turn }
 
   constructor(
     private authService: AuthService,
@@ -38,29 +38,11 @@ export class GameroomComponent implements OnInit {
 
     this.game$.subscribe(g => this.game = g);
     this.join();
-    this.trackUserChanges();
+    this.trackVotingEnd();
   }
 
   join() {
-    this.game$.take(1).subscribe(g => {
-      if (!g.players || !g.players.length) {
-        this.currentUser.isHost = true;
-        g.turn = this.currentUser.uid;
-      }
-      const existingPlayer = g.players.find(p => this.currentUser.uid === p.uid);
-      if (existingPlayer) {
-        this.currentUser = existingPlayer;
-      } else {
-        g.players.push(this.currentUser);
-        this.gameService.updateGame(g);
-      }
-    });
-  }
-
-  trackUserChanges() {
-    this.game$
-      .map(g => g.players.find(p => p.uid === this.currentUser.uid))
-      .subscribe(player => this.currentUser = player || this.currentUser);
+    this.gameService.join(this.currentUser);
   }
 
   beginGame() {
@@ -73,20 +55,16 @@ export class GameroomComponent implements OnInit {
   changeTurns() {
     const id = this.findIdOfNextPlayer();
     this.game.turn = id;
-    this.resetRound();
-    this.updateGame();
   }
 
   beginTurn() {
-    if (!this.isCurrentUsersTurn()) return;
+    if (!this.isCurrentUsersTurn) return;
 
     this.game.tagOptions = this.giphyService.getRandomTags();
     this.updateGame();
   }
 
   selectTag(tag: string) {
-    if (!this.isCurrentUsersTurn()) return;
-
     this.game.tagSelection = tag;
     this.giphyService.getRandomImages(tag).then(images => {
       this.game.gifOptionURLs = images;
@@ -95,15 +73,11 @@ export class GameroomComponent implements OnInit {
   }
 
   selectGif(gifUrl: string) {
-    if (!this.isCurrentUsersTurn()) return;
-
     this.game.gifSelectionURL = gifUrl;
     this.updateGame();
   }
 
   selectCaption(caption: string) {
-    if (!this.isUpForVoting || this.isCurrentUsersTurn() || this.currentUser.captionPlayed) return;
-
     const user = this.findGamePlayerById(this.currentUser.uid);
     const captionIndex = user.captions.indexOf(caption);
     user.captions.splice(captionIndex, 1);
@@ -111,8 +85,21 @@ export class GameroomComponent implements OnInit {
     this.updateGame();
   }
 
-  private isCurrentUsersTurn() {
-    return this.currentUser.uid === this.game.turn;
+  trackVotingEnd() {
+    this.gameService.votingEnd()
+      .subscribe(g => {
+        this.game.isVotingRound = true;
+        this.updateGame();
+      });
+  }
+
+  selectFavoriteCaption(player: IPlayer) {
+    if (!this.isCurrentUsersTurn) return;
+
+    player.score += 1;
+    this.resetRound();
+    this.changeTurns();
+    this.updateGame();
   }
 
   private findIdOfNextPlayer(): string {
@@ -145,8 +132,11 @@ export class GameroomComponent implements OnInit {
     this.game.gifSelectionURL = null;
     this.game.tagOptions = [];
     this.game.tagSelection = null;
+    this.game.isVotingRound = false;
     this.game.players.forEach(p => {
       p.captionPlayed = null;
     });
   }
+
+  // TODO: Unsubscribe On Destroy
 }

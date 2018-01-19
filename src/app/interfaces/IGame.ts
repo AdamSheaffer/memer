@@ -9,4 +9,6 @@ export interface IGame {
   tagSelection?: string;
   gifOptionURLs: string[];
   gifSelectionURL?: string;
+  captionDeck: string[];
+  isVotingRound: boolean;
 }

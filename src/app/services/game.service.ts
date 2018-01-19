@@ -16,14 +16,6 @@ export class GameService {
     this.gamesCollection = this.afs.collection('games');
   }
 
-  gamesSnapshotChanges() {
-    return this.gamesCollection.snapshotChanges();
-  }
-
-  gamesValueChanges() {
-    return this.gamesCollection.valueChanges();
-  }
-
   addGame(): Promise<firebase.firestore.DocumentReference> {
     const game = this.createGame();
     return this.gamesCollection.add(game);
@@ -41,7 +33,37 @@ export class GameService {
 
   getGameById(id: string): Observable<IGame> {
     this.gameDoc = this.afs.doc<IGame>(`games/${id}`);
-    return this.gameDoc.valueChanges();
+    this.game$ = this.gameDoc.valueChanges();
+    return this.game$;
+  }
+
+  join(player: IPlayer) {
+    this.game$.take(1).subscribe(g => {
+      if (!g.players || !g.players.length) {
+        player.isHost = true;
+        g.turn = player.uid;
+      }
+      const existingPlayer = g.players.find(p => player.uid === p.uid);
+      if (existingPlayer) {
+        player = existingPlayer;
+      } else {
+        g.players.push(player);
+        this.updateGame(g);
+      }
+    });
+  }
+
+  votingEnd() {
+    return this.game$.filter(this.everyoneVoted);
+  }
+
+  private everyoneVoted(game: IGame) {
+    if (!game) return;
+
+    return game.hasStarted &&
+      !!game.gifSelectionURL &&
+      !game.isVotingRound &&
+      game.players.every(p => !!p.captionPlayed || game.turn === p.uid);
   }
 
   updateGame(game: IGame): Promise<void> {
@@ -53,7 +75,9 @@ export class GameService {
       hasStarted: false,
       players: [],
       tagOptions: [],
-      gifOptionURLs: []
+      gifOptionURLs: [],
+      captionDeck: [],
+      isVotingRound: false
     }
   }
 }

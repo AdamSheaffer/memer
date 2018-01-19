@@ -7,7 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class PlayerHandComponent implements OnInit {
   @Input() playerHand: string[];
-  @Input() canVote: boolean;
+  @Input() playerCanSelect: boolean;
   @Output() onCardSelect = new EventEmitter<string>();
 
   constructor() { }
@@ -16,6 +16,7 @@ export class PlayerHandComponent implements OnInit {
   }
 
   selectCard(card: string) {
+    if (!this.playerCanSelect) return;
     this.onCardSelect.emit(card);
   }
 }

@@ -7,6 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class GifOptionsComponent implements OnInit {
   @Input() optionUrls: string;
+  @Input() playerCanSelect: boolean;
   @Output() onOptionSelect = new EventEmitter<string>();
 
   constructor() { }
@@ -15,6 +16,7 @@ export class GifOptionsComponent implements OnInit {
   }
 
   selectOption(url: string) {
+    if (!this.playerCanSelect) return;
     this.onOptionSelect.emit(url);
   }
 }

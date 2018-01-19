@@ -46,7 +46,7 @@ export class AuthService {
       isActive: true,
       isHost: false,
       score: 0,
-      captions: ['caption 1', 'caption 2', 'caption 3'],
+      captions: ['BOUGIE ASS WHOLE FOODS SHIT', 'ME AFTER 2 BEERS', 'THE WAY WHITE PEOPLE LOOK AT THEIR DOGS'],
       photoURL
     }
   }

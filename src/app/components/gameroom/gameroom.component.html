@@ -1,6 +1,8 @@
 <!-- Header -->
 <memer-header></memer-header>
 
+<h3 *ngIf="game?.isVotingRound">It's time to vote</h3>
+
 <!-- Player images and scores -->
 <div *ngIf="game?.players.length">
   <memer-player-list [players]="game.players"></memer-player-list>
@@ -8,29 +10,42 @@
 
 <!-- Giphy Tags to choose from -->
 <div *ngIf="game?.tagOptions && !game.selectedTag">
-  <memer-tag-selection [tags]="game.tagOptions" (onTagSelect)="selectTag($event)"></memer-tag-selection>
+  <memer-tag-selection [playerCanSelect]="isCurrentUsersTurn" [tags]="game.tagOptions" (onTagSelect)="selectTag($event)"></memer-tag-selection>
 </div>
 
 <!-- Gif Options to choose from -->
 <div *ngIf="game?.gifOptionURLs && !game.gifSelectionURL">
-  <memer-gif-options [optionUrls]="game.gifOptionURLs" (onOptionSelect)="selectGif($event)"></memer-gif-options>
+  <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [optionUrls]="game.gifOptionURLs" (onOptionSelect)="selectGif($event)"></memer-gif-options>
 </div>
 
 <!-- Gif that judge has selected -->
 <div *ngIf="game?.gifSelectionURL">
   <h5>Submit a caption for:</h5>
-  <img class="ui centered bordered medium image" [src]="game.gifSelectionURL">
+  <img [src]="game.gifSelectionURL">
+</div>
+
+<!-- Caption Cards submitted -->
+<div *ngIf="game?.gifSelectionURL">
+  <div *ngFor="let player of game.players">
+    <div *ngIf="game?.turn !== player.uid">
+      <div *ngIf="!player.captionPlayed">{{player.username}} has not played</div>
+      <div *ngIf="player.captionPlayed && !isVotingRound">{{player.username}}: HIDDEN</div>
+      <div *ngIf="player.captionPlayed && isVotingRound">{{player.captionPlayed}}</div>
+    </div>
+  </div>
 </div>
 
 <!-- Button to begin when it's your turn -->
-<div *ngIf="game?.hasStarted && game.turn === currentUser.uid && !game.tagOptions.length">
+<div *ngIf="game?.hasStarted && isCurrentUsersTurn && !game.tagOptions.length">
   <h5>It's your turn</h5>
-  <button class="ui button" (click)="beginTurn()">Begin Turn</button>
+  <button (click)="beginTurn()">Begin Turn</button>
 </div>
 
 <!-- Hand of Caption Cards -->
 <div *ngIf="currentUser?.captions">
-  <memer-player-hand [playerHand]="currentUser.captions" (onCardSelect)="selectCaption($event)"></memer-player-hand>
+  <memer-player-hand [playerCanSelect]="isUpForVoting && !isCurrentUsersTurn && !currentUser.captionPlayed" [playerHand]="currentUser.captions"
+    (onCardSelect)="selectCaption($event)">
+  </memer-player-hand>
 </div>
 
 <!-- Button for Host to start the game -->
