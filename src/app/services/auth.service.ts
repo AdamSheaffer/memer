@@ -37,7 +37,7 @@ export class AuthService {
     if (!fbuser) return null;
 
     const facebook = fbuser.providerData.find(p => p.providerId.includes('facebook'));
-    const photoURL = `https://graph.facebook.com/${facebook.uid}/picture?height=400&width=400`;
+    const photoURL = `https://graph.facebook.com/${facebook.uid}/picture?height=300&width=300`;
 
     return {
       fullName: fbuser.displayName,

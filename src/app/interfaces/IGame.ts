@@ -9,6 +9,7 @@ export interface IGame {
   tagSelection?: string;
   gifOptionURLs: string[];
   gifSelectionURL?: string;
+  roundWinner?: IPlayer;
   captionDeck: string[];
   isVotingRound: boolean;
 }

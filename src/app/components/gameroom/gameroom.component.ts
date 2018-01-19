@@ -94,9 +94,16 @@ export class GameroomComponent implements OnInit {
   }
 
   selectFavoriteCaption(player: IPlayer) {
-    if (!this.isCurrentUsersTurn) return;
+    if (!this.isCurrentUsersTurn || !this.game.isVotingRound) return;
 
     player.score += 1;
+    this.game.roundWinner = player;
+    this.updateGame().then(() => {
+      //this.startNewRound();
+    })
+  }
+
+  startNewRound() {
     this.resetRound();
     this.changeTurns();
     this.updateGame();
@@ -133,6 +140,7 @@ export class GameroomComponent implements OnInit {
     this.game.tagOptions = [];
     this.game.tagSelection = null;
     this.game.isVotingRound = false;
+    this.game.roundWinner = null;
     this.game.players.forEach(p => {
       p.captionPlayed = null;
     });

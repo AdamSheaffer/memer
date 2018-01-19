@@ -29,10 +29,16 @@
   <div *ngFor="let player of game.players">
     <div *ngIf="game?.turn !== player.uid">
       <div *ngIf="!player.captionPlayed">{{player.username}} has not played</div>
-      <div *ngIf="player.captionPlayed && !isVotingRound">{{player.username}}: HIDDEN</div>
-      <div *ngIf="player.captionPlayed && isVotingRound">{{player.captionPlayed}}</div>
+      <div *ngIf="player.captionPlayed && !game.isVotingRound">{{player.username}}: HIDDEN</div>
+      <div *ngIf="player.captionPlayed && game.isVotingRound" (click)="selectFavoriteCaption(player)">{{player.captionPlayed}}</div>
     </div>
   </div>
+</div>
+
+<!-- Winning Meme -->
+<div *ngIf="game?.roundWinner">
+  <h2>WINNER: {{game.roundWinner.captionPlayed}}</h2>
+  <img [src]="game.gifSelectionURL" alt="{{game.roundWinner.selectedTag}}">
 </div>
 
 <!-- Button to begin when it's your turn -->
