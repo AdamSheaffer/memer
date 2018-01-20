@@ -12,4 +12,5 @@ export interface IGame {
   roundWinner?: IPlayer;
   captionDeck: string[];
   isVotingRound: boolean;
+  winner?: IPlayer;
 }

@@ -38,11 +38,17 @@ export class GameroomComponent implements OnInit {
 
     this.game$.subscribe(g => this.game = g);
     this.join();
+    this.trackPlayerChanges();
     this.trackVotingEnd();
   }
 
   join() {
     this.gameService.join(this.currentUser);
+  }
+
+  trackPlayerChanges() {
+    this.gameService.currentPlayer(this.currentUser.uid)
+      .subscribe(p => this.currentUser = p);
   }
 
   beginGame() {
@@ -98,8 +104,20 @@ export class GameroomComponent implements OnInit {
 
     player.score += 1;
     this.game.roundWinner = player;
+
+    if (player.score >= 10) {
+      this.game.winner = player;
+    }
+
     this.updateGame().then(() => {
-      //this.startNewRound();
+      alert(player.username + ' wins the round');
+      setTimeout(() => {
+        if (this.game.winner) {
+          alert(this.game.winner + ' WINS!');
+        } else {
+          this.startNewRound();
+        }
+      }, 5000);
     })
   }
 

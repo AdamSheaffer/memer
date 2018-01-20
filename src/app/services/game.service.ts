@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs/Observable';
 import { IPlayer } from '../interfaces/IPlayer';
 import { IGame } from '../interfaces/IGame';
+import 'rxjs/operators/mergeMap';
 
 @Injectable()
 export class GameService {
@@ -57,6 +58,15 @@ export class GameService {
     return this.game$.filter(this.everyoneVoted);
   }
 
+  updateGame(game: IGame): Promise<void> {
+    return this.gameDoc.update(game);
+  }
+
+  currentPlayer(uid: string) {
+    return this.game$.switchMap(g => g.players)
+      .filter(p => p.uid === uid);
+  }
+
   private everyoneVoted(game: IGame) {
     if (!game) return;
 
@@ -64,10 +74,6 @@ export class GameService {
       !!game.gifSelectionURL &&
       !game.isVotingRound &&
       game.players.every(p => !!p.captionPlayed || game.turn === p.uid);
-  }
-
-  updateGame(game: IGame): Promise<void> {
-    return this.gameDoc.update(game);
   }
 
   private createGame(): IGame {
