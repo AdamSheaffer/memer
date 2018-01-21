@@ -1,0 +1,92 @@
+@import '/Users/ford.heacock/dev/memer/src/_variables.scss';
+@import '/Users/ford.heacock/dev/memer/src/_mixins.scss';
+
+
+.login-wrapper {
+  marquee {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    color: $white-color;
+  }
+
+  .card {
+    border: none;
+    background: none;
+    .card-img-top {
+      box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.3);
+    }
+    .sign-in-btn {
+      @extend .card-img-top;
+    }
+  }
+
+  h1 {
+    color: $white-color;
+  }
+
+  .card-footer {
+    transition: .2s;
+    &:hover {
+      background-color: darkgray;
+      transition: .2s;
+    }
+  }
+
+  .neon-lights {
+    width: 100%;
+    text-align: center;
+    font-size: 7em;
+    text-decoration: none;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    transition: all 0.5s;
+    color: #fff;
+    font-family: Monoton;
+    -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
+    -moz-animation: neon1 1.5s ease-in-out infinite alternate;
+    animation: neon1 1.5s ease-in-out infinite alternate;
+    @include respond-to($phone) {
+      font-size: 5em;
+    }
+    &:hover {
+      color: $accent-color;
+      -webkit-animation: none;
+      -moz-animation: none;
+      animation: none;
+    }
+
+    @-webkit-keyframes neon1 {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #9b59b6, 0 0 70px #9b59b6, 0 0 80px #9b59b6, 0 0 100px #9b59b6, 0 0 150px #9b59b6;
+      }
+      to {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #9b59b6, 0 0 35px #9b59b6, 0 0 40px #9b59b6, 0 0 50px #9b59b6, 0 0 75px #9b59b6;
+      }
+    }
+
+    @-moz-keyframes neon1 {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #9b59b6, 0 0 70px #9b59b6, 0 0 80px #9b59b6, 0 0 100px #9b59b6, 0 0 150px #9b59b6;
+      }
+      to {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #9b59b6, 0 0 35px #9b59b6, 0 0 40px #9b59b6, 0 0 50px #9b59b6, 0 0 75px #9b59b6;
+      }
+    }
+
+    @keyframes neon1 {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #9b59b6, 0 0 70px #9b59b6, 0 0 80px #9b59b6, 0 0 100px #9b59b6, 0 0 150px #9b59b6;
+      }
+      to {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #9b59b6, 0 0 35px #9b59b6, 0 0 40px #9b59b6, 0 0 50px #9b59b6, 0 0 75px #9b59b6;
+      }
+    }
+  }
+
+  .blockquote {
+    color: $white-color !important;
+    .blockquote-footer {
+      @extend .blockquote;
+    }
+  }
+}
+

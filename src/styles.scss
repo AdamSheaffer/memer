@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'variables';
 
-body {
-  background: $primary-color;
+.game-wrapper {
+  height: 100vh;
+  background-image: linear-gradient(to right top, #1cbc9c, #00afc4, #009ce0, #447fdd, #9b59b6);
 }
