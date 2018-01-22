@@ -2,3 +2,14 @@ $primary-color: #1cbc9c;
 $accent-color: #9b59b6;
 $dark-gray: #2d3e4f;
 $white-color: #fdfdfd;
+$phone : '(max-width: 480px)';
+$tablet-portrait: '(max-width: 767px)';
+$tablet-landscape: '(min-width: 768px) and (max-width: 979px)';
+$large-desktop: '(min-width: 1200px)';
+$non-retina: 'screen and (-webkit-max-device-pixel-ratio: 1)';
+$retina: '(min--moz-device-pixel-ratio: 1.5),
+                    (-o-min-device-pixel-ratio: 3/2),
+                    (-webkit-min-device-pixel-ratio: 1.5),
+                    (min-device-pixel-ratio: 1.5),
+                    (min-resolution: 144dpi),
+                    (min-resolution: 1.5dppx)';
