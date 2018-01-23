@@ -3,6 +3,7 @@ export interface IPlayer {
   fullName: string;
   username: string;
   photoURL: string;
+  thumbnailURL: string;
   isActive: boolean;
   isHost: boolean;
   score: number;

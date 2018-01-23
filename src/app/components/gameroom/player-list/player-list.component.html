@@ -1,4 +1,11 @@
-<div *ngFor="let player of players">
-  <img [src]="player.photoURL">
-  <span>{{player.username}}</span>
+<div class="players row">
+  <div *ngFor="let player of players">
+    <div class="card player-card" [ngClass]="{'current-turn': player.uid === turn}">
+      <div class="card-header bg-transparent">{{player.username | uppercase}}</div>
+      <div>
+        <img class="card-img-top" [src]="player.thumbnailURL">
+      </div>
+      <div class="card-footer">SCORE: {{player.score}}</div>
+    </div>
+  </div>
 </div>

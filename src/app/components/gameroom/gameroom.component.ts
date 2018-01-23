@@ -78,6 +78,11 @@ export class GameroomComponent implements OnInit {
     });
   }
 
+  changeGifIndex(index: number) {
+    this.game.gifOptionIndex = index;
+    this.updateGame();
+  }
+
   selectGif(gifUrl: string) {
     this.game.gifSelectionURL = gifUrl;
     this.updateGame();

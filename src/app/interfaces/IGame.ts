@@ -8,6 +8,7 @@ export interface IGame {
   tagOptions: string[];
   tagSelection?: string;
   gifOptionURLs: string[];
+  gifOptionIndex: number;
   gifSelectionURL?: string;
   roundWinner?: IPlayer;
   captionDeck: string[];

@@ -6,17 +6,36 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./gif-options.component.scss']
 })
 export class GifOptionsComponent implements OnInit {
-  @Input() optionUrls: string;
+  @Input() displayGif: string;
+  @Input() optionCount: number;
   @Input() playerCanSelect: boolean;
+  @Output() onOptionChange = new EventEmitter<number>();
   @Output() onOptionSelect = new EventEmitter<string>();
 
-  constructor() { }
+  public imageIndex: number = 0;
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
-  selectOption(url: string) {
+  next(): void {
     if (!this.playerCanSelect) return;
-    this.onOptionSelect.emit(url);
+    this.imageIndex += 1
+    if (this.imageIndex >= this.optionCount) this.imageIndex = 0;
+    this.onOptionChange.emit(this.imageIndex);
+  }
+
+  previous(): void {
+    if (!this.playerCanSelect) return;
+    this.imageIndex -= 1
+    if (this.imageIndex < 0) this.imageIndex = (this.optionCount - 1);
+    this.onOptionChange.emit(this.imageIndex);
+  }
+
+  selectOption() {
+    if (!this.playerCanSelect) return;
+    this.onOptionSelect.emit(this.displayGif);
   }
 }

@@ -1,1 +1,9 @@
-<button *ngFor="let caption of playerHand" (click)="selectCard(caption)">{{caption}}</button>
+<div class="row hand">
+  <div *ngFor="let caption of playerHand" (click)="selectCard(caption)" class="card col player-card">
+    <div class="card-body">
+      <div class="card-title">
+        {{caption}}
+      </div>
+    </div>
+  </div>
+</div>

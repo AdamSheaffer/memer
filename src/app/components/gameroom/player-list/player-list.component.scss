@@ -1,0 +1,23 @@
+@import '../../../../variables';
+
+.players {
+  padding: 25px;
+}
+
+.player-card {
+  background: $primary-color;
+  border: 2px solid $primary-color;
+  font-family: $impact;
+  color: $white-color;
+  max-width: 150px;
+  margin: 0 8px;
+
+  .card-header, .card-footer {
+    padding: 4px;
+  }
+}
+
+.current-turn {
+  background: $accent-color;
+  border: 2px solid $accent-color;
+}

@@ -83,7 +83,8 @@ export class GameService {
       tagOptions: [],
       gifOptionURLs: [],
       captionDeck: [],
-      isVotingRound: false
+      isVotingRound: false,
+      gifOptionIndex: 0
     }
   }
 }

@@ -1,0 +1,14 @@
+@import '../../../../variables';
+
+.hand {
+  padding: 0 8px;
+
+  .player-card {
+    font-family: $impact;
+    height: 16rem;
+    margin: 0 8px;
+    font-size: 1.6em;
+    max-width: 14rem;
+  }
+}
+

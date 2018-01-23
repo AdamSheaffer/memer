@@ -38,6 +38,7 @@ export class AuthService {
 
     const facebook = fbuser.providerData.find(p => p.providerId.includes('facebook'));
     const photoURL = `https://graph.facebook.com/${facebook.uid}/picture?height=300&width=300`;
+    const thumbnailURL = `https://graph.facebook.com/${facebook.uid}/picture?height=150&width=150`;
 
     return {
       fullName: fbuser.displayName,
@@ -47,7 +48,8 @@ export class AuthService {
       isHost: false,
       score: 0,
       captions: ['BOUGIE ASS WHOLE FOODS SHIT', 'ME AFTER 2 BEERS', 'THE WAY WHITE PEOPLE LOOK AT THEIR DOGS'],
-      photoURL
+      photoURL,
+      thumbnailURL
     }
   }
 }

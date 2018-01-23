@@ -1,1 +1,11 @@
-<img [src]="url" [alt]="'Option ' + index" *ngFor="let url of optionUrls; let i = index" (click)="selectOption(url)">
+<div *ngIf="displayGif" class="option-container">
+  <div>
+    <div>
+      <button *ngIf="playerCanSelect" (click)="previous()" class="btn btn-outline-primary">PREV</button>
+      <button *ngIf="playerCanSelect" (click)="next()" class="btn btn-outline-primary">NEXT</button>
+    </div>
+    <div>
+      <img class="col gif-option" [src]="displayGif" [alt]="'Option ' + imageIndex" (click)="selectOption()">
+    </div>
+  </div>
+</div>

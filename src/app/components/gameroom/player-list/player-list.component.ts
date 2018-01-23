@@ -8,6 +8,7 @@ import { IPlayer } from '../../../interfaces/IPlayer';
 })
 export class PlayerListComponent implements OnInit {
   @Input() players: IPlayer[];
+  @Input() turn: string;
 
   constructor() { }
 
