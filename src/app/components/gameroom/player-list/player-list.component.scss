@@ -1,4 +1,5 @@
 @import '../../../../variables';
+@import '../../../../mixins';
 
 .players {
   padding: 25px;
@@ -15,6 +16,10 @@
   .card-header, .card-footer {
     padding: 4px;
   }
+}
+
+.pending-selection {
+    @include grayscale_element(100%);    
 }
 
 .current-turn {

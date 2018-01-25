@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'variables';
 
-.game-wrapper {
-  height: 100vh;
-  background: $dark-gray;
+body {
+  background-color: $dark-gray;
+}
+
+.btn {
+  border-radius: 25px;
 }

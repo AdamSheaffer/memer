@@ -1,5 +1,5 @@
 <div class="row">
   <div class="col-sm-12 col-md-6 option-container" *ngFor="let tag of tags">
-    <button class="btn btn-outline-warning options-button" (click)="selectTag(tag)">{{tag}}</button>
+    <button [disabled]="!playerCanSelect" class="btn btn-outline-warning options-button" (click)="selectTag(tag)">{{tag}}</button>
   </div>
 </div>

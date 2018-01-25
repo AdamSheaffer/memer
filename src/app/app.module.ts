@@ -6,6 +6,9 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
+// BOOTSTRAP MODULES
+import { ModalModule } from 'ngx-bootstrap/modal';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthService } from './services/auth.service';
@@ -19,6 +22,8 @@ import { PlayerListComponent } from './components/gameroom/player-list/player-li
 import { TagSelectionComponent } from './components/gameroom/tag-selection/tag-selection.component';
 import { GifOptionsComponent } from './components/gameroom/gif-options/gif-options.component';
 import { PlayerHandComponent } from './components/gameroom/player-hand/player-hand.component';
+import { DeckService } from './services/deck.service';
+import { MemeComponent } from './components/meme/meme.component';
 
 
 @NgModule({
@@ -31,7 +36,8 @@ import { PlayerHandComponent } from './components/gameroom/player-hand/player-ha
     PlayerListComponent,
     TagSelectionComponent,
     GifOptionsComponent,
-    PlayerHandComponent
+    PlayerHandComponent,
+    MemeComponent
   ],
   imports: [
     BrowserModule,
@@ -39,10 +45,12 @@ import { PlayerHandComponent } from './components/gameroom/player-hand/player-ha
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ModalModule.forRoot()
   ],
   providers: [
     AuthService,
+    DeckService,
     GiphyService,
     GameService],
   bootstrap: [AppComponent]

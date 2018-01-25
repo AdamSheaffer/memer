@@ -43,6 +43,7 @@ export class GameService {
       if (!g.players || !g.players.length) {
         player.isHost = true;
         g.turn = player.uid;
+        g.turnUsername = player.username;
       }
       const existingPlayer = g.players.find(p => player.uid === p.uid);
       if (existingPlayer) {

@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { GiphyService } from '../../services/giphy.service';
+import { ICard } from '../../interfaces/ICard';
+import { DeckService } from '../../services/deck.service';
 
 @Component({
   selector: 'memer-gameroom',
@@ -24,6 +26,7 @@ export class GameroomComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private deckService: DeckService,
     private gameService: GameService,
     private giphyService: GiphyService,
     private route: ActivatedRoute) {
@@ -55,18 +58,23 @@ export class GameroomComponent implements OnInit {
     if (!this.currentUser.isHost) return;
 
     this.game.hasStarted = true;
+
+    this.game.captionDeck = this.deckService.getDeck()
+    this.deckService.deal(this.game.captionDeck, this.game.players, 7);
     this.updateGame();
   }
 
   changeTurns() {
-    const id = this.findIdOfNextPlayer();
-    this.game.turn = id;
+    const player = this.findNextPlayer();
+    this.game.turn = player.uid;
+    this.game.turnUsername = player.username;
   }
 
   beginTurn() {
     if (!this.isCurrentUsersTurn) return;
 
     this.game.tagOptions = this.giphyService.getRandomTags();
+
     this.updateGame();
   }
 
@@ -88,11 +96,12 @@ export class GameroomComponent implements OnInit {
     this.updateGame();
   }
 
-  selectCaption(caption: string) {
+  selectCaption(caption: ICard) {
     const user = this.findGamePlayerById(this.currentUser.uid);
-    const captionIndex = user.captions.indexOf(caption);
+    const captionIndex = user.captions.findIndex(c => c.top === caption.top && c.bottom == caption.bottom);
     user.captions.splice(captionIndex, 1);
     user.captionPlayed = caption;
+    this.deckService.deal(this.game.captionDeck, [user], 1);
     this.updateGame();
   }
 
@@ -132,15 +141,15 @@ export class GameroomComponent implements OnInit {
     this.updateGame();
   }
 
-  private findIdOfNextPlayer(): string {
+  private findNextPlayer(): IPlayer {
     const index = this.game.players.findIndex(p => {
       return this.game.turn === p.uid;
     });
 
     if (index === this.game.players.length - 1) {
-      return this.game.players[0].uid;
+      return this.game.players[0];
     }
-    return this.game.players[index + 1].uid;
+    return this.game.players[index + 1];
   }
 
   private updateGame() {

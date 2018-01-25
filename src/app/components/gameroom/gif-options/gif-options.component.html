@@ -1,11 +1,24 @@
-<div *ngIf="displayGif" class="option-container">
-  <div>
-    <div>
-      <button *ngIf="playerCanSelect" (click)="previous()" class="btn btn-outline-primary">PREV</button>
-      <button *ngIf="playerCanSelect" (click)="next()" class="btn btn-outline-primary">NEXT</button>
-    </div>
-    <div>
-      <img class="col gif-option" [src]="displayGif" [alt]="'Option ' + imageIndex" (click)="selectOption()">
-    </div>
+<div *ngIf="displayGif" class="container option-container">
+
+  <!-- If it's your turn -->
+  <div *ngIf="playerCanSelect">
+    <h3>
+      SELECT A GIF FOR
+      <span class="tag">{{chosenTag | uppercase}}</span>
+    </h3>
+    <img [src]="displayGif" [alt]="'Option ' + imageIndex" (click)="selectOption()" class="col gif-option">
+  </div>
+  <div *ngIf="playerCanSelect" class="d-flex justify-content-center gif-buttons">
+    <button (click)="previous()" class="btn btn-outline-info">PREV</button>
+    <button (click)="next()" class="btn btn-outline-info">NEXT</button>
+  </div>
+
+  <!-- If it's not your turn -->
+  <div *ngIf="!playerCanSelect">
+    <h3>
+      {{usernameSelecting | uppercase}} PICKED
+      <span class="tag">{{chosenTag | uppercase}}</span>
+    </h3>
+    <h3>{{selectingIndicator}}</h3>
   </div>
 </div>

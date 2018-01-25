@@ -1,0 +1,44 @@
+@import '../../../variables';
+
+.turn-indicator {
+  font-family: $impact;
+  margin: 20px auto 30px auto;
+  color: $accent-color;
+  text-align: center;
+}
+
+.selected-gif {
+  margin: 20px 0 30px 0;
+
+  h3 {
+    color: $accent-color;
+    font-family: $impact;
+    text-align: center;
+  }
+
+  img {
+    height: 200px;
+    width: auto;
+    display: block;
+    padding: 0;
+    margin: auto;
+  }
+}
+
+.meme-container {
+  margin: auto;
+}
+
+.voting-indicator {
+  text-align: center;
+  font-family: $impact;
+  color: $white-color;
+
+  .username {
+    color: $accent-color;
+  }
+}
+
+.player-submission {
+  margin-bottom: 30px;
+}

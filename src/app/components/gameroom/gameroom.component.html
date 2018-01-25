@@ -7,11 +7,27 @@
     <memer-player-list [turn]="game.turn" [players]="game.players"></memer-player-list>
   </div>
 
-  <h3 *ngIf="game?.isVotingRound">It's time to vote</h3>
+  <h3 *ngIf="game?.isVotingRound" class="voting-indicator">
+    <span class="username">{{game.turnUsername | uppercase}}</span> IS VOTING
+  </h3>
 
   <!-- Button to begin when it's your turn -->
-  <div *ngIf="game?.hasStarted && isCurrentUsersTurn && !game.tagOptions.length">
-    <button class="btn btn-outline" (click)="beginTurn()">Begin Turn</button>
+  <div *ngIf="game?.hasStarted" class="row align-items-center">
+    <div class="turn-indicator">
+      <div *ngIf="isCurrentUsersTurn">
+        <h3 *ngIf="!game.tagOptions.length">{{currentUser.username | uppercase}}, IT'S YOUR TURN!</h3>
+        <h3 *ngIf="game.tagOptions.length && !game.tagSelection">SELECT A TAG</h3>
+        <button *ngIf="!game.tagOptions.length" class="btn btn-outline-success btn-block" (click)="beginTurn()">START</button>
+      </div>
+      <div *ngIf="!isCurrentUsersTurn && !game.tagSelection" class="turn-indicator">
+        <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] === 'S'">
+          <h3>{{game.turnUsername | uppercase}}' TURN</h3>
+        </div>
+        <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] !== 'S'">
+          <h3>{{game.turnUsername | uppercase}}'S TURN</h3>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Giphy Tags to choose from -->
@@ -21,23 +37,29 @@
 
   <!-- Gif Options to choose from -->
   <div *ngIf="game?.gifOptionURLs && !game.gifSelectionURL">
-    <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [displayGif]="game.gifOptionURLs[game.gifOptionIndex]" (onOptionSelect)="selectGif($event)"
-      (onOptionChange)="changeGifIndex($event)" [optionCount]="game.gifOptionURLs.length"></memer-gif-options>
+    <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [displayGif]="game.gifOptionURLs[game.gifOptionIndex]" [usernameSelecting]="game.turnUsername"
+      (onOptionSelect)="selectGif($event)" (onOptionChange)="changeGifIndex($event)" [optionCount]="game.gifOptionURLs.length"
+      [chosenTag]="game.tagSelection"></memer-gif-options>
   </div>
 
   <!-- Gif that judge has selected -->
-  <div *ngIf="game?.gifSelectionURL">
-    <h5>Submit a caption for:</h5>
-    <img [src]="game.gifSelectionURL">
+  <div *ngIf="game?.gifSelectionURL && !game.isVotingRound" class="selected-gif">
+    <div class="row align-items-center">
+      <div class="d-flex align-items-center flex-column meme-container">
+        <h3 *ngIf="!isCurrentUsersTurn && !currentUser.captionPlayed">SUBMIT A CAPTION</h3>
+        <h1 *ngIf="(isCurrentUsersTurn || (currentUser.captionPlayed && !game.roundWinner)) && !game.isVotingRound">WAITING FOR OTHER PLAYERS...</h1>
+        <memer-meme [imageURL]="game.gifSelectionURL"></memer-meme>
+      </div>
+    </div>
   </div>
 
   <!-- Caption Cards submitted -->
-  <div *ngIf="game?.gifSelectionURL">
-    <div *ngFor="let player of game.players">
-      <div *ngIf="game?.turn !== player.uid">
-        <div *ngIf="!player.captionPlayed">{{player.username}} has not played</div>
-        <div *ngIf="player.captionPlayed && !game.isVotingRound">{{player.username}}: HIDDEN</div>
-        <div *ngIf="player.captionPlayed && game.isVotingRound" (click)="selectFavoriteCaption(player)">{{player.captionPlayed}}</div>
+  <div *ngIf="game?.gifSelectionURL && game.isVotingRound">
+    <div class="d-flex justify-content-center">
+      <div *ngFor="let player of game.players" class="player-submission">
+        <div *ngIf="game?.turn !== player.uid" class="col">
+          <memer-meme (click)="selectFavoriteCaption(player)" [caption]="player.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
+        </div>
       </div>
     </div>
   </div>
@@ -56,5 +78,11 @@
   </div>
 
   <!-- Button for Host to start the game -->
-  <button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()">Start Game</button>
+  <div class="row justify-content-center">
+    <div class="col-4">
+      <div class="d-flex justify-content-center">
+        <button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()" class="btn btn-outline-info btn-block">START GAME</button>
+      </div>
+    </div>
+  </div>
 </div>
