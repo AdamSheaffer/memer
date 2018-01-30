@@ -7,7 +7,13 @@
     text-align: center;
     font-family: $impact;
     color: $white-color;
-    padding: 10px 0;
+    padding: 10px 15px;
     min-height: 55px;
+  }
+
+  .meme-image {
+    min-width: 300px;
+    display: block;
+    margin: auto;
   }
 }

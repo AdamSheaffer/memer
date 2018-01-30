@@ -42,3 +42,22 @@
 .player-submission {
   margin-bottom: 30px;
 }
+
+.modal-header {
+  background: $accent-color;
+  border: 3px solid $white-color;
+  h2, h3, h4 {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: $white-color;
+    font-family: $impact;
+  }
+}
+
+.modal-body {
+  border: none;
+  background: lighten($color: $primary-color, $amount: 20%);
+  border: 3px solid $white-color;
+  border-top: none;
+}

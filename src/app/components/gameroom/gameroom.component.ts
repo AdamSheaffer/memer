@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IPlayer } from '../../interfaces/IPlayer';
 import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { GiphyService } from '../../services/giphy.service';
 import { ICard } from '../../interfaces/ICard';
 import { DeckService } from '../../services/deck.service';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'memer-gameroom',
@@ -16,7 +17,8 @@ import { DeckService } from '../../services/deck.service';
   styleUrls: ['./gameroom.component.scss']
 })
 export class GameroomComponent implements OnInit {
-
+  @ViewChild('winnerModal') winnerModal: ModalDirective;
+  isWinningModalShown: boolean;
   currentUser: IPlayer;
   game$: Observable<IGame>;
   gameId: string;
@@ -59,7 +61,7 @@ export class GameroomComponent implements OnInit {
 
     this.game.hasStarted = true;
 
-    this.game.captionDeck = this.deckService.getDeck()
+    this.game.captionDeck = this.deckService.getDeck();
     this.deckService.deal(this.game.captionDeck, this.game.players, 7);
     this.updateGame();
   }
@@ -124,21 +126,44 @@ export class GameroomComponent implements OnInit {
     }
 
     this.updateGame().then(() => {
-      alert(player.username + ' wins the round');
       setTimeout(() => {
-        if (this.game.winner) {
-          alert(this.game.winner + ' WINS!');
-        } else {
+        if (!this.game.winner) {
           this.startNewRound();
         }
       }, 5000);
-    })
+    });
   }
 
   startNewRound() {
     this.resetRound();
     this.changeTurns();
     this.updateGame();
+  }
+
+  resetGame() {
+    this.game.hasStarted = false;
+    this.game.players.forEach(p => p.captions = []);
+    this.game.tagOptions = [];
+    this.game.tagSelection = null;
+    this.game.gifOptionURLs = [];
+    this.game.isVotingRound = false;
+    this.game.roundWinner = null;
+    this.game.winner = null;
+    this.game.gifOptionIndex = 0;
+    this.game.gifSelectionURL = null;
+    this.updateGame();
+  }
+
+  private showModal(): void {
+    this.isWinningModalShown = true;
+  }
+
+  private hideModal(): void {
+    this.winnerModal.hide();
+  }
+
+  private onHidden(): void {
+    this.isWinningModalShown = false;
   }
 
   private findNextPlayer(): IPlayer {
@@ -175,6 +200,7 @@ export class GameroomComponent implements OnInit {
     this.game.roundWinner = null;
     this.game.players.forEach(p => {
       p.captionPlayed = null;
+      p.captions = [];
     });
   }
 
