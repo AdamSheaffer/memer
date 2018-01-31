@@ -10,6 +10,7 @@ import { GiphyService } from '../../services/giphy.service';
 import { ICard } from '../../interfaces/ICard';
 import { DeckService } from '../../services/deck.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { IMessage } from '../../interfaces/IMessage';
 
 @Component({
   selector: 'memer-gameroom',
@@ -154,6 +155,11 @@ export class GameroomComponent implements OnInit {
     this.updateGame();
   }
 
+  sendMessage(message: IMessage) {
+    this.game.messages.push(message);
+    this.updateGame();
+  }
+
   private showModal(): void {
     this.isWinningModalShown = true;
   }
@@ -200,7 +206,6 @@ export class GameroomComponent implements OnInit {
     this.game.roundWinner = null;
     this.game.players.forEach(p => {
       p.captionPlayed = null;
-      p.captions = [];
     });
   }
 

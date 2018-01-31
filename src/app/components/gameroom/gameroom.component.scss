@@ -1,9 +1,20 @@
 @import '../../../variables';
 
+.wrapper {
+  display: flex;
+  align-items: stretch;
+}
+
+#sidebar {
+  min-width: 300px;
+  max-width: 300px;
+  min-height: calc(100vh - 72px);
+}
+
 .turn-indicator {
   font-family: $impact;
   margin: 20px auto 30px auto;
-  color: $accent-color;
+  color: $primary-color;
   text-align: center;
 }
 

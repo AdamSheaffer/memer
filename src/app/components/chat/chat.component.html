@@ -1,0 +1,19 @@
+<div class="chat d-flex justify-content-end flex-column">
+  <div class="p-2 messages">
+    <div *ngIf="messages">
+      <div *ngFor="let message of messages" class="message">
+        <div class="user-photo">
+          <img [src]="message.photoURL" [alt]="message.username">
+          <p class="message-content" [ngClass]="{'current-user-message': message.userUID === currentUser.uid}">{{message.content}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="p-2">
+    <textarea [value]="messageContent" (input)="messageContent = $event.target.value;" (keyup.enter)="send()" class="form-control message"
+      placeholder="Message..."></textarea>
+    <div class="float-right">
+      <button (click)="send()" class="btn btn-info send-btn" type="button ">SEND</button>
+    </div>
+  </div>
+</div>

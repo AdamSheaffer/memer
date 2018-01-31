@@ -85,7 +85,8 @@ export class GameService {
       gifOptionURLs: [],
       captionDeck: [],
       isVotingRound: false,
-      gifOptionIndex: 0
+      gifOptionIndex: 0,
+      messages: []
     }
   }
 }
