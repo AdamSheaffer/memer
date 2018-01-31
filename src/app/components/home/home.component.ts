@@ -30,7 +30,11 @@ export class HomeComponent implements OnInit {
 
   joinGame() {
     this.gameService.findOpenGameId().subscribe(id => {
-      this.router.navigate([`game/${id}`]);
+      if (!id) {
+        this.hostGame();
+      } else {
+        this.router.navigate([`game/${id}`]);
+      }
     });
   }
 }
