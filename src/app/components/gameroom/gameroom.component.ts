@@ -3,7 +3,7 @@ import { IPlayer } from '../../interfaces/IPlayer';
 import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
 import { IGame } from '../../interfaces/IGame';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { GiphyService } from '../../services/giphy.service';
@@ -32,6 +32,7 @@ export class GameroomComponent implements OnInit {
     private deckService: DeckService,
     private gameService: GameService,
     private giphyService: GiphyService,
+    private router: Router,
     private route: ActivatedRoute) {
     this.currentUser = this.authService.getUser();
   }
@@ -46,6 +47,7 @@ export class GameroomComponent implements OnInit {
     this.join();
     this.trackPlayerChanges();
     this.trackVotingEnd();
+    this.trackPlayerRemoval();
   }
 
   join() {
@@ -158,6 +160,31 @@ export class GameroomComponent implements OnInit {
   sendMessage(message: IMessage) {
     this.game.messages.push(message);
     this.updateGame();
+  }
+
+  removePlayer(player: IPlayer) {
+    const playerIndex = this.game.players.findIndex(p => p.uid === player.uid);
+    this.game.players.splice(playerIndex, 1);
+
+    if (this.game.turn === player.uid) {
+      this.changeTurns();
+    }
+
+    this.game.messages.push({
+      content: `${player.username} has been removed from the game`,
+      username: 'MEMER',
+      userUID: null,
+      photoURL: null
+    });
+    this.updateGame();
+  }
+
+  trackPlayerRemoval() {
+    this.gameService.userRemoval(this.currentUser.uid)
+      .subscribe(() => {
+        alert('You\'ve been removed from the game');
+        this.router.navigate(['/']);
+      });
   }
 
   private showModal(): void {

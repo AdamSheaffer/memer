@@ -68,6 +68,12 @@ export class GameService {
       .filter(p => p.uid === uid);
   }
 
+  userRemoval(uid: string) {
+    return this.game$.filter(g => {
+      return !g.players.find(p => p.uid === uid);
+    });
+  }
+
   private everyoneVoted(game: IGame) {
     if (!game) return;
 

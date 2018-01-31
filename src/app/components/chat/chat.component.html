@@ -3,7 +3,7 @@
     <div *ngIf="messages">
       <div *ngFor="let message of messages" class="message">
         <div class="user-photo">
-          <img [src]="message.photoURL" [alt]="message.username">
+          <img *ngIf="message.photoURL" [src]="message.photoURL" [alt]="message.username">
           <p class="message-content" [ngClass]="{'current-user-message': message.userUID === currentUser.uid}">{{message.content}}</p>
         </div>
       </div>

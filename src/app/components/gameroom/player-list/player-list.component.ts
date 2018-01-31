@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IPlayer } from '../../../interfaces/IPlayer';
 
 @Component({
@@ -9,10 +9,27 @@ import { IPlayer } from '../../../interfaces/IPlayer';
 export class PlayerListComponent implements OnInit {
   @Input() players: IPlayer[];
   @Input() turn: string;
+  @Input() isHost: boolean;
+  @Output() onPlayerRemoval = new EventEmitter<IPlayer>();
+
+  playerStagedForRemoval: IPlayer;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  stagePlayerToRemove(player: IPlayer) {
+    if (!this.isHost) return;
+
+    this.playerStagedForRemoval = player;
+  }
+
+  removePlayer() {
+    if (!this.isHost) return;
+
+    this.onPlayerRemoval.emit(this.playerStagedForRemoval);
+    this.playerStagedForRemoval = null;
   }
 
 }

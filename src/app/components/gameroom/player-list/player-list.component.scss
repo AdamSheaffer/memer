@@ -26,3 +26,11 @@
   background: $accent-color;
   border: 2px solid $accent-color;
 }
+
+.modal-body {
+  p {
+    font-family: $impact;
+    text-align: center;
+    color: $dark-gray;
+  }
+}

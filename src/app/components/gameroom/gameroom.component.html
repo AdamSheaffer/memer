@@ -10,7 +10,7 @@
 
     <!-- Player images and scores -->
     <div *ngIf="game?.players.length">
-      <memer-player-list [turn]="game.turn" [players]="game.players"></memer-player-list>
+      <memer-player-list [turn]="game.turn" [players]="game.players" [isHost]="currentUser?.isHost" (onPlayerRemoval)="removePlayer($event)"></memer-player-list>
     </div>
 
     <h3 *ngIf="game?.isVotingRound" class="voting-indicator">
@@ -19,13 +19,13 @@
 
     <!-- Button to begin when it's your turn -->
     <div *ngIf="game?.hasStarted" class="row align-items-center">
-      <div class="turn-indicator">
+      <div class="text-indicator">
         <div *ngIf="isCurrentUsersTurn">
           <h3 *ngIf="!game.tagOptions.length">{{currentUser.username | uppercase}}, IT'S YOUR TURN!</h3>
           <h3 *ngIf="game.tagOptions.length && !game.tagSelection">SELECT A TAG</h3>
           <button *ngIf="!game.tagOptions.length" class="btn btn-outline-success btn-block" (click)="beginTurn()">START</button>
         </div>
-        <div *ngIf="!isCurrentUsersTurn && !game.tagSelection" class="turn-indicator">
+        <div *ngIf="!isCurrentUsersTurn && !game.tagSelection" class="text-indicator">
           <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] === 'S'">
             <h3>{{game.turnUsername | uppercase}}' TURN</h3>
           </div>
@@ -102,9 +102,10 @@
 
     <!-- Button for Host to start the game -->
     <div class="row justify-content-center">
-      <div class="col-4">
-        <div class="d-flex justify-content-center">
-          <button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()" [disabled]="game?.players.length < 2" class="btn btn-outline-info btn-block">START GAME</button>
+      <div class="col-6">
+        <div class="d-flex flex-column">
+          <h3 class="p-2 text-indicator" *ngIf="!game?.hasStarted">WAITING FOR OTHER PLAYERS</h3>
+          <button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()" [disabled]="game?.players.length < 2" class="btn btn-outline-info btn-block p-2">START GAME</button>
         </div>
       </div>
     </div>
