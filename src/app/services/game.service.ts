@@ -38,8 +38,10 @@ export class GameService {
     return this.game$;
   }
 
-  join(player: IPlayer) {
-    this.game$.take(1).subscribe(g => {
+  join(player: IPlayer, onError: () => void) {
+    return this.game$.take(1).subscribe(g => {
+      if (!g) return onError();
+
       if (!g.players || !g.players.length) {
         player.isHost = true;
         g.turn = player.uid;
@@ -52,7 +54,7 @@ export class GameService {
         g.players.push(player);
         this.updateGame(g);
       }
-    });
+    }, onError);
   }
 
   votingEnd() {

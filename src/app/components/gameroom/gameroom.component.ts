@@ -51,7 +51,9 @@ export class GameroomComponent implements OnInit {
   }
 
   join() {
-    this.gameService.join(this.currentUser);
+    this.gameService.join(this.currentUser, () => {
+      this.router.navigate(['/']);
+    });
   }
 
   trackPlayerChanges() {
@@ -185,6 +187,13 @@ export class GameroomComponent implements OnInit {
         alert('You\'ve been removed from the game');
         this.router.navigate(['/']);
       });
+  }
+
+  trackLeavingGame() {
+    this.router.events.subscribe(e => {
+      console.log(e);
+      debugger;
+    });
   }
 
   private showModal(): void {
