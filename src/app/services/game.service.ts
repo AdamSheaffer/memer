@@ -50,6 +50,7 @@ export class GameService {
       const existingPlayer = g.players.find(p => player.uid === p.uid);
       if (existingPlayer) {
         player = existingPlayer;
+        player.isActive = true;
       } else {
         g.players.push(player);
         this.updateGame(g);

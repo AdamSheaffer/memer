@@ -1,6 +1,6 @@
 <div class="players row">
   <div *ngFor="let player of players">
-    <div class="card player-card" [ngClass]="{'current-turn': player.uid === turn, 'pending-selection': !player.captionPlayed && player.uid !== turn }">
+    <div *ngIf="player.isActive" class="card player-card" [ngClass]="{'current-turn': player.uid === turn, 'pending-selection': !player.captionPlayed && player.uid !== turn }">
       <div class="card-header bg-transparent">{{player.username | uppercase}}
         <button *ngIf="isHost && !player.isHost" (click)="stagePlayerToRemove(player)" type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>

@@ -3,7 +3,7 @@ import { IPlayer } from '../../interfaces/IPlayer';
 import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
 import { IGame } from '../../interfaces/IGame';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { ParamMap } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { GiphyService } from '../../services/giphy.service';
@@ -45,14 +45,29 @@ export class GameroomComponent implements OnInit {
 
     this.game$.subscribe(g => this.game = g);
     this.join();
-    this.trackPlayerChanges();
-    this.trackVotingEnd();
-    this.trackPlayerRemoval();
   }
 
   join() {
-    this.gameService.join(this.currentUser, () => {
-      this.router.navigate(['/']);
+    return this.game$.take(1).subscribe(g => {
+      if (!g) return this.router.navigate(['/']);
+
+      if (!g.players || !g.players.length) {
+        this.currentUser.isHost = true;
+        g.turn = this.currentUser.uid;
+        g.turnUsername = this.currentUser.username;
+      }
+      const existingPlayer = g.players.find(p => this.currentUser.uid === p.uid);
+      if (existingPlayer) {
+        this.currentUser = existingPlayer;
+        this.currentUser.isActive = true;
+      } else {
+        g.players.push(this.currentUser);
+      }
+
+      this.gameService.updateGame(g);
+      this.trackPlayerChanges();
+      this.trackVotingEnd();
+      this.trackLeavingGame();
     });
   }
 
@@ -74,6 +89,9 @@ export class GameroomComponent implements OnInit {
   changeTurns() {
     const player = this.findNextPlayer();
     this.game.turn = player.uid;
+
+    if (!player.isActive) return this.changeTurns();
+
     this.game.turnUsername = player.username;
   }
 
@@ -173,7 +191,7 @@ export class GameroomComponent implements OnInit {
     }
 
     this.game.messages.push({
-      content: `${player.username} has been removed from the game`,
+      content: `${player.username} HAS BEEN REMOVED FROM THE GAME`,
       username: 'MEMER',
       userUID: null,
       photoURL: null
@@ -190,10 +208,24 @@ export class GameroomComponent implements OnInit {
   }
 
   trackLeavingGame() {
-    this.router.events.subscribe(e => {
-      console.log(e);
-      debugger;
-    });
+    this.router.events
+      .filter(e => e instanceof NavigationStart && !e.url.includes(this.gameId))
+      .subscribe(e => {
+        const player = this.findGamePlayerById(this.currentUser.uid);
+        player.isActive = false;
+        const playerLeftMsg = this.createSystemChatMessage(`${player.username.toUpperCase()} LEFT THE GAME`);
+        this.game.messages.push(playerLeftMsg);
+
+        if (player.isHost) {
+          player.isHost = false;
+          const nextPlayer = this.game.players.find(p => p.isActive);
+          if (nextPlayer) nextPlayer.isHost = true;
+          const newHostMsg = this.createSystemChatMessage(`${nextPlayer.username.toUpperCase()} IS THE NEW HOST`);
+          this.game.messages.push(newHostMsg);
+        }
+
+        this.updateGame();
+      });
   }
 
   private showModal(): void {
@@ -216,6 +248,7 @@ export class GameroomComponent implements OnInit {
     if (index === this.game.players.length - 1) {
       return this.game.players[0];
     }
+
     return this.game.players[index + 1];
   }
 
@@ -243,6 +276,15 @@ export class GameroomComponent implements OnInit {
     this.game.players.forEach(p => {
       p.captionPlayed = null;
     });
+  }
+
+  private createSystemChatMessage(message: string): IMessage {
+    return {
+      content: message,
+      username: null,
+      userUID: null,
+      photoURL: null
+    }
   }
 
   // TODO: Unsubscribe On Destroy
