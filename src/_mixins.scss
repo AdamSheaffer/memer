@@ -6,6 +6,12 @@
   filter:#{"grayscale(#{$value})"};
 }
 
+@mixin contrast_element($value) {
+  -webkit-filter: #{"contrast(#{$value})"};
+  -moz-filter: #{"contrast(#{$value})"};
+  filter:#{"contrast(#{$value})"};
+}
+
 @mixin respond-to($media) {
   @media only screen and #{$media} {
       @content;

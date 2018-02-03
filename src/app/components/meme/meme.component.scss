@@ -1,14 +1,22 @@
 @import '../../../variables';
+@import '../../../mixins';
 
 .meme {
   background: black;
+  border: 4px solid $primary-color;
+  transition: all .2s linear;
+
+  &:hover {
+    @include contrast_element(120%); 
+    border: 4px solid $accent-color;
+  }
 
   .meme-caption {
     text-align: center;
-    font-family: $impact;
     color: $white-color;
     padding: 10px 15px;
     min-height: 55px;
+    margin: 0;
   }
 
   .meme-image {

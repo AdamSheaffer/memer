@@ -28,7 +28,7 @@
 .selected-gif {
   margin: 20px 0 30px 0;
 
-  h3 {
+  h3, h2, h1 {
     color: $accent-color;
     font-family: $impact;
     text-align: center;
@@ -56,7 +56,8 @@
 }
 
 .player-submission {
-  margin-bottom: 30px;
+  margin: 30px 15px;
+  cursor: pointer;
 }
 
 #chat {
@@ -67,6 +68,7 @@
   width: 12rem;
 }
 
-.clr-vertical-nav .nav-trigger+.nav-content {
-  flex-direction: column-reverse !important;
+.modal-title {
+  font-family: $impact;
+  color: $primary-color;
 }

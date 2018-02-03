@@ -23,7 +23,6 @@ export class ChatComponent implements OnInit {
   }
 
   send() {
-    debugger;
     if (!this.messageContent) return;
 
     const message: IMessage = {

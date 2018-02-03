@@ -7,7 +7,7 @@ import { ICard } from '../../interfaces/ICard';
   styleUrls: ['./meme.component.scss']
 })
 export class MemeComponent implements OnInit {
-  @Input() caption: ICard = { top: '????', bottom: null };
+  @Input() caption: ICard = { top: null, bottom: '????' };
   @Input() imageURL: string;
 
   constructor() {

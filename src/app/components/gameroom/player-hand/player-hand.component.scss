@@ -5,10 +5,12 @@
 
   .player-card {
     font-family: $impact;
-    height: 16rem;
-    margin: 0 8px;
+    height: 10rem;
+    margin: 0 8px 8px 8px;
     font-size: 1.2em;
-    max-width: 14rem;
   }
 }
 
+.player-hand-container {
+  margin-top: 24px;
+}

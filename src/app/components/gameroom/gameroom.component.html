@@ -49,46 +49,35 @@
         <div *ngIf="game?.gifSelectionURL && !game.isVotingRound" class="selected-gif">
           <div class="row align-items-center">
             <div class="d-flex align-items-center flex-column meme-container">
-              <h3 *ngIf="!isCurrentUsersTurn && !currentUser.captionPlayed">SUBMIT A CAPTION</h3>
-              <h3 *ngIf="(isCurrentUsersTurn || (currentUser.captionPlayed && !game.roundWinner)) && !game.isVotingRound">WAITING FOR OTHER PLAYERS...</h3>
+              <h2 *ngIf="!isCurrentUsersTurn && !currentUser.captionPlayed">SUBMIT A CAPTION</h2>
+              <h2 *ngIf="(isCurrentUsersTurn || (currentUser.captionPlayed && !game.roundWinner)) && !game.isVotingRound">WAITING FOR OTHER PLAYERS...</h2>
               <memer-meme [imageURL]="game.gifSelectionURL"></memer-meme>
             </div>
           </div>
         </div>
 
         <!-- Caption Cards submitted -->
-        <div *ngIf="game?.gifSelectionURL && game.isVotingRound && !game.roundWinner">
-          <div class="d-flex justify-content-center">
-            <div *ngFor="let player of game.players" class="player-submission">
-              <div *ngIf="game?.turn !== player.uid" class="col">
-                <memer-meme (click)="selectFavoriteCaption(player)" [caption]="player.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
-              </div>
+        <div *ngIf="game?.gifSelectionURL && game.isVotingRound && !game.roundWinner" class="row flex-items-xs-center">
+          <div *ngFor="let player of game.players" class="player-submission flex-xs-bottom">
+            <div *ngIf="game?.turn !== player.uid">
+              <memer-meme (click)="selectFavoriteCaption(player)" [caption]="player.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
             </div>
           </div>
         </div>
 
         <!-- Winning Meme -->
-        <!-- <div *ngIf="game?.roundWinner" [config]="{ show: true, ignoreBackdropClick: true, keyboard: false }" (onHidden)="onHidden()"
-              bsModal #winnerModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-              <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h2 *ngIf="!game.winner">{{game.roundWinner.username | uppercase}} WINS THE ROUND!</h2>
-                    <h2 *ngIf="game.winner">{{game.roundWinner.username | uppercase}} WINS THE GAME!</h2>
-                  </div>
-                  <div class="modal-body">
-                    <div class="d-flex align-items-center flex-column meme-container">
-                      <memer-meme [caption]="game.roundWinner.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
-                    </div>
-                    <div *ngIf="game.winner && currentUser?.isHost">
-                      <div (click)="resetGame()" class="btn btn-outline-info">
-                        NEW GAME
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
+        <clr-modal [(clrModalOpen)]="game.roundWinner" *ngIf="game?.roundWinner">
+          <h2 *ngIf="!game.winner" class="modal-title">{{game.roundWinner.username | uppercase}} WINS THE ROUND!</h2>
+          <h2 *ngIf="game.winner" class="modal-title">{{game.roundWinner.username | uppercase}} WINS THE GAME!</h2>
+          <div class="modal-body">
+            <memer-meme [caption]="game.roundWinner.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
+          </div>
+          <div *ngIf="game.winner && currentUser?.isHost" class="modal-footer">
+            <div (click)="resetGame()" class="btn btn-outline-info">
+              NEW GAME
+            </div>
+          </div>
+        </clr-modal>
 
         <!-- Hand of Caption Cards -->
         <div *ngIf="currentUser?.captions">
