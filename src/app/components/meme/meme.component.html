@@ -1,7 +1,7 @@
-<div class="meme">
-  <h2 class="meme-caption">{{caption.top | uppercase}}</h2>
+<div #meme class="meme">
+  <h2 #memetop class="meme-caption">{{caption.top | uppercase}}</h2>
   <div>
-    <img [src]="imageURL" class="meme-image">
+    <img #memeimg [src]="imageURL" class="meme-image">
   </div>
-  <h2 class="meme-caption">{{caption.bottom | uppercase}}</h2>
+  <h2 #memebottom class="meme-caption">{{caption.bottom | uppercase}}</h2>
 </div>

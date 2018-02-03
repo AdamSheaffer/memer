@@ -66,11 +66,17 @@
         </div>
 
         <!-- Winning Meme -->
-        <clr-modal [(clrModalOpen)]="game.roundWinner" *ngIf="game?.roundWinner">
-          <h2 *ngIf="!game.winner" class="modal-title">{{game.roundWinner.username | uppercase}} WINS THE ROUND!</h2>
-          <h2 *ngIf="game.winner" class="modal-title">{{game.roundWinner.username | uppercase}} WINS THE GAME!</h2>
+        <clr-modal [(clrModalOpen)]="game.roundWinner" *ngIf="game?.roundWinner" [clrModalClosable]="false">
+          <h2 *ngIf="!game.winner" class="modal-title">
+            <span class="winner-name">{{game.roundWinner.username | uppercase}} </span> WINS THE ROUND!
+          </h2>
+          <h2 *ngIf="game.winner" class="modal-title">
+            <span class="winner-name">{{game.roundWinner.username | uppercase}}</span> WINS THE GAME!
+          </h2>
           <div class="modal-body">
-            <memer-meme [caption]="game.roundWinner.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
+            <div class="row flex-items-xs-center">
+              <memer-meme [caption]="game.roundWinner.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
+            </div>
           </div>
           <div *ngIf="game.winner && currentUser?.isHost" class="modal-footer">
             <div (click)="resetGame()" class="btn btn-outline-info">

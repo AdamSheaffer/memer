@@ -18,6 +18,8 @@
 
 .waiting-indicator {
   margin-top: 72px;
+  color: $primary-color;
+  text-align: center;
 }
 
 .spinner {
@@ -71,4 +73,9 @@
 .modal-title {
   font-family: $impact;
   color: $primary-color;
+
+  .winner-name {
+    color: $accent-color;
+  }
 }
+
