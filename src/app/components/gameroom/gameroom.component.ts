@@ -225,12 +225,19 @@ export class GameroomComponent implements OnInit, AfterViewInit {
         if (player.isHost) {
           player.isHost = false;
           const nextPlayer = this.game.players.find(p => p.isActive);
-          if (nextPlayer) nextPlayer.isHost = true;
-          const newHostMsg = this.createSystemChatMessage(`${nextPlayer.username.toUpperCase()} IS THE NEW HOST`);
-          this.game.messages.push(newHostMsg);
+          if (nextPlayer) {
+            nextPlayer.isHost = true;
+            const newHostMsg = this.createSystemChatMessage(`${nextPlayer.username.toUpperCase()} IS THE NEW HOST`);
+            this.game.messages.push(newHostMsg);
+          }
         }
 
-        this.updateGame();
+        // If no one is left in the game, delete the game
+        if (!this.gameHasActivePlayers()) {
+          this.gameService.deleteGame();
+        } else {
+          this.updateGame();
+        }
       });
   }
 
@@ -279,6 +286,11 @@ export class GameroomComponent implements OnInit, AfterViewInit {
       userUID: null,
       photoURL: null
     }
+  }
+
+  private gameHasActivePlayers(): boolean {
+    return !!this.game.players.length &&
+      !!this.game.players.find(p => p.isActive);
   }
 
   // TODO: Unsubscribe On Destroy

@@ -38,24 +38,8 @@ export class GameService {
     return this.game$;
   }
 
-  join(player: IPlayer, onError: () => void) {
-    return this.game$.take(1).subscribe(g => {
-      if (!g) return onError();
-
-      if (!g.players || !g.players.length) {
-        player.isHost = true;
-        g.turn = player.uid;
-        g.turnUsername = player.username;
-      }
-      const existingPlayer = g.players.find(p => player.uid === p.uid);
-      if (existingPlayer) {
-        player = existingPlayer;
-        player.isActive = true;
-      } else {
-        g.players.push(player);
-        this.updateGame(g);
-      }
-    }, onError);
+  deleteGame() {
+    this.gameDoc.delete();
   }
 
   votingEnd() {
@@ -67,7 +51,7 @@ export class GameService {
   }
 
   currentPlayer(uid: string) {
-    return this.game$.switchMap(g => g.players)
+    return this.game$.switchMap(g => !!g ? g.players : [])
       .filter(p => p.uid === uid);
   }
 
