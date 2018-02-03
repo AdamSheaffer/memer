@@ -43,7 +43,10 @@ export class GameroomComponent implements OnInit, AfterViewInit {
       return this.gameService.getGameById(this.gameId);
     });
 
-    this.game$.subscribe(g => this.game = g);
+    this.game$.subscribe(g => {
+      if (!g) return this.router.navigate(['/']);
+      return this.game = g
+    });
     this.join();
   }
 
