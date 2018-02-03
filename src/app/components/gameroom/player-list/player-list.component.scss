@@ -1,36 +1,44 @@
 @import '../../../../variables';
 @import '../../../../mixins';
 
-.players {
-  padding: 25px;
+// .pending-selection {
+//     @include grayscale_element(100%);    
+// }
+
+.player-img {
+  border-radius: 100px;
+  border: 4px solid $accent-color;
+  display: block;
+  height: 100px;
+  margin: 8px auto;
+  transition: all .2s linear;
 }
 
-.player-card {
-  background: $primary-color;
-  border: 2px solid $primary-color;
+.player-img:hover {
+  transform: scale(1.1);
+  border: 4px solid $primary-color;
+}
+
+.player-details {
+  color: $dark-gray;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.player-score {
+  font-size: 0.5rem;
+}
+
+.remove-player-button {
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.modal-title {
   font-family: $impact;
-  color: $white-color;
-  max-width: 150px;
-  margin: 0 8px;
-
-  .card-header, .card-footer {
-    padding: 4px;
-  }
-}
-
-.pending-selection {
-    @include grayscale_element(100%);    
-}
-
-.current-turn {
-  background: $accent-color;
-  border: 2px solid $accent-color;
+  color: $primary-color;
 }
 
 .modal-body {
-  p {
-    font-family: $impact;
-    text-align: center;
-    color: $dark-gray;
-  }
+  font-family: $secondary-font;
 }

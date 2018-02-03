@@ -28,6 +28,7 @@ import { PlayerHandComponent } from './components/gameroom/player-hand/player-ha
 import { DeckService } from './services/deck.service';
 import { MemeComponent } from './components/meme/meme.component';
 import { ChatComponent } from './components/chat/chat.component';
+import { PlayerScoreComponent } from './components/player-score/player-score.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { ChatComponent } from './components/chat/chat.component';
     GifOptionsComponent,
     PlayerHandComponent,
     MemeComponent,
-    ChatComponent
+    ChatComponent,
+    PlayerScoreComponent
   ],
   imports: [
     BrowserModule,

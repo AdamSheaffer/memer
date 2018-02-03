@@ -11,25 +11,24 @@
           <memer-player-list [turn]="game.turn" [players]="game.players" [isHost]="currentUser?.isHost" (onPlayerRemoval)="removePlayer($event)"></memer-player-list>
         </div>
 
+        <!-- Voting label -->
         <h3 *ngIf="game?.isVotingRound" class="voting-indicator">
           <span class="username">{{game.turnUsername | uppercase}}</span> IS VOTING
         </h3>
 
         <!-- Button to begin when it's your turn -->
-        <div *ngIf="game?.hasStarted" class="row align-items-center">
-          <div class="text-indicator">
-            <div *ngIf="isCurrentUsersTurn">
-              <h3 *ngIf="!game.tagOptions.length">{{currentUser.username | uppercase}}, IT'S YOUR TURN!</h3>
-              <h3 *ngIf="game.tagOptions.length && !game.tagSelection">SELECT A TAG</h3>
-              <button *ngIf="!game.tagOptions.length" class="btn btn-outline-success btn-block" (click)="beginTurn()">START</button>
+        <div *ngIf="game?.hasStarted" class="row">
+          <div *ngIf="isCurrentUsersTurn" class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+            <h2 *ngIf="!game.tagOptions.length">{{currentUser.username | uppercase}}, IT'S YOUR TURN!</h2>
+            <h2 *ngIf="game.tagOptions.length && !game.tagSelection">SELECT A TAG</h2>
+            <button *ngIf="!game.tagOptions.length" class="btn btn-outline-primary btn-block" (click)="beginTurn()">START</button>
+          </div>
+          <div *ngIf="!isCurrentUsersTurn && !game.tagSelection" class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+            <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] === 'S'">
+              <h2>{{game.turnUsername | uppercase}}' TURN</h2>
             </div>
-            <div *ngIf="!isCurrentUsersTurn && !game.tagSelection" class="text-indicator">
-              <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] === 'S'">
-                <h3>{{game.turnUsername | uppercase}}' TURN</h3>
-              </div>
-              <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] !== 'S'">
-                <h3>{{game.turnUsername | uppercase}}'S TURN</h3>
-              </div>
+            <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] !== 'S'">
+              <h2>{{game.turnUsername | uppercase}}'S TURN</h2>
             </div>
           </div>
         </div>
@@ -99,11 +98,14 @@
         </div>
 
         <!-- Button for Host to start the game -->
-        <div class="row justify-content-center">
-          <div class="col-6">
-            <div class="d-flex flex-column">
-              <h3 class="p-2 text-indicator" *ngIf="!game?.hasStarted">WAITING FOR OTHER PLAYERS</h3>
-              <button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()" [disabled]="game?.players.length < 2" class="btn btn-outline-info btn-block p-2">START GAME</button>
+        <div>
+          <h2 class="text-indicator waiting-indicator" *ngIf="!game?.hasStarted">WAITING FOR OTHER PLAYERS</h2>
+          <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+              <button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()" [disabled]="game?.players.length < 2" class="btn btn-outline-info btn-block">START GAME</button>
+              <span *ngIf="!currentUser?.isHost && !game?.hasStarted" class="spinner spinner-lg">
+                  Waiting...
+              </span>
             </div>
           </div>
         </div>

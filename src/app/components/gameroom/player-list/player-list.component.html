@@ -1,18 +1,32 @@
 <div class="players row">
-  <div *ngFor="let player of players">
-    <div *ngIf="player.isActive" class="card player-card" [ngClass]="{'current-turn': player.uid === turn, 'pending-selection': !player.captionPlayed && player.uid !== turn }">
-      <div class="card-header bg-transparent">{{player.username | uppercase}}
-        <button *ngIf="isHost && !player.isHost" (click)="stagePlayerToRemove(player)" type="button" class="close" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <div *ngFor="let player of players" class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <div *ngIf="player.isActive" [ngClass]="{'current-turn': player.uid === turn, 'pending-selection': !player.captionPlayed && player.uid !== turn }">
+      <div class="player-details player-name">
+        <span>{{player.username | uppercase}}</span>
+        <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-xs tooltip-right">
+          <clr-icon *ngIf="isHost && !player.isHost" (click)="stagePlayerToRemove(player)" shape="thumbs-down" class="is-error remove-player-button"></clr-icon>
+          <span class="tooltip-content">Remove {{player.username}}</span>
+        </a>
+        <div>
+          <img class="player-img" [src]="player.thumbnailURL">
+        </div>
       </div>
-      <div>
-        <img class="card-img-top" [src]="player.thumbnailURL">
-      </div>
-      <div class="card-footer">SCORE: {{player.score}}</div>
+      <div class="player-details player-score">SCORE: {{player.score}}</div>
+      <memer-player-score [score]="player.score"></memer-player-score>
     </div>
   </div>
 </div>
+
+<clr-modal *ngIf="playerStagedForRemoval && isHost" [(clrModalOpen)]="playerStagedForRemoval && isHost" [clrModalClosable]="false">
+  <h3 class="modal-title">IS {{playerStagedForRemoval.username | uppercase}} BEING A DICK?</h3>
+  <div class="modal-body">
+    <p>Do you want to remove {{playerStagedForRemoval.username}} from the game?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="playerStagedForRemoval = null;">NO</button>
+    <button type="button" class="btn btn-primary" (click)="removePlayer()">YES</button>
+  </div>
+</clr-modal>
 
 <!-- <div *ngIf="playerStagedForRemoval && isHost" [config]="{ show: true, ignoreBackdropClick: true, keyboard: false }" bsModal
   #removalModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">

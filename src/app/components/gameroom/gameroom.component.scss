@@ -5,11 +5,24 @@
   align-items: stretch;
 }
 
-.text-indicator {
+.text-indicator h1,
+.text-indicator h2,
+.text-indicator h3,
+.text-indicator h4,
+.text-indicator h5 {
   font-family: $impact;
   margin: 20px auto 30px auto;
   color: $primary-color;
   text-align: center;
+}
+
+.waiting-indicator {
+  margin-top: 72px;
+}
+
+.spinner {
+  display: block;
+  margin: auto;
 }
 
 .selected-gif {
