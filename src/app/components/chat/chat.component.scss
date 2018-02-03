@@ -1,32 +1,32 @@
 @import '../../../variables';
 
 .chat {
-  background-color: lighten($color: $dark-gray, $amount: 60%);
-  height: 100%;
   color: $dark-gray;
+  font-family: 'Heebo', sans-serif;
+  padding: 8px;
+}
+
+.message-textarea {
+  margin-bottom: 60px;
 }
 
 .messages {
-  padding: 16px;
+  margin-bottom: 24px;
 
   p {
     display: inline-block;
     background: lighten($color: $dark-gray, $amount: 40%);
     padding: 6px;
-    border-radius: .25rem;
+    border-radius: 2px;
     margin-left: 4px;
     color: white;
-    max-width: 235px;
+    max-width: 8.5rem;
   }
 
   .current-user-message {
     background: #1dbc9c;
     color: white;
   }
-}
-
-.send-btn {
-  margin-top: 8px;
 }
 
 .user-photo {

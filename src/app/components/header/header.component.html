@@ -1,4 +1,17 @@
-<nav class="navbar navbar-dark">
-  <h1 class="title">MEMER</h1>
-  <button class="btn btn-outline-danger float-left" (click)="logout()">LOG OUT</button>
-</nav>
+<header class="header">
+  <div class="branding">
+    <span class="memer-title">MEMER</span>
+  </div>
+  <div class="header-actions">
+    <clr-dropdown>
+      <button class="nav-icon" clrDropdownTrigger>
+            <clr-icon shape="cog"></clr-icon>
+            <clr-icon shape="caret down"></clr-icon>
+        </button>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a routerLink="/" clrDropdownItem>LEAVE GAME</a>
+        <a (click)="logout()" clrDropdownItem>LOG OUT</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
+  </div>
+</header>

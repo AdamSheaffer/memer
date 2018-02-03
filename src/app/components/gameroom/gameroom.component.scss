@@ -5,12 +5,6 @@
   align-items: stretch;
 }
 
-#sidebar {
-  min-width: 300px;
-  max-width: 300px;
-  min-height: calc(100vh - 72px);
-}
-
 .text-indicator {
   font-family: $impact;
   margin: 20px auto 30px auto;
@@ -42,8 +36,6 @@
 
 .voting-indicator {
   text-align: center;
-  font-family: $impact;
-  color: $white-color;
 
   .username {
     color: $accent-color;
@@ -54,21 +46,14 @@
   margin-bottom: 30px;
 }
 
-.modal-header {
-  background: $accent-color;
-  border: 3px solid $white-color;
-  h2, h3, h4 {
-    display: block;
-    width: 100%;
-    text-align: center;
-    color: $white-color;
-    font-family: $impact;
-  }
+#chat {
+  order: inherit;
 }
 
-.modal-body {
-  border: none;
-  background: lighten($color: $primary-color, $amount: 20%);
-  border: 3px solid $white-color;
-  border-top: none;
+.clr-vertical-nav {
+  width: 12rem;
+}
+
+.clr-vertical-nav .nav-trigger+.nav-content {
+  flex-direction: column-reverse !important;
 }

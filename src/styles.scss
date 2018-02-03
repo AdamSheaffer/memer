@@ -3,8 +3,13 @@
 
 body {
   background-color: $dark-gray;
+  font-family: $impact;
 }
 
-.btn {
-  border-radius: 25px;
+.impact {
+  font-family: $impact;
+
+  .white {
+    color: $white-color;
+  }
 }

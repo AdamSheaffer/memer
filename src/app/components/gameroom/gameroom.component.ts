@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Renderer } from '@angular/core';
 import { IPlayer } from '../../interfaces/IPlayer';
 import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
@@ -9,7 +9,6 @@ import { Observable } from 'rxjs/Observable';
 import { GiphyService } from '../../services/giphy.service';
 import { ICard } from '../../interfaces/ICard';
 import { DeckService } from '../../services/deck.service';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IMessage } from '../../interfaces/IMessage';
 
 @Component({
@@ -17,8 +16,8 @@ import { IMessage } from '../../interfaces/IMessage';
   templateUrl: './gameroom.component.html',
   styleUrls: ['./gameroom.component.scss']
 })
-export class GameroomComponent implements OnInit {
-  @ViewChild('winnerModal') winnerModal: ModalDirective;
+export class GameroomComponent implements OnInit, AfterViewInit {
+  @ViewChild('chat', { read: ElementRef }) chatEl: ElementRef;
   isWinningModalShown: boolean;
   currentUser: IPlayer;
   game$: Observable<IGame>;
@@ -33,7 +32,8 @@ export class GameroomComponent implements OnInit {
     private gameService: GameService,
     private giphyService: GiphyService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private renderer: Renderer) {
     this.currentUser = this.authService.getUser();
   }
 
@@ -45,6 +45,12 @@ export class GameroomComponent implements OnInit {
 
     this.game$.subscribe(g => this.game = g);
     this.join();
+  }
+
+  // To position the chat at the bottom
+  ngAfterViewInit(): void {
+    const el = this.chatEl.nativeElement.getElementsByClassName('nav-content')[0];
+    this.renderer.setElementStyle(el, 'flex-direction', 'column-reverse');
   }
 
   join() {
@@ -226,18 +232,6 @@ export class GameroomComponent implements OnInit {
 
         this.updateGame();
       });
-  }
-
-  private showModal(): void {
-    this.isWinningModalShown = true;
-  }
-
-  private hideModal(): void {
-    this.winnerModal.hide();
-  }
-
-  private onHidden(): void {
-    this.isWinningModalShown = false;
   }
 
   private findNextPlayer(): IPlayer {

@@ -1,10 +1,13 @@
 @import '../../../variables';
 
-.navbar {
+.header {
   background: $primary-color;
 }
 
-.title {
+.memer-title {
   font-family: $impact;
   color: $white-color;
+  display: inline-block;
+  font-size: 1.6rem;
+  margin: auto;
 }

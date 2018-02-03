@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { AngularFireModule } from 'angularfire2';
@@ -6,8 +7,10 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
-// BOOTSTRAP MODULES
-import { ModalModule } from 'ngx-bootstrap/modal';
+import { ClarityModule } from "@clr/angular";
+import '@clr/icons';
+import '@clr/icons/shapes/essential-shapes';
+import '@clr/icons/shapes/social-shapes';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -43,12 +46,13 @@ import { ChatComponent } from './components/chat/chat.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
     AppRoutingModule,
-    ModalModule.forRoot()
+    ClarityModule
   ],
   providers: [
     AuthService,
