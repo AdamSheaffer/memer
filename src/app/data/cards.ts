@@ -2,8 +2,8 @@ import { ICard } from "../interfaces/ICard";
 
 export const cards: ICard[] = [
   {
-    top: "Wubba Lubba Dub Dub",
-    bottom: null
+    top: null,
+    bottom: "Wubba Lubba Dub Dub"
   },
   {
     top: "Doing hood-rat shit",
@@ -14,132 +14,128 @@ export const cards: ICard[] = [
     bottom: "in the wild"
   },
   {
-    top: "The ‘ol switcharoo",
-    bottom: null
+    top: null,
+    bottom: "The ‘ol switcharoo"
   },
   {
-    top: "Are you hearing this shit?",
-    bottom: null
+    top: "Are you hearing",
+    bottom: "this shit?"
   },
   {
-    top: "Y’all poor mother fuckers.",
-    bottom: null
+    top: null,
+    bottom: "Y’all poor mother fuckers"
   },
   {
     top: "So woke",
     bottom: "you can’t close your eyes"
   },
   {
-    top: "Why is y’all like this?",
-    bottom: null
-  },
-  {
-    top: "So waaaavy",
-    bottom: null
+    top: null,
+    bottom: "Why is y’all like this?"
   },
   {
     top: "The way white people",
     bottom: "look at their dogs"
   },
   {
-    top: "There are only 2 genders.",
-    bottom: null
+    top: "There are only",
+    bottom: "2 genders"
   },
   {
-    top: "Okay, byyyyyeeeee.",
-    bottom: null
+    top: null,
+    bottom: "Okay, byyyyyeeeee"
   },
   {
-    top: "Casting couch",
-    bottom: null
+    top: null,
+    bottom: "Casting couch"
   },
   {
-    top: "Bougie ass Whole Foods shit.",
-    bottom: null
+    top: "Bougie ass",
+    bottom: "Whole Foods shit"
   },
   {
-    top: "Master race.",
-    bottom: null
+    top: null,
+    bottom: "Master race"
   },
   {
-    top: "Why u do this???",
-    bottom: null
+    top: null,
+    bottom: "Why u do dis???"
   },
   {
-    top: "Hurrrr Durrrr",
-    bottom: null
+    top: null,
+    bottom: "Hurrrr Durrrr"
   },
   {
-    top: "Incel tears",
-    bottom: null
+    top: null,
+    bottom: "Incel tears"
   },
   {
-    top: "Seal Team Six",
-    bottom: null
+    top: null,
+    bottom: "Seal Team Six"
   },
   {
-    top: "Leroy Jenkins",
-    bottom: null
+    top: null,
+    bottom: "Leroy Jenkins"
   },
   {
-    top: "Aw buddy",
-    bottom: null
+    top: null,
+    bottom: "Aw buddy..."
   },
   {
     top: "When I nut",
     bottom: "but she keeps sucking"
   },
   {
-    top: "Amy Schumer’s lunch",
-    bottom: null
+    top: null,
+    bottom: "Amy Schumer’s lunch"
   },
   {
     top: "It’s pronounced",
     bottom: "Sein-feld"
   },
   {
-    top: "Catch me in the club like",
-    bottom: null
+    top: null,
+    bottom: "Catch me in the club like"
   },
   {
-    top: "Miss me with that gay shit",
-    bottom: null
+    top: null,
+    bottom: "Miss me with that gay shit"
   },
   {
-    top: "The club can’t even handle me",
-    bottom: null
+    top: null,
+    bottom: "The club can’t even handle me"
   },
   {
-    top: "Me after 2 beers",
-    bottom: null
+    top: null,
+    bottom: "Me after 2 beers"
   },
   {
-    top: "White girl popping",
-    bottom: null
+    top: null,
+    bottom: "White girl popping"
   },
   {
     top: "When you from the hood",
     bottom: "but do aight now"
   },
   {
-    top: "First of all...",
-    bottom: null
+    top: null,
+    bottom: "First of all..."
   },
   {
-    top: "I just clocked out.",
-    bottom: null
+    top: null,
+    bottom: "I just clocked out"
   },
   {
-    top: "When you text someone at 3am",
-    bottom: "and the three dots pop up right away"
+    top: "When you see the three dots",
+    bottom: "after a 2am text"
   },
   {
-    top: "What it's like to date me.",
-    bottom: null
+    top: null,
+    bottom: "What it's like to date me"
   },
   {
-    top: "lol same",
-    bottom: null
+    top: null,
+    bottom: "lol same"
   },
   {
     top: "When you get a notification",
@@ -154,36 +150,36 @@ export const cards: ICard[] = [
     bottom: "it slips in the wrong hole"
   },
   {
-    top: "#lit",
-    bottom: null
+    top: null,
+    bottom: "#lit"
   },
   {
-    top: "Send nudes",
-    bottom: null
+    top: null,
+    bottom: "Send nudes"
   },
   {
-    top: "FAKE NEWS",
-    bottom: null
+    top: null,
+    bottom: "FAKE NEWS"
   },
   {
-    top: "I've seen some shit...",
-    bottom: null
+    top: null,
+    bottom: "I've seen some shit!"
   },
   {
-    top: "I don't know, man",
-    bottom: null
+    top: null,
+    bottom: "I don't know, man"
   },
   {
-    top: "Make dat stink face",
-    bottom: null
+    top: null,
+    bottom: "Make dat stink face"
   },
   {
-    top: "Surprise poop party",
-    bottom: null
+    top: null,
+    bottom: "Surprise poop party"
   },
   {
-    top: "Trump hair",
-    bottom: null
+    top: null,
+    bottom: "Trump hair"
   },
   {
     top: "Would you rather never poop again",
@@ -194,27 +190,207 @@ export const cards: ICard[] = [
     bottom: "contemplate existence"
   },
   {
-    top: "Swiggity swooty, I'm cumming for that booty",
-    bottom: ""
+    top: "Swiggity swooty",
+    bottom: "I'm cumming for that booty"
   },
   {
     top: "When all his Tinder pics ",
     bottom: "have dead animals in them"
   },
   {
-    top: "And peoples knows dis...?",
-    bottom: null
+    top: null,
+    bottom: "And peoples knows dis?"
   },
   {
     top: "When Internet Explorer",
-    bottom: "asks to be your default browser...again"
+    bottom: "asks to be your default browser"
   },
   {
     top: "When you send out a massive group text",
     bottom: "and it turns blue"
   },
   {
-    top: "when you're forced to spend time with your kids",
-    bottom: null
+    top: "when you're forced",
+    bottom: "to spend time with your kids"
+  },
+  {
+    top: null,
+    bottom: "#triggered"
+  },
+  {
+    top: "Ay gurl",
+    bottom: "you up?"
+  },
+  {
+    top: null,
+    bottom: "White people, ladies and gentlemen!"
+  },
+  {
+    top: "When you already nutted",
+    bottom: "and she give you this look"
+  },
+  {
+    top: null,
+    bottom: "when the acid kicks in"
+  },
+  {
+    top: null,
+    bottom: "Tight dick, playa"
+  },
+  {
+    top: null,
+    bottom: "::heavy breathing intensifies::"
+  },
+  {
+    top: null,
+    bottom: "When your song comes on"
+  },
+  {
+    top: "This is why we have",
+    bottom: "sex robots"
+  },
+  {
+    top: null,
+    bottom: "On hold with comcast"
+  },
+  {
+    top: null,
+    bottom: "harder daddy"
+  },
+  {
+    top: null,
+    bottom: "you are *not* the father"
+  },
+  {
+    top: null,
+    bottom: "Vape nation"
+  },
+  {
+    top: "we get it",
+    bottom: "you smoke weed"
+  },
+  {
+    top: "forgot to close",
+    bottom: "browser history"
+  },
+  {
+    top: null,
+    bottom: "you can lead a ho to water"
+  },
+  {
+    top: null,
+    bottom: "you can lead a ho to water"
+  },
+  {
+    top: null,
+    bottom: "La Croix > Boys"
+  },
+  {
+    top: null,
+    bottom: "Chiplote on payday"
+  },
+  {
+    top: null,
+    bottom: "wwjd"
+  },
+  {
+    top: "When you smell weed",
+    bottom: "and hear trap music"
+  },
+  {
+    top: null,
+    bottom: "watches downton abbey once"
+  },
+  {
+    top: null,
+    bottom: "goes to atlanta once"
+  },
+  {
+    top: null,
+    bottom: "White ppl be like..."
+  },
+  {
+    top: "when she says she prefers",
+    bottom: "miracle whip over mayo"
+  },
+  {
+    top: "when you ask for sausage",
+    bottom: "and he pulls his pants down"
+  },
+  {
+    top: null,
+    bottom: "nailed it"
+  },
+  {
+    top: null,
+    bottom: "put that belly on me"
+  },
+  {
+    top: null,
+    bottom: "what's the safe word again?"
+  },
+  {
+    top: "yay!",
+    bottom: "i did a thing"
+  },
+  {
+    top: "damn girl",
+    bottom: "you shit with that thing?"
+  },
+  {
+    top: null,
+    bottom: "#metoo"
+  },
+  {
+    top: null,
+    bottom: "Back to what the fuck I was saying"
+  },
+  {
+    top: "When you got",
+    bottom: "the house to yourself"
+  },
+  {
+    top: null,
+    bottom: "Every. Single. Time."
+  },
+  {
+    top: "Y’all mothafuckers",
+    bottom: "need Jesus"
+  },
+  {
+    top: null,
+    bottom: "Me irl"
+  },
+  {
+    top: null,
+    bottom: "gottem"
+  },
+  {
+    top: "sure",
+    bottom: "I could fuck with that"
+  },
+  {
+    top: null,
+    bottom: "Smokes weed once"
+  },
+  {
+    top: null,
+    bottom: "after you hit it"
+  },
+  {
+    top: "congratulations",
+    bottom: "you played yourself"
+  },
+  {
+    top: null,
+    bottom: "that's huggy, bro"
+  },
+  {
+    top: "When she says a hotdog",
+    bottom: "is indeed a sandwich"
+  },
+  {
+    top: "When you're mad at bae",
+    bottom: "and he asks if you hungry"
   }
 ];
