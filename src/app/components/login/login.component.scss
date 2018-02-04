@@ -1,8 +1,8 @@
-@import '../../../_variables.scss';
-@import '../../../_mixins.scss';
+.login {
+  margin-top: 80px;
+}
 
-.title {
-  font-family: $impact;
-  color: $white-color;
-  text-align: center;
+.logo {
+  display: block;
+  margin: auto;
 }

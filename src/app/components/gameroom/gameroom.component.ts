@@ -18,6 +18,7 @@ import { IMessage } from '../../interfaces/IMessage';
 })
 export class GameroomComponent implements OnInit, AfterViewInit {
   @ViewChild('chat', { read: ElementRef }) chatEl: ElementRef;
+  collapsed: boolean = false;
   isWinningModalShown: boolean;
   currentUser: IPlayer;
   game$: Observable<IGame>;
@@ -174,7 +175,11 @@ export class GameroomComponent implements OnInit, AfterViewInit {
 
   resetGame() {
     this.game.hasStarted = false;
-    this.game.players.forEach(p => p.captions = []);
+    this.game.players.forEach(p => {
+      p.captions = [];
+      p.score = 0;
+      p.captionPlayed = null;
+    });
     this.game.tagOptions = [];
     this.game.tagSelection = null;
     this.game.gifOptionURLs = [];

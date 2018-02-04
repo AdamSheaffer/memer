@@ -1,5 +1,15 @@
-<memer-header></memer-header>
-<div>
-  <button class="btn btn-outline-info" (click)="joinGame()">JOIN GAME</button>
-  <button class="btn btn-outline-info" (click)="hostGame()">HOST NEW GAME</button>
+<div class="home">
+  <div class="row flex-items-xs-center">
+    <div class="col-xs-12">
+      <img class="logo" src="assets/logo.png" alt="logo">
+    </div>
+    <div class="login-group col-xs-12 row flex-items-xs-center">
+      <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
+        <button (click)="joinGame()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">JOIN GAME</button>
+      </div>
+      <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
+        <button (click)="hostGame()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">HOST NEW GAME</button>
+      </div>
+    </div>
+  </div>
 </div>

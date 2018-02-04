@@ -287,7 +287,7 @@ export const cards: ICard[] = [
   },
   {
     top: null,
-    bottom: "Chiplote on payday"
+    bottom: "Chipotle on payday"
   },
   {
     top: null,
@@ -392,5 +392,9 @@ export const cards: ICard[] = [
   {
     top: "When you're mad at bae",
     bottom: "and he asks if you hungry"
+  },
+  {
+    top: null,
+    bottom: "thanks obama"
   }
 ];
