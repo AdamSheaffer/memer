@@ -4,9 +4,9 @@ A multiplayer card game a la _Cards Against Humanity_ or _Know Your Meme_. Memer
 
 [Play here](https://i-memer.firebaseapp.com)
 
-![Screenshot][screencast]
+![Screenshot][screenshot]
 
-[screencast]: https://dr5mo5s7lqrtc.cloudfront.net/items/2n2K3C402i3h250J3I14/Screen%20Recording%202018-02-04%20at%2012.13%20PM.gif "MEMER screenshot"
+[screenshot]: screenshots/screenshot1.png "MEMER screenshot"
 
 ### Rules
 
