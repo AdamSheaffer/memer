@@ -1,27 +1,20 @@
-# Memer
+# MEMER 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.6.4.
+A multiplayer card game a la _Cards Against Humanity_ or _Know Your Meme_. Memer pulls from the [GIPHY API](https://developers.giphy.com/) so every game will have new and random community cards.
 
-## Development server
+[Play here](https://i-memer.firebaseapp.com)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+![Screenshot][screencast]
 
-## Code scaffolding
+[screencast]: https://dr5mo5s7lqrtc.cloudfront.net/items/2n2K3C402i3h250J3I14/Screen%20Recording%202018-02-04%20at%2012.13%20PM.gif "MEMER screenshot"
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Rules
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+* Players get dealt 7 **CAPTION CARDS**
+* One Player is chosen to be the **JUDGE**. The judge selects from a random set of 4 popular categories (i.e. Food, Chuck Norris, Alcohol, Sassy)
+* After the judge picks a category, GIPHY selects 4 random gifs. The judge selects 1 gif to be the **COMMUNITY CARD**
+* All other players select a caption card to play on top of the community card.
+* A meme gets generated for each player using the community card and their selected caption card
+* The judge selects their favorite meme and the player that submitted the caption scores a point
+* The round resets and the next player becomes the judge
+* First player to 10 points wins
