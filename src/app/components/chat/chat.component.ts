@@ -23,7 +23,7 @@ export class ChatComponent implements OnInit {
   }
 
   send() {
-    if (!this.messageContent) return;
+    if (!this.messageContent || !this.messageContent.trim()) return;
 
     const message: IMessage = {
       content: this.messageContent,
