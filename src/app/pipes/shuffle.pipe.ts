@@ -11,8 +11,6 @@ export class ShufflePipe implements PipeTransform {
       return items;
     }
 
-    console.log('shuffling');
-
     return shuffle(items);
   }
 }
