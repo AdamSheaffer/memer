@@ -1,4 +1,4 @@
-<div *ngIf="displayGif" class="container option-container row">
+<div *ngIf="options" class="container option-container row">
 
   <!-- If it's your turn -->
   <div *ngIf="playerCanSelect" class="col-xs-12">
@@ -6,7 +6,9 @@
       SELECT A GIF FOR
       <span class="tag">{{chosenTag | uppercase}}</span>
     </h2>
-    <img [src]="displayGif" [alt]="'Option ' + imageIndex" (click)="selectOption()" class="col gif-option">
+    <div *ngFor="let option of options; index as i">
+      <img *ngIf="i === imageIndex" [src]="option" [alt]="'Option ' + i" (click)="selectOption(option)" class="col gif-option">
+    </div>
   </div>
   <div *ngIf="playerCanSelect" class="col-xs-12 col-md-4 offset-md-4 row flex-items-xs-center">
     <button (click)="previous()" class="btn btn-outline-info gif-nav-btn">

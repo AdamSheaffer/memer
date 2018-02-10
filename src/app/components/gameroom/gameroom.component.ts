@@ -10,6 +10,7 @@ import { GiphyService } from '../../services/giphy.service';
 import { ICard } from '../../interfaces/ICard';
 import { DeckService } from '../../services/deck.service';
 import { IMessage } from '../../interfaces/IMessage';
+import { ThemeService, Theme } from '../../services/theme.service';
 
 @Component({
   selector: 'memer-gameroom',
@@ -24,8 +25,10 @@ export class GameroomComponent implements OnInit, AfterViewInit {
   game$: Observable<IGame>;
   gameId: string;
   game: IGame;
-  get isUpForVoting(): boolean { return !!this.game && !!this.game.gifSelectionURL }
-  get isCurrentUsersTurn(): boolean { return this.currentUser.uid === this.game.turn }
+  gifOptionIndex: number = 0;
+  get isDarkTheme(): boolean { return this.themeService.theme === Theme.DARK };
+  get isUpForVoting(): boolean { return !!this.game && !!this.game.gifSelectionURL };
+  get isCurrentUsersTurn(): boolean { return this.currentUser.uid === this.game.turn };
 
   constructor(
     private authService: AuthService,
@@ -34,6 +37,7 @@ export class GameroomComponent implements OnInit, AfterViewInit {
     private giphyService: GiphyService,
     private router: Router,
     private route: ActivatedRoute,
+    private themeService: ThemeService,
     private renderer: Renderer) {
     this.currentUser = this.authService.getUser();
   }
@@ -121,11 +125,6 @@ export class GameroomComponent implements OnInit, AfterViewInit {
     });
   }
 
-  changeGifIndex(index: number) {
-    this.game.gifOptionIndex = index;
-    this.updateGame();
-  }
-
   selectGif(gifUrl: string) {
     this.game.gifSelectionURL = gifUrl;
     this.updateGame();
@@ -186,7 +185,6 @@ export class GameroomComponent implements OnInit, AfterViewInit {
     this.game.isVotingRound = false;
     this.game.roundWinner = null;
     this.game.winner = null;
-    this.game.gifOptionIndex = 0;
     this.game.gifSelectionURL = null;
     this.updateGame();
   }

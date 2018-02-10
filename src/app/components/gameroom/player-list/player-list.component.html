@@ -1,7 +1,7 @@
 <div class="players row">
   <div *ngFor="let player of players" class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <div *ngIf="player.isActive" [ngClass]="{'current-turn': player.uid === turn, 'pending-selection': !player.captionPlayed && player.uid !== turn }">
-      <div class="player-details player-name">
+      <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-name">
         <span>{{player.username | uppercase}}</span>
         <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-xs tooltip-right">
           <clr-icon *ngIf="isHost && !player.isHost" (click)="stagePlayerToRemove(player)" shape="thumbs-down" class="is-error remove-player-button"></clr-icon>
@@ -11,7 +11,7 @@
           <img class="player-img" [src]="player.thumbnailURL">
         </div>
       </div>
-      <div class="player-details player-score">SCORE: {{player.score}} / 10</div>
+      <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-score">SCORE: {{player.score}} / 10</div>
       <memer-player-score [player]="player"></memer-player-score>
     </div>
   </div>

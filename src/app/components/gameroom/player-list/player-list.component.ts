@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IPlayer } from '../../../interfaces/IPlayer';
+import { ThemeService, Theme } from '../../../services/theme.service';
 
 @Component({
   selector: 'memer-player-list',
@@ -11,10 +12,11 @@ export class PlayerListComponent implements OnInit {
   @Input() turn: string;
   @Input() isHost: boolean;
   @Output() onPlayerRemoval = new EventEmitter<IPlayer>();
+  get isDarkTheme() { return this.themeService.theme === Theme.DARK };
 
   playerStagedForRemoval: IPlayer;
 
-  constructor() { }
+  constructor(private themeService: ThemeService) { }
 
   ngOnInit() {
   }

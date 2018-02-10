@@ -29,6 +29,7 @@ import { DeckService } from './services/deck.service';
 import { MemeComponent } from './components/meme/meme.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { PlayerScoreComponent } from './components/player-score/player-score.component';
+import { ThemeService } from './services/theme.service';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { PlayerScoreComponent } from './components/player-score/player-score.com
     AuthService,
     DeckService,
     GiphyService,
+    ThemeService,
     GameService],
   bootstrap: [AppComponent]
 })

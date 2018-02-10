@@ -20,6 +20,7 @@
 }
 
 .player-details {
+  transition: $theme-transition;
   color: $dark-gray;
   text-align: center;
   font-size: 0.8rem;
@@ -41,4 +42,9 @@
 
 .modal-body p{
   font-family: $secondary-font;
+}
+
+.dark-theme {
+  color: $white-color;
+  transition: $theme-transition;
 }

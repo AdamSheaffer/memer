@@ -1,7 +1,7 @@
 <!-- Header -->
 <memer-header></memer-header>
 
-<div class="main-container">
+<div [ngClass]="{'dark-theme': isDarkTheme}" class="main-container">
   <div class="content-container">
     <div class="content-area">
       <div>
@@ -40,9 +40,8 @@
 
         <!-- Gif Options to choose from -->
         <div *ngIf="game?.gifOptionURLs && !game.gifSelectionURL">
-          <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [displayGif]="game.gifOptionURLs[game.gifOptionIndex]" [usernameSelecting]="game.turnUsername"
-            (onOptionSelect)="selectGif($event)" (onOptionChange)="changeGifIndex($event)" [optionCount]="game.gifOptionURLs.length"
-            [chosenTag]="game.tagSelection"></memer-gif-options>
+          <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [usernameSelecting]="game.turnUsername" (onOptionSelect)="selectGif($event)"
+            [options]="game.gifOptionURLs" [chosenTag]="game.tagSelection"></memer-gif-options>
         </div>
 
         <!-- Gif that judge has selected -->
@@ -108,7 +107,7 @@
     </div>
 
     <!-- Chat -->
-    <clr-vertical-nav #chat [clrVerticalNavCollapsible]="true" [(clrVerticalNavCollapsed)]="collapsed" id="chat">
+    <clr-vertical-nav #chat [clrVerticalNavCollapsible]="true" [(clrVerticalNavCollapsed)]="collapsed" id="chat" [ngClass]="{'dark-theme': isDarkTheme}">
       <div *ngIf="!collapsed">
         <memer-chat [messages]="game?.messages" (onMessageSend)="sendMessage($event)" class="chat-sidebar"></memer-chat>
       </div>

@@ -7,17 +7,15 @@ import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
   styleUrls: ['./gif-options.component.scss']
 })
 export class GifOptionsComponent implements OnInit, OnDestroy {
-  @Input() displayGif: string;
-  @Input() optionCount: number;
+  @Input() options: string[];
   @Input() playerCanSelect: boolean;
   @Input() usernameSelecting: string;
   @Input() chosenTag: string;
-  @Output() onOptionChange = new EventEmitter<number>();
   @Output() onOptionSelect = new EventEmitter<string>();
 
-  public imageIndex: number = 0;
-  public selectingIndicator = 'SELECTING   ';
-  public timerId;
+  imageIndex: number = 0;
+  selectingIndicator = 'SELECTING   ';
+  timerId;
 
   constructor() {
   }
@@ -34,21 +32,19 @@ export class GifOptionsComponent implements OnInit, OnDestroy {
 
   next(): void {
     if (!this.playerCanSelect) return;
-    this.imageIndex += 1
-    if (this.imageIndex >= this.optionCount) this.imageIndex = 0;
-    this.onOptionChange.emit(this.imageIndex);
+    this.imageIndex += 1;
+    if (this.imageIndex >= this.options.length) this.imageIndex = 0;
   }
 
   previous(): void {
     if (!this.playerCanSelect) return;
     this.imageIndex -= 1
-    if (this.imageIndex < 0) this.imageIndex = (this.optionCount - 1);
-    this.onOptionChange.emit(this.imageIndex);
+    if (this.imageIndex < 0) this.imageIndex = (this.options.length - 1);
   }
 
-  selectOption() {
+  selectOption(option: string) {
     if (!this.playerCanSelect) return;
-    this.onOptionSelect.emit(this.displayGif);
+    this.onOptionSelect.emit(option);
   }
 
   ngOnDestroy(): void {
