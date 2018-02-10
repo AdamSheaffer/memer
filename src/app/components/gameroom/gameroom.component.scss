@@ -67,7 +67,7 @@
 }
 
 #chat.dark-theme {
-  background: darken($color: $white-color, $amount: 10%);
+  background: darken($color: $dark-gray, $amount: 10%);
   transition: $theme-transition;
 }
 

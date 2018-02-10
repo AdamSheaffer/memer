@@ -57,7 +57,7 @@
 
         <!-- Caption Cards submitted -->
         <div *ngIf="game?.gifSelectionURL && game.isVotingRound && !game.roundWinner" class="row flex-items-xs-center">
-          <div *ngFor="let player of game.players" class="player-submission flex-xs-bottom">
+          <div *ngFor="let player of game.players | shuffle" class="player-submission flex-xs-bottom">
             <div *ngIf="game?.turn !== player.uid">
               <memer-meme (click)="selectFavoriteCaption(player)" [caption]="player.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
             </div>

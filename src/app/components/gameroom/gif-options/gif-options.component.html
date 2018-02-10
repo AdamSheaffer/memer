@@ -1,4 +1,4 @@
-<div *ngIf="options" class="container option-container row">
+<div *ngIf="options && options.length" class="container option-container row">
 
   <!-- If it's your turn -->
   <div *ngIf="playerCanSelect" class="col-xs-12">
