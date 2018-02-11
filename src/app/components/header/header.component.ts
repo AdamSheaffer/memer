@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router/';
+import { Router, ActivatedRoute } from '@angular/router/';
 import { ThemeService, Theme } from '../../services/theme.service';
 
 @Component({
@@ -15,15 +16,26 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
+    private location: Location,
     private themeService: ThemeService) {
     this.username = this.authService.getUser().username;
   }
 
   ngOnInit() {
+    this.route.params.subscribe(p => {
+      const isDarkTheme = p.dark == 'true';
+      if (isDarkTheme) this.themeService.setDark();
+    });
   }
 
   changeTheme() {
     this.themeService.changeTheme();
+    const url = this
+      .router
+      .createUrlTree([{ dark: !this.isLightTheme }], { relativeTo: this.route })
+      .toString();
+    this.location.go(url);
   }
 
   logout() {

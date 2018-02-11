@@ -11,6 +11,14 @@ export class ThemeService {
   changeTheme() {
     this._theme = this._theme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT;
   }
+
+  setDark() {
+    this._theme = Theme.DARK;
+  }
+
+  setLight() {
+    this._theme = Theme.LIGHT;
+  }
 }
 
 export enum Theme {
