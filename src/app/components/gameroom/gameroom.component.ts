@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Renderer, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Renderer, OnDestroy, HostListener } from '@angular/core';
 import { IPlayer } from '../../interfaces/IPlayer';
 import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
@@ -230,29 +230,41 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   trackLeavingGame() {
     return this.router.events
       .filter(e => e instanceof NavigationStart && !e.url.includes(this.gameId))
-      .subscribe(e => {
-        const player = this.findGamePlayerById(this.currentUser.uid);
-        player.isActive = false;
-        const playerLeftMsg = this.createSystemChatMessage(`${player.username.toUpperCase()} LEFT THE GAME`);
-        this.game.messages.push(playerLeftMsg);
+      .subscribe(() => this.handlePlayerLeaving());
+  }
 
-        if (player.isHost) {
-          player.isHost = false;
-          const nextPlayer = this.game.players.find(p => p.isActive);
-          if (nextPlayer) {
-            nextPlayer.isHost = true;
-            const newHostMsg = this.createSystemChatMessage(`${nextPlayer.username.toUpperCase()} IS THE NEW HOST`);
-            this.game.messages.push(newHostMsg);
-          }
-        }
+  @HostListener('window:beforeunload', ['$event'])
+  leaveOnUnload($event) {
+    this.handlePlayerLeaving();
+  }
 
-        // If no one is left in the game, delete the game
-        if (!this.gameHasActivePlayers()) {
-          this.gameService.deleteGame();
-        } else {
-          this.updateGame();
-        }
-      });
+  private handlePlayerLeaving() {
+    const player = this.findGamePlayerById(this.currentUser.uid);
+    player.isActive = false;
+    const playerLeftMsg = this.createSystemChatMessage(`${player.username.toUpperCase()} LEFT THE GAME`);
+    this.game.messages.push(playerLeftMsg);
+    const nextPlayer = this.game.players.find(p => p.isActive);
+
+    if (this.game.turn == player.uid && !!nextPlayer) {
+      this.game.turn = nextPlayer.uid;
+      this.game.turnUsername = nextPlayer.username;
+    }
+
+    if (player.isHost) {
+      player.isHost = false;
+      if (nextPlayer) {
+        nextPlayer.isHost = true;
+        const newHostMsg = this.createSystemChatMessage(`${nextPlayer.username.toUpperCase()} IS THE NEW HOST`);
+        this.game.messages.push(newHostMsg);
+      }
+    }
+
+    // If no one is left in the game, delete the game
+    if (!this.gameHasActivePlayers()) {
+      this.gameService.deleteGame();
+    } else {
+      this.updateGame();
+    }
   }
 
   private findNextPlayer(): IPlayer {

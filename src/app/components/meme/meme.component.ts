@@ -22,6 +22,8 @@ export class MemeComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    if (!this.topCaption || !this.bottomCaption) return;
+
     const imgWidth = this.getElementWidth(this.img);
 
     this.renderer.setElementStyle(this.topCaption.nativeElement, 'width', `${imgWidth}px`);

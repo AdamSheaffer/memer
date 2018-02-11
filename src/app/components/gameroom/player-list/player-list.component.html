@@ -1,5 +1,5 @@
 <div class="players row">
-  <div *ngFor="let player of players" class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+  <div *ngFor="let player of players | activePlayers" class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <div *ngIf="player.isActive" [ngClass]="{'current-turn': player.uid === turn, 'pending-selection': !player.captionPlayed && player.uid !== turn }">
       <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-name">
         <span>{{player.username | uppercase}}</span>

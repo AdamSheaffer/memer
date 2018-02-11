@@ -1,4 +1,4 @@
-<div #meme class="meme">
+<div #meme class="meme" *ngIf="caption && imageURL">
   <h2 #memetop class="meme-caption">{{caption.top | uppercase}}</h2>
   <div>
     <img #memeimg [src]="imageURL" class="meme-image">
