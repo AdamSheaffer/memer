@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Renderer } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Renderer, OnDestroy } from '@angular/core';
 import { IPlayer } from '../../interfaces/IPlayer';
 import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
@@ -11,13 +11,14 @@ import { ICard } from '../../interfaces/ICard';
 import { DeckService } from '../../services/deck.service';
 import { IMessage } from '../../interfaces/IMessage';
 import { ThemeService, Theme } from '../../services/theme.service';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'memer-gameroom',
   templateUrl: './gameroom.component.html',
   styleUrls: ['./gameroom.component.scss']
 })
-export class GameroomComponent implements OnInit, AfterViewInit {
+export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chat', { read: ElementRef }) chatEl: ElementRef;
   collapsed: boolean = false;
   isWinningModalShown: boolean;
@@ -25,7 +26,7 @@ export class GameroomComponent implements OnInit, AfterViewInit {
   game$: Observable<IGame>;
   gameId: string;
   game: IGame;
-  gifOptionIndex: number = 0;
+  gameSubscriptions: Subscription[] = [];
   get isDarkTheme(): boolean { return this.themeService.theme === Theme.DARK };
   get isUpForVoting(): boolean { return !!this.game && !!this.game.gifSelectionURL };
   get isCurrentUsersTurn(): boolean { return this.currentUser.uid === this.game.turn };
@@ -64,6 +65,7 @@ export class GameroomComponent implements OnInit, AfterViewInit {
   join() {
     return this.game$.take(1).subscribe(g => {
       if (!g) return this.router.navigate(['/']);
+      this.currentUser.isHost = false;
 
       if (!g.players || !g.players.length) {
         this.currentUser.isHost = true;
@@ -71,6 +73,9 @@ export class GameroomComponent implements OnInit, AfterViewInit {
         g.turnUsername = this.currentUser.username;
       }
       const existingPlayer = g.players.find(p => this.currentUser.uid === p.uid);
+
+      if (!existingPlayer && g.hasStarted) return this.router.navigate(['/']);
+
       if (existingPlayer) {
         this.currentUser = existingPlayer;
         this.currentUser.isActive = true;
@@ -79,14 +84,18 @@ export class GameroomComponent implements OnInit, AfterViewInit {
       }
 
       this.gameService.updateGame(g);
-      this.trackPlayerChanges();
-      this.trackVotingEnd();
-      this.trackLeavingGame();
+
+      this.gameSubscriptions.push(
+        this.trackPlayerChanges(),
+        this.trackVotingEnd(),
+        this.trackLeavingGame(),
+      );
+
     });
   }
 
   trackPlayerChanges() {
-    this.gameService.currentPlayer(this.currentUser.uid)
+    return this.gameService.currentPlayer(this.currentUser.uid)
       .subscribe(p => this.currentUser = p);
   }
 
@@ -140,7 +149,7 @@ export class GameroomComponent implements OnInit, AfterViewInit {
   }
 
   trackVotingEnd() {
-    this.gameService.votingEnd()
+    return this.gameService.votingEnd()
       .subscribe(g => {
         this.game.isVotingRound = true;
         this.updateGame();
@@ -173,7 +182,6 @@ export class GameroomComponent implements OnInit, AfterViewInit {
   }
 
   resetGame() {
-    this.game.hasStarted = false;
     this.game.players.forEach(p => {
       p.captions = [];
       p.score = 0;
@@ -220,7 +228,7 @@ export class GameroomComponent implements OnInit, AfterViewInit {
   }
 
   trackLeavingGame() {
-    this.router.events
+    return this.router.events
       .filter(e => e instanceof NavigationStart && !e.url.includes(this.gameId))
       .subscribe(e => {
         const player = this.findGamePlayerById(this.currentUser.uid);
@@ -299,5 +307,7 @@ export class GameroomComponent implements OnInit, AfterViewInit {
       !!this.game.players.find(p => p.isActive);
   }
 
-  // TODO: Unsubscribe On Destroy
+  ngOnDestroy() {
+    this.gameSubscriptions.forEach(s => s.unsubscribe());
+  }
 }
