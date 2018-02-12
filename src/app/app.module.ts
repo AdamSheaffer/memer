@@ -30,7 +30,7 @@ import { MemeComponent } from './components/meme/meme.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { PlayerScoreComponent } from './components/player-score/player-score.component';
 import { ThemeService } from './services/theme.service';
-import { ShufflePlayersPipe } from './pipes/shuffle.pipe';
+import { ShufflePipe } from './pipes/shuffle.pipe';
 import { ActivePlayersPipe } from './pipes/active-player.pipe';
 
 
@@ -48,7 +48,7 @@ import { ActivePlayersPipe } from './pipes/active-player.pipe';
     MemeComponent,
     ChatComponent,
     PlayerScoreComponent,
-    ShufflePlayersPipe,
+    ShufflePipe,
     ActivePlayersPipe
   ],
   imports: [

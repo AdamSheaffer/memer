@@ -4,6 +4,7 @@ import { IMessage } from "./IMessage";
 
 export interface IGame {
   id?: string;
+  beginDate: number;
   hasStarted: boolean;
   players: IPlayer[];
   turn?: string;

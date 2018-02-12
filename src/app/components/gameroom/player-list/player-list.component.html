@@ -27,24 +27,3 @@
     <button type="button" class="btn btn-primary" (click)="removePlayer()">YES</button>
   </div>
 </clr-modal>
-
-<!-- <div *ngIf="playerStagedForRemoval && isHost" [config]="{ show: true, ignoreBackdropClick: true, keyboard: false }" bsModal
-  #removalModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="d-flex align-items-center flex-column meme-container">
-          <p>DO YOU WANT TO REMOVE {{playerStagedForRemoval.username | uppercase}} FROM THE GAME?</p>
-        </div>
-        <div>
-          <div (click)="playerStagedForRemoval = null;" class="btn btn-outline-danger">
-            NO
-          </div>
-          <div (click)="removePlayer()" class="btn btn-outline-info float-right">
-            YES
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->

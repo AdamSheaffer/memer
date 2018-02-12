@@ -65,7 +65,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   join() {
     return this.game$.take(1).subscribe(g => {
       if (!g) return this.router.navigate(['/']);
-      this.currentUser.isHost = false;
+      this.currentUser.isHost = false; // TODO: what about re-entering the game??
 
       if (!g.players || !g.players.length) {
         this.currentUser.isHost = true;
@@ -233,10 +233,10 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => this.handlePlayerLeaving());
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  leaveOnUnload($event) {
-    this.handlePlayerLeaving();
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // leaveOnUnload($event) {
+  //   this.handlePlayerLeaving();
+  // }
 
   private handlePlayerLeaving() {
     const player = this.findGamePlayerById(this.currentUser.uid);

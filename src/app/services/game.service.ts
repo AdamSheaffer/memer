@@ -23,7 +23,10 @@ export class GameService {
   }
 
   findOpenGameId(): Observable<string> {
-    const gamesCollection = this.afs.collection('games', ref => ref.where('hasStarted', '==', false).limit(1));
+    const gamesCollection = this.afs.collection('games', ref => {
+      return ref.orderBy('beginDate').where('hasStarted', '==', false).limit(1);
+    });
+
     return gamesCollection.snapshotChanges()
       .take(1)
       .map(actions => {
@@ -73,6 +76,7 @@ export class GameService {
   private createGame(): IGame {
     return {
       hasStarted: false,
+      beginDate: (Date.now() * -1),
       players: [],
       tagOptions: [],
       gifOptionURLs: [],
