@@ -396,5 +396,154 @@ export const cards: ICard[] = [
   {
     top: null,
     bottom: "thanks obama"
-  }
+  },
+  {
+    top: null,
+    bottom: "When the Taco Bell finally hits"
+  },
+  {
+    top: 'When your mind says no',
+    bottom: "but your body say yes"
+  },
+  {
+    top: 'When your mind says no',
+    bottom: "but your body say yes"
+  },
+  {
+    top: "When you bring your own bag",
+    bottom: "to the grocery store"
+  },
+  {
+    top: null,
+    bottom: "Two health bars"
+  },
+  {
+    top: null,
+    bottom: "My people need me"
+  },
+  {
+    top: null,
+    bottom: "Fuck. A. Duck."
+  },
+  {
+    top: null,
+    bottom: "I'm Not About That Life"
+  },
+  {
+    top: null,
+    bottom: "Straight Cash Homie"
+  },
+  {
+    top: null,
+    bottom: "ORLY?"
+  },
+  {
+    top: "Also featured",
+    bottom: "in Donald Trump's Pee Tape"
+  },
+  {
+    top: "When You Have",
+    bottom: "An Itchy Asshole"
+  },
+  {
+    top: null,
+    bottom: "What My \"O\" Face Be Like"
+  },
+  {
+    top: null,
+    bottom: "What My \"O\" Face Be Like"
+  },
+  {
+    top: "Yup",
+    bottom: "That's a penis"
+  },
+  {
+    top: "TFW You Realize You're",
+    bottom: "Out of TP mid-shit"
+  },
+  {
+    top: null,
+    bottom: "That Fart After A Long Date"
+  },
+  {
+    top: null,
+    bottom: "Damn bitch, hold on"
+  },
+  {
+    top: null,
+    bottom: "When she calls your penis \"cute\""
+  },
+  {
+    top: "When you ask to netflix and chill",
+    bottom: "Knowing damn well you don't have Netflix"
+  },
+  {
+    top: null,
+    bottom: "When you rap the whole verse correctly"
+  },
+  {
+    top: "When you're trick-or-treating",
+    bottom: "And someone give you raisins"
+  },
+  {
+    top: null,
+    bottom: "Reasons he's not texting you"
+  },
+  {
+    top: null,
+    bottom: "I'm not like most girls..."
+  },
+  {
+    top: null,
+    bottom: "I'm not like most boys..."
+  },
+  {
+    top: "Just saw this dude at dinner",
+    bottom: " and I wanna be his friend"
+  },
+  {
+    top: null,
+    bottom: "This kid is going places"
+  },
+  {
+    top: null,
+    bottom: "When the existential dread kicks in..."
+  },
+  {
+    top: null,
+    bottom: "G O O D B O Y E"
+  },
+  {
+    top: "When he say you don’t ",
+    bottom: "Have to buy off the $1 menu"
+  },
+  {
+    top: null,
+    bottom: "rage quit"
+  },
+  {
+    top: null,
+    bottom: "That's no moon"
+  },
+  {
+    top: "I bet you're wondering",
+    bottom: "how we got here"
+  },
+  {
+    top: null,
+    bottom: "Passing thot"
+  },
+  {
+    top: null,
+    bottom: "She Doooooo"
+  },
+  {
+    top: null,
+    bottom: "I spit hot fire!"
+  },
+  {
+    top: "When you smell",
+    bottom: "what the rock is cooking"
+  },
+
 ];

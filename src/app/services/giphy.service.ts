@@ -91,11 +91,10 @@ export class GiphyService {
     'WEED',
     'THUG LIFE',
     'ALIENS',
-    'FLIGHT OF THE CONCORD',
+    'FLIGHT OF THE CONCORDS',
     'PARKS AND REC',
     'BREAKING BAD',
-    'WAT',
-    'THE FAST AND FURIOUS',
+    'THE FAST AND THE FURIOUS',
     '80S',
     '90S',
     'AWKWARD',
@@ -131,12 +130,10 @@ export class GiphyService {
     'AMERICAN PSYCHO',
     'EYE ROLL',
     'FACEPALM',
-    'LOL',
     'HIGH FIVE',
     'WINK',
     'MICHAEL SCOTT',
     'SNOOP DOG',
-    'PEPE',
     'MIRIN',
     'CARTOONS',
     'H3H3',
@@ -150,7 +147,6 @@ export class GiphyService {
     'TIM AND ERIC',
     'FOOD',
     'GAMING',
-    'FASHION',
     'THE GRIND',
     'NIPPLES',
     'DICKS',
@@ -159,7 +155,11 @@ export class GiphyService {
     'FML',
     'GTFO',
     'YAS',
-    'YAS QUEEN'
+    'YAS QUEEN',
+    'BABE',
+    'WES ANDERSON',
+    'BROAD CITY',
+    'WORKAHOLICS'
   ]
 
 }
