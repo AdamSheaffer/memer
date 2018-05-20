@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { cards } from '../data/cards';
 import { ICard } from '../interfaces/ICard';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { shuffle } from 'lodash';
 import { IPlayer } from '../interfaces/IPlayer';
 

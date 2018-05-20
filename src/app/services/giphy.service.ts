@@ -24,7 +24,7 @@ export class GiphyService {
     for (let i = 0; i < randomNums.length; i++) {
       const args = this.buildParams(tagName, randomNums[i]);
       const req = this.http.get(this.baseURL, args).toPromise().then(res => res.json());
-      imageRequests.push(req)
+      imageRequests.push(req);
     }
     return Promise.all(imageRequests).then(responses => {
       return responses.map(r => r.data[0].images.fixed_height.url);
@@ -38,7 +38,7 @@ export class GiphyService {
       rating: 'pg-13',
       limit: '1',
       offset
-    }
+    };
     return { params };
   }
 
@@ -50,7 +50,7 @@ export class GiphyService {
     const rands = [];
     while (rands.length < count) {
       const rand = Math.round(Math.random() * max);
-      if (rands.includes(rand)) continue;
+      if (rands.includes(rand)) { continue; }
       rands.push(rand);
     }
     return rands;
@@ -160,6 +160,6 @@ export class GiphyService {
     'WES ANDERSON',
     'BROAD CITY',
     'WORKAHOLICS'
-  ]
+  ];
 
 }

@@ -5,13 +5,12 @@ import { GameService } from '../../services/game.service';
 import { IGame } from '../../interfaces/IGame';
 import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { ParamMap } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subscription } from 'rxjs';
 import { GiphyService } from '../../services/giphy.service';
 import { ICard } from '../../interfaces/ICard';
 import { DeckService } from '../../services/deck.service';
 import { IMessage } from '../../interfaces/IMessage';
 import { ThemeService, Theme } from '../../services/theme.service';
-import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'memer-gameroom',
@@ -20,16 +19,16 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chat', { read: ElementRef }) chatEl: ElementRef;
-  collapsed: boolean = false;
+  collapsed = false;
   isWinningModalShown: boolean;
   currentUser: IPlayer;
-  game$: Observable<IGame>;
+  game$: any;
   gameId: string;
   game: IGame;
   gameSubscriptions: Subscription[] = [];
-  get isDarkTheme(): boolean { return this.themeService.theme === Theme.DARK };
-  get isUpForVoting(): boolean { return !!this.game && !!this.game.gifSelectionURL };
-  get isCurrentUsersTurn(): boolean { return this.currentUser.uid === this.game.turn };
+  get isDarkTheme(): boolean { return this.themeService.theme === Theme.DARK; }
+  get isUpForVoting(): boolean { return !!this.game && !!this.game.gifSelectionURL; }
+  get isCurrentUsersTurn(): boolean { return this.currentUser.uid === this.game.turn; }
 
   constructor(
     private authService: AuthService,
@@ -50,8 +49,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.game$.subscribe(g => {
-      if (!g) return this.router.navigate(['/']);
-      return this.game = g
+      if (!g) { return this.router.navigate(['/']); }
+      return this.game = g;
     });
     this.join();
   }
@@ -64,7 +63,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   join() {
     return this.game$.take(1).subscribe(g => {
-      if (!g) return this.router.navigate(['/']);
+      if (!g) { return this.router.navigate(['/']); }
       this.currentUser.isHost = false; // TODO: what about re-entering the game??
 
       if (!g.players || !g.players.length) {
@@ -74,7 +73,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       const existingPlayer = g.players.find(p => this.currentUser.uid === p.uid);
 
-      if (!existingPlayer && g.hasStarted) return this.router.navigate(['/']);
+      if (!existingPlayer && g.hasStarted) { return this.router.navigate(['/']); }
 
       if (existingPlayer) {
         this.currentUser = existingPlayer;
@@ -100,7 +99,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   beginGame() {
-    if (!this.currentUser.isHost) return;
+    if (!this.currentUser.isHost) { return; }
 
     this.game.hasStarted = true;
 
@@ -113,13 +112,13 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     const player = this.findNextPlayer();
     this.game.turn = player.uid;
 
-    if (!player.isActive) return this.changeTurns();
+    if (!player.isActive) { return this.changeTurns(); }
 
     this.game.turnUsername = player.username;
   }
 
   beginTurn() {
-    if (!this.isCurrentUsersTurn) return;
+    if (!this.isCurrentUsersTurn) { return; }
 
     this.game.tagOptions = this.giphyService.getRandomTags();
 
@@ -141,7 +140,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   selectCaption(caption: ICard) {
     const user = this.findGamePlayerById(this.currentUser.uid);
-    const captionIndex = user.captions.findIndex(c => c.top === caption.top && c.bottom == caption.bottom);
+    const captionIndex = user.captions.findIndex(c => c.top === caption.top && c.bottom === caption.bottom);
     user.captions.splice(captionIndex, 1);
     user.captionPlayed = caption;
     this.deckService.deal(this.game.captionDeck, [user], 1);
@@ -157,7 +156,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   selectFavoriteCaption(player: IPlayer) {
-    if (!this.isCurrentUsersTurn || !this.game.isVotingRound) return;
+    if (!this.isCurrentUsersTurn || !this.game.isVotingRound) { return; }
 
     player.score += 1;
     this.game.roundWinner = player;
@@ -245,7 +244,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.game.messages.push(playerLeftMsg);
     const nextPlayer = this.game.players.find(p => p.isActive);
 
-    if (this.game.turn == player.uid && !!nextPlayer) {
+    if (this.game.turn === player.uid && !!nextPlayer) {
       this.game.turn = nextPlayer.uid;
       this.game.turnUsername = nextPlayer.username;
     }
@@ -288,7 +287,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private findGameUserById(uid: string, game: IGame): IPlayer {
-    if (!game || !game.players) return;
+    if (!game || !game.players) { return; }
 
     return game.players.find(p => p.uid === uid);
   }
@@ -311,7 +310,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
       username: null,
       userUID: null,
       photoURL: null
-    }
+    };
   }
 
   private gameHasActivePlayers(): boolean {

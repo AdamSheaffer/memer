@@ -1,7 +1,9 @@
+
+import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { IPlayer } from '../interfaces/IPlayer';
 
 @Injectable()
@@ -10,8 +12,8 @@ export class AuthService {
   private user: IPlayer;
 
   constructor(private afAuth: AngularFireAuth) {
-    this.afAuth.authState
-      .map(this.toPlayerModel)
+    this.afAuth.authState.pipe(
+      map(this.toPlayerModel))
       .subscribe(user => {
         this.user = user;
       });
@@ -26,7 +28,7 @@ export class AuthService {
   }
 
   authState(): Observable<IPlayer> {
-    return this.afAuth.authState.map(this.toPlayerModel);
+    return this.afAuth.authState.pipe(map(this.toPlayerModel));
   }
 
   getUser(): IPlayer {

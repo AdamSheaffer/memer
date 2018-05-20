@@ -22,7 +22,7 @@ export class MemeComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (!this.topCaption || !this.bottomCaption) return;
+    if (!this.topCaption || !this.bottomCaption) { return; }
 
     const imgWidth = this.getElementWidth(this.img);
 
@@ -53,13 +53,13 @@ export class MemeComponent implements AfterViewInit {
   }
 
   private getElementWidth(elRef: ElementRef) {
-    if (!elRef) return;
+    if (!elRef) { return; }
 
     return elRef.nativeElement.offsetWidth;
   }
 
   private getElementHeight(elRef: ElementRef) {
-    if (!elRef) return;
+    if (!elRef) { return; }
 
     return elRef.nativeElement.offsetHeight;
   }

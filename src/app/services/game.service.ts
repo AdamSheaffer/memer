@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { IPlayer } from '../interfaces/IPlayer';
 import { IGame } from '../interfaces/IGame';
-import 'rxjs/operators/mergeMap';
+import { take, map, switchMap, filter } from 'rxjs/operators';
 
 @Injectable()
 export class GameService {
@@ -27,12 +27,14 @@ export class GameService {
       return ref.orderBy('beginDate').where('hasStarted', '==', false).limit(1);
     });
 
-    return gamesCollection.snapshotChanges()
-      .take(1)
-      .map(actions => {
-        const ids = actions.map(a => a.payload.doc.id);
+    return gamesCollection.snapshotChanges().pipe(
+      take(1),
+      map(actions => {
+        const ids = actions.map(a => a.payload.doc['id']);
+        debugger;
         return ids[0];
-      });
+      })
+    );
   }
 
   getGameById(id: string): Observable<IGame> {
@@ -46,7 +48,9 @@ export class GameService {
   }
 
   votingEnd() {
-    return this.game$.filter(this.everyoneVoted);
+    return this.game$.pipe(
+      filter(this.everyoneVoted)
+    );
   }
 
   updateGame(game: IGame): Promise<void> {
@@ -54,18 +58,20 @@ export class GameService {
   }
 
   currentPlayer(uid: string) {
-    return this.game$.switchMap(g => !!g ? g.players : [])
-      .filter(p => p.uid === uid);
+    return this.game$.pipe(
+      switchMap((g: IGame) => !!g ? g.players : []),
+      filter(p => p.uid === uid)
+    );
   }
 
   userRemoval(uid: string) {
-    return this.game$.filter(g => {
-      return !g.players.find(p => p.uid === uid);
-    });
+    return this.game$.pipe(
+      filter(g => !g.players.find(p => p.uid === uid))
+    );
   }
 
   private everyoneVoted(game: IGame) {
-    if (!game) return;
+    if (!game) { return; }
 
     return game.hasStarted &&
       !!game.gifSelectionURL &&
@@ -83,6 +89,6 @@ export class GameService {
       captionDeck: [],
       isVotingRound: false,
       messages: []
-    }
+    };
   }
 }
