@@ -4,7 +4,7 @@
       <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-name">
         <span>{{player.username | uppercase}}</span>
         <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-xs tooltip-right">
-          <clr-icon *ngIf="isHost && !player.isHost" (click)="stagePlayerToRemove(player)" shape="thumbs-down" class="is-error remove-player-button"></clr-icon>
+          <clr-icon *ngIf="isHost && player.uid !== hostId" (click)="stagePlayerToRemove(player)" shape="thumbs-down" class="is-error remove-player-button"></clr-icon>
           <span class="tooltip-content">Remove {{player.username}}</span>
         </a>
         <div>

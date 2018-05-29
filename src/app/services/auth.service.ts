@@ -1,5 +1,5 @@
 
-import {map} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
@@ -20,7 +20,7 @@ export class AuthService {
   }
 
   login(): Promise<firebase.User> {
-    return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+    return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
   }
 
   logout(): Promise<any> {
@@ -36,7 +36,7 @@ export class AuthService {
   }
 
   private toPlayerModel(fbuser: firebase.User): IPlayer {
-    if (!fbuser) return null;
+    if (!fbuser) { return null; }
 
     const facebook = fbuser.providerData.find(p => p.providerId.includes('facebook'));
     const photoURL = `https://graph.facebook.com/${facebook.uid}/picture?height=300&width=300`;
@@ -47,11 +47,10 @@ export class AuthService {
       uid: fbuser.uid,
       username: facebook.displayName.split(' ')[0],
       isActive: true,
-      isHost: false,
       score: 0,
       captions: [],
       photoURL,
       thumbnailURL
-    }
+    };
   }
 }

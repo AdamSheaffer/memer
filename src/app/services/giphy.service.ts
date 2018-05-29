@@ -56,6 +56,7 @@ export class GiphyService {
     return rands;
   }
 
+  // tslint:disable-next-line:member-ordering
   private static tags: string[] = [
     'CRYING',
     'DANCING',

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { GameService } from '../../services/game.service';
+import { IGame } from '../../interfaces/IGame';
 
 @Component({
   selector: 'memer-home',
@@ -22,19 +23,10 @@ export class HomeComponent implements OnInit {
 
   hostGame() {
     const user = this.authService.getUser();
-    this.gameService.addGame()
-      .then(ref => {
-        this.router.navigate([`game/${ref.id}`]);
+    this.gameService.createNewGame(user)
+      .then(gameId => {
+        this.router.navigate([`game/${gameId}`]);
       });
   }
 
-  joinGame() {
-    this.gameService.findOpenGameId().subscribe(id => {
-      if (!id) {
-        this.hostGame();
-      } else {
-        this.router.navigate([`game/${id}`]);
-      }
-    });
-  }
 }

@@ -11,9 +11,9 @@ export class GifOptionsComponent implements OnInit, OnDestroy {
   @Input() playerCanSelect: boolean;
   @Input() usernameSelecting: string;
   @Input() chosenTag: string;
-  @Output() onOptionSelect = new EventEmitter<string>();
+  @Output() optionSelect = new EventEmitter<string>();
 
-  imageIndex: number = 0;
+  imageIndex = 0;
   selectingIndicator = 'SELECTING   ';
   timerId;
 
@@ -22,7 +22,7 @@ export class GifOptionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.timerId = setInterval(() => {
-      if (this.selectingIndicator.includes("...")) {
+      if (this.selectingIndicator.includes('...')) {
         this.selectingIndicator = 'SELECTING   ';
       } else {
         this.selectingIndicator = this.selectingIndicator.replace(' ', '.');
@@ -31,20 +31,25 @@ export class GifOptionsComponent implements OnInit, OnDestroy {
   }
 
   next(): void {
-    if (!this.playerCanSelect) return;
+    if (!this.playerCanSelect) { return; }
     this.imageIndex += 1;
-    if (this.imageIndex >= this.options.length) this.imageIndex = 0;
+    if (this.imageIndex >= this.options.length) {
+      this.imageIndex = 0;
+    }
   }
 
   previous(): void {
-    if (!this.playerCanSelect) return;
-    this.imageIndex -= 1
-    if (this.imageIndex < 0) this.imageIndex = (this.options.length - 1);
+    if (!this.playerCanSelect) { return; }
+
+    this.imageIndex -= 1;
+    if (this.imageIndex < 0) {
+      this.imageIndex = (this.options.length - 1);
+    }
   }
 
   selectOption(option: string) {
-    if (!this.playerCanSelect) return;
-    this.onOptionSelect.emit(option);
+    if (!this.playerCanSelect) { return; }
+    this.optionSelect.emit(option);
   }
 
   ngOnDestroy(): void {

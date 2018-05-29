@@ -32,6 +32,7 @@ import { PlayerScoreComponent } from './components/player-score/player-score.com
 import { ThemeService } from './services/theme.service';
 import { ShufflePipe } from './pipes/shuffle.pipe';
 import { ActivePlayersPipe } from './pipes/active-player.pipe';
+import { CurrentUserPipe } from './pipes/current-user.pipe';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { ActivePlayersPipe } from './pipes/active-player.pipe';
     ChatComponent,
     PlayerScoreComponent,
     ShufflePipe,
-    ActivePlayersPipe
+    ActivePlayersPipe,
+    CurrentUserPipe
   ],
   imports: [
     BrowserModule,

@@ -3,4 +3,5 @@ export class IMessage {
   username: string;
   photoURL: string;
   userUID: string;
+  timeStamp: number;
 }

@@ -3,12 +3,27 @@
 
 <div [ngClass]="{'dark-theme': isDarkTheme}" class="main-container">
   <div class="content-container">
-    <div class="content-area">
+    <div *ngIf="game$|async as game" class="content-area">
       <div>
-
+        <h3>{{ isHost$|async }}</h3>
         <!-- Player images and scores -->
-        <div *ngIf="game?.players.length">
-          <memer-player-list [turn]="game.turn" [players]="game.players" [isHost]="currentUser?.isHost" (onPlayerRemoval)="removePlayer($event)"></memer-player-list>
+        <div>
+          <memer-player-list [turn]="game?.turn" [players]="game.players" [hostId]="game.hostId" [isHost]="game.hostId === currentUser.uid"
+            (playerRemoval)="removePlayer($event)"></memer-player-list>
+        </div>
+
+        <!-- Button for Host to start the game -->
+        <div *ngIf="!game?.hasStarted">
+          <h2 class="text-indicator waiting-indicator">WAITING FOR OTHER PLAYERS</h2>
+          <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+              <button *ngIf="game.hostId === currentUser.uid && !game?.hasStarted" (click)="beginGame()" [disabled]="game.players?.length < 2"
+                class="btn btn-outline-info btn-block">START GAME</button>
+              <span *ngIf="currentUser?.id !== game.hostId && !game?.hasStarted" class="spinner spinner-lg">
+                  Waiting...
+              </span>
+            </div>
+          </div>
         </div>
 
         <!-- Voting label -->
@@ -35,12 +50,12 @@
 
         <!-- Giphy Tags to choose from -->
         <div *ngIf="game?.tagOptions && !game.tagSelection">
-          <memer-tag-selection [playerCanSelect]="isCurrentUsersTurn" [tags]="game.tagOptions" (onTagSelect)="selectTag($event)"></memer-tag-selection>
+          <memer-tag-selection [playerCanSelect]="isCurrentUsersTurn" [tags]="game.tagOptions" (tagSelect)="selectTag($event)"></memer-tag-selection>
         </div>
 
         <!-- Gif Options to choose from -->
         <div *ngIf="game?.gifOptionURLs && !game.gifSelectionURL">
-          <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [usernameSelecting]="game.turnUsername" (onOptionSelect)="selectGif($event)"
+          <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [usernameSelecting]="game.turnUsername" (optionSelect)="selectGif($event)"
             [options]="game.gifOptionURLs" [chosenTag]="game.tagSelection"></memer-gif-options>
         </div>
 
@@ -77,7 +92,7 @@
               <memer-meme [caption]="game.roundWinner.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
             </div>
           </div>
-          <div *ngIf="game.winner && currentUser?.isHost" class="modal-footer">
+          <div *ngIf="game.winner && isHost" class="modal-footer">
             <div (click)="resetGame()" class="btn btn-outline-info">
               NEW GAME
             </div>
@@ -85,31 +100,21 @@
         </clr-modal>
 
         <!-- Hand of Caption Cards -->
-        <div *ngIf="currentUser?.captions">
-          <memer-player-hand [playerCanSelect]="isUpForVoting && !isCurrentUsersTurn && !currentUser.captionPlayed" [playerHand]="currentUser.captions"
-            (onCardSelect)="selectCaption($event)">
-          </memer-player-hand>
-        </div>
-
-        <!-- Button for Host to start the game -->
-        <div>
-          <h2 class="text-indicator waiting-indicator" *ngIf="!game?.hasStarted">WAITING FOR OTHER PLAYERS</h2>
-          <div class="row">
-            <div class="col-sm-6 offset-sm-3">
-              <button *ngIf="currentUser?.isHost && !game?.hasStarted" (click)="beginGame()" [disabled]="game?.players.length < 2" class="btn btn-outline-info btn-block">START GAME</button>
-              <span *ngIf="!currentUser?.isHost && !game?.hasStarted" class="spinner spinner-lg">
-                  Waiting...
-              </span>
-            </div>
+        <div *ngIf="game.players|currentUser:currentUser.uid as player">
+          <div *ngIf="player?.captions">
+            <memer-player-hand [playerCanSelect]="isUpForVoting && !isCurrentUsersTurn && !player.captionPlayed" [playerHand]="player.captions"
+              (cardSelect)="selectCaption($event)">
+            </memer-player-hand>
           </div>
         </div>
+
       </div>
     </div>
 
     <!-- Chat -->
     <clr-vertical-nav #chat [clrVerticalNavCollapsible]="true" [(clrVerticalNavCollapsed)]="collapsed" id="chat" [ngClass]="{'dark-theme': isDarkTheme}">
       <div *ngIf="!collapsed">
-        <memer-chat [messages]="game?.messages" (onMessageSend)="sendMessage($event)" class="chat-sidebar"></memer-chat>
+        <memer-chat [gameId]="gameId" class="chat-sidebar"></memer-chat>
       </div>
     </clr-vertical-nav>
   </div>

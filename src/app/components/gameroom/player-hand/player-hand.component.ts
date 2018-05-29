@@ -9,7 +9,7 @@ import { ICard } from '../../../interfaces/ICard';
 export class PlayerHandComponent implements OnInit {
   @Input() playerHand: ICard[];
   @Input() playerCanSelect: boolean;
-  @Output() onCardSelect = new EventEmitter<ICard>();
+  @Output() cardSelect = new EventEmitter<ICard>();
 
   constructor() { }
 
@@ -17,7 +17,7 @@ export class PlayerHandComponent implements OnInit {
   }
 
   selectCard(card: ICard) {
-    if (!this.playerCanSelect) return;
-    this.onCardSelect.emit(card);
+    if (!this.playerCanSelect) { return; }
+    this.cardSelect.emit(card);
   }
 }

@@ -7,6 +7,7 @@ export interface IGame {
   beginDate: number;
   hasStarted: boolean;
   players: IPlayer[];
+  hostId: string;
   turn?: string;
   turnUsername?: string;
   tagOptions: string[];

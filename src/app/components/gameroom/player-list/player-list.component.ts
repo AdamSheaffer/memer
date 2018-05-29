@@ -11,8 +11,9 @@ export class PlayerListComponent implements OnInit {
   @Input() players: IPlayer[];
   @Input() turn: string;
   @Input() isHost: boolean;
-  @Output() onPlayerRemoval = new EventEmitter<IPlayer>();
-  get isDarkTheme() { return this.themeService.theme === Theme.DARK };
+  @Input() hostId: string;
+  @Output() playerRemoval = new EventEmitter<IPlayer>();
+  get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
 
   playerStagedForRemoval: IPlayer;
 
@@ -22,15 +23,15 @@ export class PlayerListComponent implements OnInit {
   }
 
   stagePlayerToRemove(player: IPlayer) {
-    if (!this.isHost) return;
+    if (!this.isHost) { return; }
 
     this.playerStagedForRemoval = player;
   }
 
   removePlayer() {
-    if (!this.isHost) return;
+    if (!this.isHost) { return; }
 
-    this.onPlayerRemoval.emit(this.playerStagedForRemoval);
+    this.playerRemoval.emit(this.playerStagedForRemoval);
     this.playerStagedForRemoval = null;
   }
 

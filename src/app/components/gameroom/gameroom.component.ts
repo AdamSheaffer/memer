@@ -11,6 +11,8 @@ import { ICard } from '../../interfaces/ICard';
 import { DeckService } from '../../services/deck.service';
 import { IMessage } from '../../interfaces/IMessage';
 import { ThemeService, Theme } from '../../services/theme.service';
+import { switchMap, filter, take, map, single, skip, takeWhile, takeUntil } from 'rxjs/operators';
+import { hasLifecycleHook } from '@angular/compiler/src/lifecycle_reflector';
 
 @Component({
   selector: 'memer-gameroom',
@@ -19,16 +21,17 @@ import { ThemeService, Theme } from '../../services/theme.service';
 })
 export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chat', { read: ElementRef }) chatEl: ElementRef;
+  gameId: string;
   collapsed = false;
   isWinningModalShown: boolean;
   currentUser: IPlayer;
-  game$: any;
-  gameId: string;
-  game: IGame;
+  game$: Observable<IGame>;
+  gameState: IGame;
   gameSubscriptions: Subscription[] = [];
-  get isDarkTheme(): boolean { return this.themeService.theme === Theme.DARK; }
-  get isUpForVoting(): boolean { return !!this.game && !!this.game.gifSelectionURL; }
-  get isCurrentUsersTurn(): boolean { return this.currentUser.uid === this.game.turn; }
+  get isCurrentUsersTurn() { return this.gameState.turn === this.currentUser.uid; }
+  get isHost() { return this.gameState.hostId === this.currentUser.uid; }
+  get isUpForVoting(): boolean { return !!this.gameState && !!this.gameState.gifSelectionURL; }
+  get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
 
   constructor(
     private authService: AuthService,
@@ -38,21 +41,20 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private themeService: ThemeService,
-    private renderer: Renderer) {
+    private renderer: Renderer
+  ) {
     this.currentUser = this.authService.getUser();
   }
 
   ngOnInit() {
-    this.game$ = this.route.paramMap.switchMap((params: ParamMap) => {
-      this.gameId = params.get('id');
-      return this.gameService.getGameById(this.gameId);
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.gameId = id;
+      this.game$ = this.gameService.joinGameWithId(id, this.currentUser);
+      this.track(this.game$.subscribe(g => this.gameState = g));
+      this.trackPlayerRemoval();
+      this.trackVotingRound();
     });
-
-    this.game$.subscribe(g => {
-      if (!g) { return this.router.navigate(['/']); }
-      return this.game = g;
-    });
-    this.join();
   }
 
   // To position the chat at the bottom
@@ -61,113 +63,62 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.setElementStyle(el, 'flex-direction', 'column-reverse');
   }
 
-  join() {
-    return this.game$.take(1).subscribe(g => {
-      if (!g) { return this.router.navigate(['/']); }
-      this.currentUser.isHost = false; // TODO: what about re-entering the game??
-
-      if (!g.players || !g.players.length) {
-        this.currentUser.isHost = true;
-        g.turn = this.currentUser.uid;
-        g.turnUsername = this.currentUser.username;
-      }
-      const existingPlayer = g.players.find(p => this.currentUser.uid === p.uid);
-
-      if (!existingPlayer && g.hasStarted) { return this.router.navigate(['/']); }
-
-      if (existingPlayer) {
-        this.currentUser = existingPlayer;
-        this.currentUser.isActive = true;
-      } else {
-        g.players.push(this.currentUser);
-      }
-
-      this.gameService.updateGame(g);
-
-      this.gameSubscriptions.push(
-        this.trackPlayerChanges(),
-        this.trackVotingEnd(),
-        this.trackLeavingGame(),
-      );
-
-    });
-  }
-
-  trackPlayerChanges() {
-    return this.gameService.currentPlayer(this.currentUser.uid)
-      .subscribe(p => this.currentUser = p);
-  }
-
   beginGame() {
-    if (!this.currentUser.isHost) { return; }
-
-    this.game.hasStarted = true;
-
-    this.game.captionDeck = this.deckService.getDeck();
-    this.deckService.deal(this.game.captionDeck, this.game.players, 7);
-    this.updateGame();
-  }
-
-  changeTurns() {
-    const player = this.findNextPlayer();
-    this.game.turn = player.uid;
-
-    if (!player.isActive) { return this.changeTurns(); }
-
-    this.game.turnUsername = player.username;
+    const captionDeck = this.deckService.getDeck();
+    this.deckService.deal(captionDeck, this.gameState.players, 7);
+    this.gameService.updateGame({
+      hasStarted: true,
+      players: this.gameState.players,
+      captionDeck,
+      turn: this.currentUser.uid,
+      turnUsername: this.currentUser.username
+    });
   }
 
   beginTurn() {
     if (!this.isCurrentUsersTurn) { return; }
 
-    this.game.tagOptions = this.giphyService.getRandomTags();
+    const tagOptions = this.giphyService.getRandomTags();
+    this.gameService.updateGame({ tagOptions }).then(() => {
 
-    this.updateGame();
-  }
-
-  selectTag(tag: string) {
-    this.game.tagSelection = tag;
-    this.giphyService.getRandomImages(tag).then(images => {
-      this.game.gifOptionURLs = images;
-      this.updateGame();
     });
   }
 
-  selectGif(gifUrl: string) {
-    this.game.gifSelectionURL = gifUrl;
-    this.updateGame();
+  selectTag(tagSelection: string) {
+    this.giphyService.getRandomImages(tagSelection).then(gifOptionURLs => {
+      this.gameService.updateGame({ gifOptionURLs, tagSelection });
+    });
+  }
+
+  selectGif(gifSelectionURL: string) {
+    this.gameService.updateGame({ gifSelectionURL });
   }
 
   selectCaption(caption: ICard) {
-    const user = this.findGamePlayerById(this.currentUser.uid);
-    const captionIndex = user.captions.findIndex(c => c.top === caption.top && c.bottom === caption.bottom);
-    user.captions.splice(captionIndex, 1);
-    user.captionPlayed = caption;
-    this.deckService.deal(this.game.captionDeck, [user], 1);
-    this.updateGame();
-  }
-
-  trackVotingEnd() {
-    return this.gameService.votingEnd()
-      .subscribe(g => {
-        this.game.isVotingRound = true;
-        this.updateGame();
-      });
+    const players = [...this.gameState.players];
+    const player = players.find(p => p.uid === this.currentUser.uid);
+    const captionIndex = player.captions.findIndex(c => c.top === caption.top && c.bottom === caption.bottom);
+    player.captions.splice(captionIndex, 1);
+    player.captionPlayed = caption;
+    this.deckService.deal(this.gameState.captionDeck, [player], 1);
+    this.gameService.updateGame({ players });
   }
 
   selectFavoriteCaption(player: IPlayer) {
-    if (!this.isCurrentUsersTurn || !this.game.isVotingRound) { return; }
+    if (!this.isCurrentUsersTurn || !this.gameState.isVotingRound) { return; }
 
     player.score += 1;
-    this.game.roundWinner = player;
+    const players = this.updatePlayersWithPlayer(player);
+    const hasGameWinner = player.score >= 10;
+    const changes: any = { players, roundWinner: player };
 
-    if (player.score >= 10) {
-      this.game.winner = player;
+    if (hasGameWinner) {
+      changes.winner = player;
     }
 
-    this.updateGame().then(() => {
+    this.gameService.updateGame(changes).then(() => {
       setTimeout(() => {
-        if (!this.game.winner) {
+        if (!hasGameWinner) {
           this.startNewRound();
         }
       }, 5000);
@@ -175,147 +126,110 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   startNewRound() {
-    this.resetRound();
-    this.changeTurns();
-    this.updateGame();
+    const changes: any = {};
+    const players = [...this.gameState.players];
+    players.forEach(p => p.captionPlayed = null);
+    const nextPlayer = this.findNextPlayer();
+
+    changes.gifOptionURLs = [];
+    changes.gifSelectionURL = null;
+    changes.tagOptions = [];
+    changes.tagSelection = null;
+    changes.isVotingRound = false;
+    changes.roundWinner = null;
+    changes.players = players;
+    changes.turn = nextPlayer.uid;
+    changes.turnUsername = nextPlayer.username;
+
+    this.gameService.updateGame(changes);
+  }
+
+  private findNextPlayer() {
+    const index = this.gameState.players.findIndex(p => {
+      return this.gameState.turn === p.uid;
+    });
+
+    if (index === this.gameState.players.length - 1) {
+      return this.gameState.players[0];
+    }
+
+    return this.gameState.players[index + 1];
   }
 
   resetGame() {
-    this.game.players.forEach(p => {
+    const changes: any = {};
+    const players = [...this.gameState.players];
+    players.forEach(p => {
       p.captions = [];
       p.score = 0;
       p.captionPlayed = null;
     });
-    this.game.tagOptions = [];
-    this.game.tagSelection = null;
-    this.game.gifOptionURLs = [];
-    this.game.isVotingRound = false;
-    this.game.roundWinner = null;
-    this.game.winner = null;
-    this.game.gifSelectionURL = null;
-    this.updateGame();
-  }
 
-  sendMessage(message: IMessage) {
-    this.game.messages.push(message);
-    this.updateGame();
+    changes.tagOptions = [];
+    changes.tagSelection = null;
+    changes.gifOptionURLs = [];
+    changes.isVotingRound = false;
+    changes.roundWinner = null;
+    changes.winner = null;
+    changes.gifSelectionURL = null;
+    changes.players = players;
+
+    this.beginGame();
   }
 
   removePlayer(player: IPlayer) {
-    const playerIndex = this.game.players.findIndex(p => p.uid === player.uid);
-    this.game.players.splice(playerIndex, 1);
-
-    if (this.game.turn === player.uid) {
-      this.changeTurns();
-    }
-
-    this.game.messages.push({
-      content: `${player.username} HAS BEEN REMOVED FROM THE GAME`,
-      username: 'MEMER',
-      userUID: null,
-      photoURL: null
-    });
-    this.updateGame();
+    const players = this.gameState.players;
+    const index = players.findIndex(p => p.uid === player.uid);
+    players.splice(index, 1);
+    this.gameService.updateGame({ players });
   }
 
+  /*********************/
+  /**** GAME EVENTS ****/
+  /*********************/
   trackPlayerRemoval() {
-    this.gameService.userRemoval(this.currentUser.uid)
-      .subscribe(() => {
-        alert('You\'ve been removed from the game');
-        this.router.navigate(['/']);
-      });
-  }
-
-  trackLeavingGame() {
-    return this.router.events
-      .filter(e => e instanceof NavigationStart && !e.url.includes(this.gameId))
-      .subscribe(() => this.handlePlayerLeaving());
-  }
-
-  // @HostListener('window:beforeunload', ['$event'])
-  // leaveOnUnload($event) {
-  //   this.handlePlayerLeaving();
-  // }
-
-  private handlePlayerLeaving() {
-    const player = this.findGamePlayerById(this.currentUser.uid);
-    player.isActive = false;
-    const playerLeftMsg = this.createSystemChatMessage(`${player.username.toUpperCase()} LEFT THE GAME`);
-    this.game.messages.push(playerLeftMsg);
-    const nextPlayer = this.game.players.find(p => p.isActive);
-
-    if (this.game.turn === player.uid && !!nextPlayer) {
-      this.game.turn = nextPlayer.uid;
-      this.game.turnUsername = nextPlayer.username;
-    }
-
-    if (player.isHost) {
-      player.isHost = false;
-      if (nextPlayer) {
-        nextPlayer.isHost = true;
-        const newHostMsg = this.createSystemChatMessage(`${nextPlayer.username.toUpperCase()} IS THE NEW HOST`);
-        this.game.messages.push(newHostMsg);
-      }
-    }
-
-    // If no one is left in the game, delete the game
-    if (!this.gameHasActivePlayers()) {
-      this.gameService.deleteGame();
-    } else {
-      this.updateGame();
-    }
-  }
-
-  private findNextPlayer(): IPlayer {
-    const index = this.game.players.findIndex(p => {
-      return this.game.turn === p.uid;
+    const subscription = this.game$.pipe(
+      skip(1),
+      map(g => g.players),
+      filter(players => !players.find(p => p.uid === this.currentUser.uid))
+    ).subscribe(p => {
+      alert('You have been removed from the game');
+      this.router.navigate(['/']);
     });
 
-    if (index === this.game.players.length - 1) {
-      return this.game.players[0];
-    }
-
-    return this.game.players[index + 1];
+    this.track(subscription);
   }
 
-  private updateGame() {
-    return this.gameService.updateGame(this.game);
-  }
-
-  private findGamePlayerById(id: string) {
-    return this.game.players.find(p => p.uid === id);
-  }
-
-  private findGameUserById(uid: string, game: IGame): IPlayer {
-    if (!game || !game.players) { return; }
-
-    return game.players.find(p => p.uid === uid);
-  }
-
-  private resetRound() {
-    this.game.gifOptionURLs = [];
-    this.game.gifSelectionURL = null;
-    this.game.tagOptions = [];
-    this.game.tagSelection = null;
-    this.game.isVotingRound = false;
-    this.game.roundWinner = null;
-    this.game.players.forEach(p => {
-      p.captionPlayed = null;
+  trackVotingRound() {
+    const subscription = this.game$.pipe(
+      filter(g => !g.isVotingRound),
+      filter(this.everyoneSubmittedCaption)
+    ).subscribe(g => {
+      this.gameService.updateGame({ isVotingRound: true });
     });
+
+    this.track(subscription);
   }
 
-  private createSystemChatMessage(message: string): IMessage {
-    return {
-      content: message,
-      username: null,
-      userUID: null,
-      photoURL: null
-    };
+  private track(subscription: Subscription) {
+    this.gameSubscriptions.push(subscription);
   }
 
-  private gameHasActivePlayers(): boolean {
-    return !!this.game.players.length &&
-      !!this.game.players.find(p => p.isActive);
+  private everyoneSubmittedCaption(game: IGame) {
+    const players = game.players;
+    const playersNotSelected = players.filter(p => !p.captionPlayed);
+
+    return playersNotSelected.length === 1 &&
+      playersNotSelected[0].uid === game.turn;
+  }
+
+  private updatePlayersWithPlayer(player: IPlayer) {
+    const players = [...this.gameState.players];
+    const playerIndex = players.findIndex(p => p.uid === player.uid);
+    if (playerIndex > -1) {
+      players.splice(playerIndex, 1, player);
+    }
+    return players;
   }
 
   ngOnDestroy() {

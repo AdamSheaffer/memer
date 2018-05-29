@@ -1,4 +1,4 @@
-import { ICard } from "./ICard";
+import { ICard } from './ICard';
 
 export interface IPlayer {
   uid: string;
@@ -7,7 +7,6 @@ export interface IPlayer {
   photoURL: string;
   thumbnailURL: string;
   isActive: boolean;
-  isHost: boolean;
   score: number;
   captions: ICard[];
   captionPlayed?: ICard;

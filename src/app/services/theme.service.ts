@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class ThemeService {
   private _theme: Theme = Theme.LIGHT;
 
-  get theme() { return this._theme };
+  get theme() { return this._theme; }
 
   constructor() { }
 

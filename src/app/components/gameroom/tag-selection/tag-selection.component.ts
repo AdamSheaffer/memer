@@ -8,7 +8,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 export class TagSelectionComponent implements OnInit {
   @Input() tags: string[];
   @Input() playerCanSelect: boolean;
-  @Output() onTagSelect = new EventEmitter<string>();
+  @Output() tagSelect = new EventEmitter<string>();
 
   constructor() { }
 
@@ -16,7 +16,7 @@ export class TagSelectionComponent implements OnInit {
   }
 
   selectTag(tag: string) {
-    if (!this.playerCanSelect) return;
-    this.onTagSelect.emit(tag);
+    if (!this.playerCanSelect) { return; }
+    this.tagSelect.emit(tag);
   }
 }

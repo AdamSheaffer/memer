@@ -1,27 +1,36 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
-import { Observable } from 'rxjs';
+
 import { IPlayer } from '../interfaces/IPlayer';
 import { IGame } from '../interfaces/IGame';
-import { take, map, switchMap, filter } from 'rxjs/operators';
+import { ICard } from '../interfaces/ICard';
+import { IGameObservables } from '../interfaces/IGameObservables';
+
+import { Observable } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 
 @Injectable()
 export class GameService {
 
-  private gamesCollection: AngularFirestoreCollection<IGame>;
-  private gameDoc: AngularFirestoreDocument<IGame>;
-  private game$: Observable<IGame>;
+  private _gamesCollection: AngularFirestoreCollection<IGame>;
+  private _gameDoc: AngularFirestoreDocument<IGame>;
+  private _game$: Observable<IGame>;
+
+  get game$() { return this._game$; }
 
   constructor(private afs: AngularFirestore) {
-    this.gamesCollection = this.afs.collection('games');
+    this._gamesCollection = this.afs.collection('games');
   }
 
-  addGame(): Promise<firebase.firestore.DocumentReference> {
-    const game = this.createGame();
-    return this.gamesCollection.add(game);
+  async createNewGame(player: IPlayer): Promise<string> {
+    const newGame = this.newGame(player);
+    const gameId = await this._gamesCollection.add(newGame).then(ref => ref.id);
+    return gameId;
   }
 
+  // I don't want to get a random game anymore. Users should be able to select
+  // an open game. Get rid of this method
   findOpenGameId(): Observable<string> {
     const gamesCollection = this.afs.collection('games', ref => {
       return ref.orderBy('beginDate').where('hasStarted', '==', false).limit(1);
@@ -29,66 +38,67 @@ export class GameService {
 
     return gamesCollection.snapshotChanges().pipe(
       take(1),
-      map(actions => {
-        const ids = actions.map(a => a.payload.doc['id']);
-        debugger;
+      map((actions: DocumentChangeAction<IGame>[]) => {
+        const ids = actions.map(a => a.payload.doc.id);
         return ids[0];
       })
     );
   }
 
-  getGameById(id: string): Observable<IGame> {
-    this.gameDoc = this.afs.doc<IGame>(`games/${id}`);
-    this.game$ = this.gameDoc.valueChanges();
+  getOpenGameList(gameCount: number): Observable<IGame[]> {
+    const gamesCollection = this.afs.collection('games', ref => {
+      return ref.orderBy('beginDate').where('hasStarted', '==', false).limit(gameCount);
+    });
+
+    return gamesCollection.snapshotChanges().pipe(
+      map((actions: DocumentChangeAction<IGame>[]) => {
+        const games$ = actions.map(a => a.payload.doc.data());
+        return games$;
+      })
+    );
+  }
+
+  joinGameWithId(id: string, player: IPlayer): Observable<IGame> {
+    this._gameDoc = this.afs.doc<IGame>(`games/${id}`);
+    this._game$ = this._gameDoc.valueChanges();
+
+    this.joinIfNotInGame(player);
+
     return this.game$;
   }
 
-  deleteGame() {
-    this.gameDoc.delete();
+  updateGame(changes: any): Promise<void> {
+    return this._gameDoc.update(changes);
   }
 
-  votingEnd() {
-    return this.game$.pipe(
-      filter(this.everyoneVoted)
-    );
+  once(fn: (game: IGame) => void) {
+    this._game$.pipe(take(1)).subscribe(fn);
   }
 
-  updateGame(game: IGame): Promise<void> {
-    return this.gameDoc.update(game);
-  }
-
-  currentPlayer(uid: string) {
-    return this.game$.pipe(
-      switchMap((g: IGame) => !!g ? g.players : []),
-      filter(p => p.uid === uid)
-    );
-  }
-
-  userRemoval(uid: string) {
-    return this.game$.pipe(
-      filter(g => !g.players.find(p => p.uid === uid))
-    );
-  }
-
-  private everyoneVoted(game: IGame) {
-    if (!game) { return; }
-
-    return game.hasStarted &&
-      !!game.gifSelectionURL &&
-      !game.isVotingRound &&
-      game.players.every(p => !!p.captionPlayed || game.turn === p.uid);
-  }
-
-  private createGame(): IGame {
+  private newGame(host: IPlayer): IGame {
     return {
       hasStarted: false,
       beginDate: (Date.now() * -1),
+      hostId: host.uid,
       players: [],
       tagOptions: [],
       gifOptionURLs: [],
       captionDeck: [],
       isVotingRound: false,
-      messages: []
+      messages: [],
     };
   }
+
+  private joinIfNotInGame(player: IPlayer): void {
+    this._game$.pipe(take(1)).subscribe(game => {
+      const players = game.players;
+      const hasAlreadyJoined = players.some(p => p.uid === player.uid);
+
+      if (!hasAlreadyJoined) {
+        players.push(player);
+        this._gameDoc.update({ players });
+      }
+    });
+  }
+
 }
