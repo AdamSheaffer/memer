@@ -29,4 +29,8 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  joinGame() {
+    return;
+  }
+
 }

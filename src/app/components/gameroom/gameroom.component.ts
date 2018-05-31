@@ -65,7 +65,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   beginGame() {
     const captionDeck = this.deckService.getDeck();
-    this.deckService.deal(captionDeck, this.gameState.players, 7);
+    // this.deckService.deal(captionDeck, this.gameState.players, 7);
+    this.deckService.init(this.gameId);
     this.gameService.updateGame({
       hasStarted: true,
       players: this.gameState.players,
@@ -96,12 +97,13 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   selectCaption(caption: ICard) {
     const players = [...this.gameState.players];
+    const deck = [...this.gameState.captionDeck];
     const player = players.find(p => p.uid === this.currentUser.uid);
     const captionIndex = player.captions.findIndex(c => c.top === caption.top && c.bottom === caption.bottom);
     player.captions.splice(captionIndex, 1);
     player.captionPlayed = caption;
-    this.deckService.deal(this.gameState.captionDeck, [player], 1);
-    this.gameService.updateGame({ players });
+    this.deckService.deal(deck, [player], 1);
+    this.gameService.updateGame({ players, captionDeck: deck });
   }
 
   selectFavoriteCaption(player: IPlayer) {

@@ -23,7 +23,6 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
     if (this.chatService.gameId !== this.gameId) {
       this.chatService.init(this.gameId);
     }
