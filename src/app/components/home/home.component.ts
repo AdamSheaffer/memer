@@ -12,6 +12,7 @@ import { IGame } from '../../interfaces/IGame';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  showOpenGames = false;
   openGames$: Observable<IGame[]>;
   games: IGame[] = [];
 
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit {
   }
 
   findOpenGames() {
+    this.showOpenGames = true;
     this.openGames$ = this.gameService.getOpenGameList(10);
     this.openGames$.subscribe(g => this.games = g);
   }

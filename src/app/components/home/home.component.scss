@@ -23,4 +23,14 @@
   .game-details {
     padding: 4px 0;
   }
+
+  .games-message {
+    color: $white-color;
+    font-style: italic;
+    a {
+      font-style: normal;
+      color: $primary-color;
+      cursor: pointer;
+    }
+  }
 }
