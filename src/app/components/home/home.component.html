@@ -5,11 +5,32 @@
     </div>
     <div class="login-group col-xs-12 row flex-items-xs-center">
       <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
-        <button (click)="joinGame()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">JOIN GAME</button>
+        <button (click)="findOpenGames()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">FIND GAME</button>
       </div>
       <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
         <button (click)="hostGame()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">HOST NEW GAME</button>
       </div>
     </div>
+  </div>
+
+  <div class="row flex-items-xs-center">
+    <div class="col-xs-12 col-md-6 col-xl-4">
+      <div *ngFor="let game of games" class="card col-xs-12">
+        <div class="row">
+
+          <div class="col-xs-8">
+            <div class="game-details">
+              <img [src]="game.hostPhotoURL" class="host-img" alt="Host Photo">
+              <span class="p6 open-game-timestamp">Started {{game.beginDate|abs|amTimeAgo}}</span>
+            </div>
+          </div>
+          <div class="col-xs-4 col-xs flex-xs-middle">
+            <button (click)="joinGame(game.id)" class="btn btn-link">JOIN</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

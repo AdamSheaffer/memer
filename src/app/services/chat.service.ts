@@ -39,4 +39,16 @@ export class ChatService {
 
     return this._messageCollection.add(msg);
   }
+
+  postAdminMessage(content: string) {
+    const msg: IMessage = {
+      photoURL: 'assets/logo.png',
+      username: 'MEMER',
+      userUID: null,
+      timeStamp: Date.now(),
+      content
+    };
+
+    return this._messageCollection.add(msg);
+  }
 }

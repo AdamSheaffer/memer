@@ -1,8 +1,26 @@
+@import '../../../variables';
+
 .home {
   margin-top: 80px;
   
-  img {
+  .logo {
     display: block;
     margin: auto;
+  }
+
+  .host-img {
+    border-radius: 100px;
+    border: 2px solid $accent-color;
+    display: inline-block;
+    height: 60px;
+  }
+
+  .open-game-timestamp {
+    margin-left: 12px;
+    color: $dark-gray;
+  }
+
+  .game-details {
+    padding: 4px 0;
   }
 }

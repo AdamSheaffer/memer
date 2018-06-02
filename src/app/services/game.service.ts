@@ -35,22 +35,6 @@ export class GameService {
     return gameId;
   }
 
-  // I don't want to get a random game anymore. Users should be able to select
-  // an open game. Get rid of this method
-  findOpenGameId(): Observable<string> {
-    const gamesCollection = this.afs.collection('games', ref => {
-      return ref.orderBy('beginDate').where('hasStarted', '==', false).limit(1);
-    });
-
-    return gamesCollection.snapshotChanges().pipe(
-      take(1),
-      map((actions: DocumentChangeAction<IGame>[]) => {
-        const ids = actions.map(a => a.payload.doc.id);
-        return ids[0];
-      })
-    );
-  }
-
   getOpenGameList(gameCount: number): Observable<IGame[]> {
     const gamesCollection = this.afs.collection('games', ref => {
       return ref.orderBy('beginDate').where('hasStarted', '==', false).limit(gameCount);
@@ -58,13 +42,18 @@ export class GameService {
 
     return gamesCollection.snapshotChanges().pipe(
       map((actions: DocumentChangeAction<IGame>[]) => {
-        const games$ = actions.map(a => a.payload.doc.data());
+        const games$ = actions.map(a => {
+          const game = a.payload.doc.data();
+          game.id = a.payload.doc.id;
+          return game;
+        });
         return games$;
       })
     );
   }
 
   updateGame(changes: IGameChanges): Promise<void> {
+    changes.lastUpdated = Date.now();
     return this._gameDoc.update(changes);
   }
 
@@ -73,10 +62,12 @@ export class GameService {
       hasStarted: false,
       beginDate: (Date.now() * -1),
       hostId: host.uid,
+      hostPhotoURL: host.thumbnailURL,
       tagOptions: [],
       gifOptionURLs: [],
       captionDeck: [],
-      isVotingRound: false
+      isVotingRound: false,
+      lastUpdated: Date.now(),
     };
   }
 

@@ -12,6 +12,8 @@ import { IGame } from '../../interfaces/IGame';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  openGames$: Observable<IGame[]>;
+  games: IGame[] = [];
 
   constructor(
     private gameService: GameService,
@@ -29,8 +31,13 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  joinGame() {
-    return;
+  findOpenGames() {
+    this.openGames$ = this.gameService.getOpenGameList(10);
+    this.openGames$.subscribe(g => this.games = g);
+  }
+
+  joinGame(gameId: string) {
+    this.router.navigate([`game/${gameId}`]);
   }
 
 }

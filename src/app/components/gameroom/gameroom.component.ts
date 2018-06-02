@@ -38,6 +38,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private chatService: ChatService,
     private deckService: DeckService,
     private gameService: GameService,
     private giphyService: GiphyService,
@@ -64,6 +65,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
               // If user joins a game with no host, they are the host
               this.gameService.updateGame({ hostId: this.currentUser.uid });
             }
+            const playerJoinedMsg = `${this.currentUser.username.toUpperCase()} JOINED THE GAME`;
+            this.chatService.postAdminMessage(playerJoinedMsg);
             this.currentUser.gameAssignedId = pid;
           })
           .catch(err => this.returnHomeWithMessage(err.message));
@@ -215,7 +218,9 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   removePlayer(player: IPlayer) {
     if (!this.isHost) { return; }
 
-    this.playerService.remove(player);
+    this.playerService.remove(player).then(() => {
+      this.chatService.postAdminMessage(`${player.username.toUpperCase()} WAS REMOVED`);
+    });
   }
 
   /*********************/
@@ -266,12 +271,17 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     const nextPlayerUsername = !!nextActivePlayer ? nextActivePlayer.username : null;
     const gameChanges: IGameChanges = {};
 
+    this.chatService.postAdminMessage(`${player.username.toUpperCase()} HAS LEFT THE GAME`);
+
     if (this.isCurrentUsersTurn) {
       this.startNewRound();
     }
 
     if (this.isHost) {
       gameChanges.hostId = nextPlayerId;
+      if (nextActivePlayer) {
+        this.chatService.postAdminMessage(`${nextActivePlayer.username.toUpperCase()} IS THE NEW HOST`);
+      }
     }
 
     this.playerService.update(player, { isActive: false });

@@ -7,6 +7,7 @@ export interface IGame {
   beginDate: number;
   hasStarted: boolean;
   hostId: string;
+  hostPhotoURL: string;
   turn?: string;
   turnUsername?: string;
   tagOptions: string[];
@@ -17,6 +18,7 @@ export interface IGame {
   captionDeck: ICard[];
   isVotingRound: boolean;
   winner?: IPlayer;
+  lastUpdated: number;
 }
 
 export interface IGameChanges {
@@ -32,4 +34,5 @@ export interface IGameChanges {
   captionDeck?: ICard[];
   isVotingRound?: boolean;
   winner?: IPlayer;
+  lastUpdated?: number;
 }

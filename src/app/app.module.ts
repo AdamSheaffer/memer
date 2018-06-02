@@ -12,6 +12,8 @@ import '@clr/icons';
 import '@clr/icons/shapes/essential-shapes';
 import '@clr/icons/shapes/social-shapes';
 
+import { MomentModule } from 'ngx-moment';
+
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthService } from './services/auth.service';
@@ -33,6 +35,7 @@ import { ThemeService } from './services/theme.service';
 import { ShufflePipe } from './pipes/shuffle.pipe';
 import { ActivePlayersPipe } from './pipes/active-player.pipe';
 import { CurrentUserPipe } from './pipes/current-user.pipe';
+import { AbsPipe } from './pipes/abs.pipe';
 
 
 @NgModule({
@@ -51,24 +54,27 @@ import { CurrentUserPipe } from './pipes/current-user.pipe';
     PlayerScoreComponent,
     ShufflePipe,
     ActivePlayersPipe,
-    CurrentUserPipe
+    CurrentUserPipe,
+    AbsPipe
   ],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpModule,
-    AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AppRoutingModule,
-    ClarityModule
+    BrowserAnimationsModule,
+    BrowserModule,
+    ClarityModule,
+    HttpModule,
+    MomentModule
   ],
   providers: [
     AuthService,
     DeckService,
+    GameService,
     GiphyService,
     ThemeService,
-    GameService],
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
