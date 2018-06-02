@@ -53,7 +53,6 @@ export class GameService {
   }
 
   updateGame(changes: IGameChanges): Promise<void> {
-    changes.lastUpdated = Date.now();
     return this._gameDoc.update(changes);
   }
 

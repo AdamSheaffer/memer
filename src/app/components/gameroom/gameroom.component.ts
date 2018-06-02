@@ -105,7 +105,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isCurrentUsersTurn) { return; }
 
     const tagOptions = this.giphyService.getRandomTags();
-    this.gameService.updateGame({ tagOptions });
+    const lastUpdated = Date.now();
+    this.gameService.updateGame({ tagOptions, lastUpdated });
   }
 
   selectTag(tagSelection: string) {
