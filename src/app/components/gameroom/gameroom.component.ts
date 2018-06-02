@@ -160,6 +160,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     playerChanges.captionPlayed = null;
 
     const nextPlayer = this.findNextPlayer();
+    const nextPlayerUid = nextPlayer ? nextPlayer.uid : null;
+    const nextPlayerUsername = nextPlayer ? nextPlayer.username : null;
 
     gameChanges.gifOptionURLs = [];
     gameChanges.gifSelectionURL = null;
@@ -167,8 +169,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     gameChanges.tagSelection = null;
     gameChanges.isVotingRound = false;
     gameChanges.roundWinner = null;
-    gameChanges.turn = nextPlayer.uid;
-    gameChanges.turnUsername = nextPlayer.username;
+    gameChanges.turn = nextPlayerUid;
+    gameChanges.turnUsername = nextPlayerUsername;
 
     this.playerService.updateAll(players, playerChanges);
     this.gameService.updateGame(gameChanges);
@@ -265,6 +267,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private leaveGame() {
+    if (!this.playerState) { return; }
     const player = this.playerState.find(p => p.uid === this.currentUser.uid);
     player.isActive = false;
     const nextActivePlayer = this.playerState.find(p => p.isActive);

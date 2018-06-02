@@ -46,8 +46,10 @@ export class PlayerService {
           this.resetPlayer(player); // reset player and add to game
           return this.addPlayer(player);
         }
+        const gameAssignedId = snapshot.docs[0].id;
+        player.gameAssignedId = gameAssignedId;
         this.update(player, { isActive: true });
-        return snapshot.docs[0].id; // already in game. Return their id
+        return gameAssignedId; // already in game. Return their id
       });
   }
 
