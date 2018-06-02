@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument,
 import * as firebase from 'firebase/app';
 
 import { IPlayer } from '../interfaces/IPlayer';
-import { IGame } from '../interfaces/IGame';
+import { IGame, IGameChanges } from '../interfaces/IGame';
 import { ICard } from '../interfaces/ICard';
 import { IGameObservables } from '../interfaces/IGameObservables';
 
@@ -21,6 +21,12 @@ export class GameService {
 
   constructor(private afs: AngularFirestore) {
     this._gamesCollection = this.afs.collection('games');
+  }
+
+  init(gameId: string) {
+    this._gameDoc = this._gamesCollection.doc(gameId);
+    this._game$ = this._gameDoc.valueChanges();
+    return this.game$;
   }
 
   async createNewGame(player: IPlayer): Promise<string> {
@@ -58,21 +64,8 @@ export class GameService {
     );
   }
 
-  joinGameWithId(id: string, player: IPlayer): Observable<IGame> {
-    this._gameDoc = this.afs.doc<IGame>(`games/${id}`);
-    this._game$ = this._gameDoc.valueChanges();
-
-    this.joinIfNotInGame(player);
-
-    return this.game$;
-  }
-
-  updateGame(changes: any): Promise<void> {
+  updateGame(changes: IGameChanges): Promise<void> {
     return this._gameDoc.update(changes);
-  }
-
-  once(fn: (game: IGame) => void) {
-    this._game$.pipe(take(1)).subscribe(fn);
   }
 
   private newGame(host: IPlayer): IGame {
@@ -80,25 +73,11 @@ export class GameService {
       hasStarted: false,
       beginDate: (Date.now() * -1),
       hostId: host.uid,
-      players: [],
       tagOptions: [],
       gifOptionURLs: [],
       captionDeck: [],
-      isVotingRound: false,
-      messages: [],
+      isVotingRound: false
     };
-  }
-
-  private joinIfNotInGame(player: IPlayer): void {
-    this._game$.pipe(take(1)).subscribe(game => {
-      const players = game.players;
-      const hasAlreadyJoined = players.some(p => p.uid === player.uid);
-
-      if (!hasAlreadyJoined) {
-        players.push(player);
-        this._gameDoc.update({ players });
-      }
-    });
   }
 
 }

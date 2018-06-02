@@ -1,18 +1,18 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Renderer, OnDestroy, HostListener } from '@angular/core';
-import { IPlayer } from '../../interfaces/IPlayer';
-import { AuthService } from '../../services/auth.service';
-import { GameService } from '../../services/game.service';
-import { IGame } from '../../interfaces/IGame';
-import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
-import { ParamMap } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { GiphyService } from '../../services/giphy.service';
+import { ActivatedRoute, Router, NavigationStart, ParamMap } from '@angular/router';
+import { IGame, IGameChanges } from '../../interfaces/IGame';
+import { IPlayer, IPlayerChanges } from '../../interfaces/IPlayer';
 import { ICard } from '../../interfaces/ICard';
-import { DeckService } from '../../services/deck.service';
 import { IMessage } from '../../interfaces/IMessage';
+import { AuthService } from '../../services/auth.service';
+import { ChatService } from '../../services/chat.service';
+import { DeckService } from '../../services/deck.service';
+import { GameService } from '../../services/game.service';
+import { GiphyService } from '../../services/giphy.service';
+import { PlayerService } from '../../services/player.service';
 import { ThemeService, Theme } from '../../services/theme.service';
-import { switchMap, filter, take, map, single, skip, takeWhile, takeUntil } from 'rxjs/operators';
-import { hasLifecycleHook } from '@angular/compiler/src/lifecycle_reflector';
+import { Observable, Subscription, Subject } from 'rxjs';
+import { switchMap, filter, take, map, skip, takeUntil, combineLatest } from 'rxjs/operators';
 
 @Component({
   selector: 'memer-gameroom',
@@ -21,13 +21,16 @@ import { hasLifecycleHook } from '@angular/compiler/src/lifecycle_reflector';
 })
 export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('chat', { read: ElementRef }) chatEl: ElementRef;
+  destroy$: Subject<boolean> = new Subject<boolean>();
   gameId: string;
+  cardsInHand = 7;
   collapsed = false;
   isWinningModalShown: boolean;
   currentUser: IPlayer;
   game$: Observable<IGame>;
+  players$: Observable<IPlayer[]>;
   gameState: IGame;
-  gameSubscriptions: Subscription[] = [];
+  playerState: IPlayer[];
   get isCurrentUsersTurn() { return this.gameState.turn === this.currentUser.uid; }
   get isHost() { return this.gameState.hostId === this.currentUser.uid; }
   get isUpForVoting(): boolean { return !!this.gameState && !!this.gameState.gifSelectionURL; }
@@ -38,6 +41,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     private deckService: DeckService,
     private gameService: GameService,
     private giphyService: GiphyService,
+    private playerService: PlayerService,
     private router: Router,
     private route: ActivatedRoute,
     private themeService: ThemeService,
@@ -50,10 +54,17 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.gameId = id;
-      this.game$ = this.gameService.joinGameWithId(id, this.currentUser);
-      this.track(this.game$.subscribe(g => this.gameState = g));
-      this.trackPlayerRemoval();
-      this.trackVotingRound();
+      this.game$ = this.gameService.init(this.gameId);
+      this.game$.pipe(take(1)).subscribe(g => {
+        this.players$ = this.playerService.init(this.gameId, this.currentUser.uid);
+        this.deckService.init(this.gameId);
+        this.playerService.join(this.currentUser, g.hasStarted)
+          .then(pid => this.currentUser.gameAssignedId = pid)
+          .catch(err => this.returnHomeWithMessage(err.message));
+        this.trackGameEvents();
+        this.players$.pipe(takeUntil(this.destroy$)).subscribe(p => this.playerState = p); // keep copy of players state
+      });
+      this.game$.pipe(takeUntil(this.destroy$)).subscribe(game => this.gameState = game); // keep copy of game state
     });
   }
 
@@ -64,13 +75,18 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   beginGame() {
-    const captionDeck = this.deckService.getDeck();
-    // this.deckService.deal(captionDeck, this.gameState.players, 7);
-    this.deckService.init(this.gameId);
+    this.deckService.setDeck().then(() => {
+      const playerCount = this.playerState.length;
+
+      this.deckService.getCards(this.cardsInHand * playerCount)
+        .then(cards => {
+          this.playerService.dealToAllPlayers(cards, this.cardsInHand);
+        });
+    });
+
+
     this.gameService.updateGame({
       hasStarted: true,
-      players: this.gameState.players,
-      captionDeck,
       turn: this.currentUser.uid,
       turnUsername: this.currentUser.username
     });
@@ -80,9 +96,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isCurrentUsersTurn) { return; }
 
     const tagOptions = this.giphyService.getRandomTags();
-    this.gameService.updateGame({ tagOptions }).then(() => {
-
-    });
+    this.gameService.updateGame({ tagOptions });
   }
 
   selectTag(tagSelection: string) {
@@ -95,30 +109,31 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gameService.updateGame({ gifSelectionURL });
   }
 
-  selectCaption(caption: ICard) {
-    const players = [...this.gameState.players];
-    const deck = [...this.gameState.captionDeck];
-    const player = players.find(p => p.uid === this.currentUser.uid);
-    const captionIndex = player.captions.findIndex(c => c.top === caption.top && c.bottom === caption.bottom);
-    player.captions.splice(captionIndex, 1);
-    player.captionPlayed = caption;
-    this.deckService.deal(deck, [player], 1);
-    this.gameService.updateGame({ players, captionDeck: deck });
+  selectCaption(captionPlayed: ICard) {
+    const player = this.playerState.find(p => p.uid === this.currentUser.uid);
+    const captionIndex = player.captions.findIndex(c => c.id === captionPlayed.id);
+    const captions = [...player.captions];
+    captions.splice(captionIndex, 1);
+    this.deckService.getCards(1).then(cards => {
+      captions.push(...cards);
+      this.playerService.update(player, { captionPlayed, captions });
+    });
   }
 
   selectFavoriteCaption(player: IPlayer) {
     if (!this.isCurrentUsersTurn || !this.gameState.isVotingRound) { return; }
 
-    player.score += 1;
-    const players = this.updatePlayersWithPlayer(player);
-    const hasGameWinner = player.score >= 10;
-    const changes: any = { players, roundWinner: player };
+    const newScore = player.score + 1;
+    const hasGameWinner = newScore >= 10;
+    this.playerService.update(player, { score: newScore });
+
+    const gameChanges: IGameChanges = { roundWinner: player };
 
     if (hasGameWinner) {
-      changes.winner = player;
+      gameChanges.winner = player;
     }
 
-    this.gameService.updateGame(changes).then(() => {
+    this.gameService.updateGame(gameChanges).then(() => {
       setTimeout(() => {
         if (!hasGameWinner) {
           this.startNewRound();
@@ -128,113 +143,143 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   startNewRound() {
-    const changes: any = {};
-    const players = [...this.gameState.players];
-    players.forEach(p => p.captionPlayed = null);
+    const playerChanges: IPlayerChanges = {};
+    const gameChanges: IGameChanges = {};
+    const players = [...this.playerState];
+
+    playerChanges.captionPlayed = null;
+
     const nextPlayer = this.findNextPlayer();
 
-    changes.gifOptionURLs = [];
-    changes.gifSelectionURL = null;
-    changes.tagOptions = [];
-    changes.tagSelection = null;
-    changes.isVotingRound = false;
-    changes.roundWinner = null;
-    changes.players = players;
-    changes.turn = nextPlayer.uid;
-    changes.turnUsername = nextPlayer.username;
+    gameChanges.gifOptionURLs = [];
+    gameChanges.gifSelectionURL = null;
+    gameChanges.tagOptions = [];
+    gameChanges.tagSelection = null;
+    gameChanges.isVotingRound = false;
+    gameChanges.roundWinner = null;
+    gameChanges.turn = nextPlayer.uid;
+    gameChanges.turnUsername = nextPlayer.username;
 
-    this.gameService.updateGame(changes);
+    this.playerService.updateAll(players, playerChanges);
+    this.gameService.updateGame(gameChanges);
   }
 
   private findNextPlayer() {
-    const index = this.gameState.players.findIndex(p => {
+    const index = this.playerState.findIndex(p => {
       return this.gameState.turn === p.uid;
     });
 
-    if (index === this.gameState.players.length - 1) {
-      return this.gameState.players[0];
+    const isLastPlayerToGo = index === this.playerState.length - 1;
+    if (isLastPlayerToGo) {
+      return this.playerState[0];
     }
 
-    return this.gameState.players[index + 1];
+    return this.playerState[index + 1];
   }
 
-  resetGame() {
-    const changes: any = {};
-    const players = [...this.gameState.players];
-    players.forEach(p => {
-      p.captions = [];
-      p.score = 0;
-      p.captionPlayed = null;
-    });
+  async resetGame() {
+    const gameChanges: IGameChanges = {
+      tagOptions: [],
+      tagSelection: null,
+      gifOptionURLs: [],
+      isVotingRound: false,
+      roundWinner: null,
+      winner: null,
+      gifSelectionURL: null
+    };
 
-    changes.tagOptions = [];
-    changes.tagSelection = null;
-    changes.gifOptionURLs = [];
-    changes.isVotingRound = false;
-    changes.roundWinner = null;
-    changes.winner = null;
-    changes.gifSelectionURL = null;
-    changes.players = players;
+    const players = [...this.playerState];
+    const playerChanges: IPlayerChanges = {
+      captionPlayed: null,
+      score: 0,
+      captions: []
+    };
+
+    const playersUpdated = this.playerService.updateAll(players, playerChanges);
+    const gameUpdated = this.gameService.updateGame(gameChanges);
+
+    await Promise.all([playersUpdated, gameUpdated]);
 
     this.beginGame();
   }
 
   removePlayer(player: IPlayer) {
-    const players = this.gameState.players;
-    const index = players.findIndex(p => p.uid === player.uid);
-    players.splice(index, 1);
-    this.gameService.updateGame({ players });
+    if (!this.isHost) { return; }
+
+    this.playerService.remove(player);
   }
 
   /*********************/
   /**** GAME EVENTS ****/
   /*********************/
-  trackPlayerRemoval() {
-    const subscription = this.game$.pipe(
-      skip(1),
-      map(g => g.players),
-      filter(players => !players.find(p => p.uid === this.currentUser.uid))
-    ).subscribe(p => {
-      alert('You have been removed from the game');
-      this.router.navigate(['/']);
-    });
-
-    this.track(subscription);
+  private trackGameEvents() {
+    this.trackVotingRound(); // Everyone has played. Voting Round Begins
+    this.trackPlayerRemoval();
   }
 
-  trackVotingRound() {
-    const subscription = this.game$.pipe(
-      filter(g => !g.isVotingRound),
-      filter(this.everyoneSubmittedCaption)
-    ).subscribe(g => {
+  private trackPlayerRemoval() {
+    this.players$.pipe(
+      skip(1), // This will fire when you a player enters. Skip this
+      filter(players => !players.find(p => p.uid === this.currentUser.uid))
+    ).subscribe(() => {
+      this.returnHomeWithMessage('You\'ve been removed from the game');
+    });
+  }
+
+  private trackVotingRound() {
+    this.players$.pipe(
+      combineLatest(this.game$),
+      filter(([players, game]) => this.everyoneSubmittedCaption(players, game)),
+      takeUntil(this.destroy$)
+    ).subscribe(([players, game]) => {
       this.gameService.updateGame({ isVotingRound: true });
     });
-
-    this.track(subscription);
   }
 
-  private track(subscription: Subscription) {
-    this.gameSubscriptions.push(subscription);
-  }
-
-  private everyoneSubmittedCaption(game: IGame) {
-    const players = game.players;
+  private everyoneSubmittedCaption(players: IPlayer[], game: IGame) {
     const playersNotSelected = players.filter(p => !p.captionPlayed);
 
     return playersNotSelected.length === 1 &&
       playersNotSelected[0].uid === game.turn;
   }
 
-  private updatePlayersWithPlayer(player: IPlayer) {
-    const players = [...this.gameState.players];
-    const playerIndex = players.findIndex(p => p.uid === player.uid);
-    if (playerIndex > -1) {
-      players.splice(playerIndex, 1, player);
+  private returnHomeWithMessage(message?: string) {
+    this.router.navigate(['/']).then(() => {
+      if (message) { alert(message); }
+    });
+  }
+
+  private leaveGame() {
+    const player = this.playerState.find(p => p.uid === this.currentUser.uid);
+    const nextActivePlayer = this.playerState.find(p => p.isActive);
+    const gameChanges: IGameChanges = {};
+    player.isActive = false;
+
+    if (this.isCurrentUsersTurn) {
+      gameChanges.turn = nextActivePlayer.uid;
+      gameChanges.turnUsername = nextActivePlayer.username;
     }
-    return players;
+
+    if (this.isHost) {
+      gameChanges.hostId = nextActivePlayer.uid;
+    }
+
+    this.playerService.update(player, { isActive: false });
+
+    if (Object.keys(gameChanges).length) {
+      this.gameService.updateGame(gameChanges);
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadHandler(event: Event) {
+    this.leaveGame();
   }
 
   ngOnDestroy() {
-    this.gameSubscriptions.forEach(s => s.unsubscribe());
+    this.leaveGame();
+    this.destroy$.next(true);
+    // 🔥 🔥 🔥 🚬 burn the whole thing down and leave no trace behind...
+    this.destroy$.complete();
   }
 }

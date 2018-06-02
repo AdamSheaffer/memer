@@ -4,11 +4,11 @@
 <div [ngClass]="{'dark-theme': isDarkTheme}" class="main-container">
   <div class="content-container">
     <div *ngIf="game$|async as game" class="content-area">
-      <div>
-        <h3>{{ isHost$|async }}</h3>
+      <div *ngIf="players$|async as players">
+
         <!-- Player images and scores -->
         <div>
-          <memer-player-list [turn]="game?.turn" [players]="game.players" [hostId]="game.hostId" [isHost]="game.hostId === currentUser.uid"
+          <memer-player-list [turn]="game?.turn" [players]="players" [hostId]="game.hostId" [isHost]="game.hostId === currentUser.uid"
             (playerRemoval)="removePlayer($event)"></memer-player-list>
         </div>
 
@@ -17,7 +17,7 @@
           <h2 class="text-indicator waiting-indicator">WAITING FOR OTHER PLAYERS</h2>
           <div class="row">
             <div class="col-sm-6 offset-sm-3">
-              <button *ngIf="game.hostId === currentUser.uid && !game?.hasStarted" (click)="beginGame()" [disabled]="game.players?.length < 2"
+              <button *ngIf="game.hostId === currentUser.uid && !game?.hasStarted" (click)="beginGame()" [disabled]="players?.length < 2"
                 class="btn btn-outline-info btn-block">START GAME</button>
               <span *ngIf="currentUser?.id !== game.hostId && !game?.hasStarted" class="spinner spinner-lg">
                   Waiting...
@@ -60,19 +60,21 @@
         </div>
 
         <!-- Gif that judge has selected -->
-        <div *ngIf="game?.gifSelectionURL && !game.isVotingRound" class="selected-gif">
-          <div class="row align-items-center">
-            <div class="d-flex align-items-center flex-column meme-container">
-              <h2 *ngIf="!isCurrentUsersTurn && !currentUser.captionPlayed">SUBMIT A CAPTION</h2>
-              <h2 *ngIf="(isCurrentUsersTurn || (currentUser.captionPlayed && !game.roundWinner)) && !game.isVotingRound">WAITING FOR OTHER PLAYERS...</h2>
-              <memer-meme [imageURL]="game.gifSelectionURL"></memer-meme>
+        <div *ngIf="players|currentUser:currentUser.uid as player">
+          <div *ngIf="game?.gifSelectionURL && !game.isVotingRound" class="selected-gif">
+            <div class="row align-items-center">
+              <div class="d-flex align-items-center flex-column meme-container">
+                <h2 *ngIf="!isCurrentUsersTurn && !player.captionPlayed">SUBMIT A CAPTION</h2>
+                <h2 *ngIf="(isCurrentUsersTurn || (player.captionPlayed && !game.roundWinner)) && !game.isVotingRound">WAITING FOR OTHER PLAYERS...</h2>
+                <memer-meme [imageURL]="game.gifSelectionURL"></memer-meme>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Caption Cards submitted -->
         <div *ngIf="game?.gifSelectionURL && game.isVotingRound && !game.roundWinner" class="row flex-items-xs-center">
-          <div *ngFor="let player of game.players | shuffle" class="player-submission flex-xs-bottom">
+          <div *ngFor="let player of players | shuffle" class="player-submission flex-xs-bottom">
             <div *ngIf="game?.turn !== player.uid">
               <memer-meme (click)="selectFavoriteCaption(player)" [caption]="player.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
             </div>
@@ -100,7 +102,7 @@
         </clr-modal>
 
         <!-- Hand of Caption Cards -->
-        <div *ngIf="game.players|currentUser:currentUser.uid as player">
+        <div *ngIf="players|currentUser:currentUser.uid as player">
           <div *ngIf="player?.captions">
             <memer-player-hand [playerCanSelect]="isUpForVoting && !isCurrentUsersTurn && !player.captionPlayed" [playerHand]="player.captions"
               (cardSelect)="selectCaption($event)">

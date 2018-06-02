@@ -1,14 +1,22 @@
 import { Injectable } from '@angular/core';
 import { cards } from '../data/cards';
 import { ICard } from '../interfaces/ICard';
-import { Observable } from 'rxjs';
-import { shuffle } from 'lodash';
+import { IGame } from '../interfaces/IGame';
 import { IPlayer } from '../interfaces/IPlayer';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from 'angularfire2/firestore';
-import { map } from 'rxjs/operators';
+import {
+  AngularFirestore,
+  AngularFirestoreCollection,
+  AngularFirestoreDocument,
+  DocumentChangeAction,
+  DocumentReference
+} from 'angularfire2/firestore';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { shuffle } from 'lodash';
 
 @Injectable()
 export class DeckService {
+  private _gameDoc: AngularFirestoreDocument<IGame>;
   private _cardCollection: AngularFirestoreCollection<ICard>;
   private _deck$: Observable<ICard[]>;
 
@@ -18,9 +26,8 @@ export class DeckService {
   }
 
   init(gameId: string) {
-    this._cardCollection = this.afs.collection('games')
-      .doc(gameId)
-      .collection('deck');
+    this._gameDoc = this.afs.collection('games').doc(gameId);
+    this._cardCollection = this._gameDoc.collection('deck');
 
     this._deck$ = this._cardCollection.snapshotChanges().pipe(
       map(actions => {
@@ -31,7 +38,9 @@ export class DeckService {
         });
       })
     );
+  }
 
+  setDeck() {
     const batch = this.afs.firestore.batch();
 
     this.getDeck().map(card => {
@@ -42,11 +51,27 @@ export class DeckService {
       batch.set(ref, card);
     });
 
-    batch.commit();
+    return batch.commit();
   }
 
   getDeck(): ICard[] {
     return shuffle(cards);
+  }
+
+  getCards(count: number) {
+    return this._gameDoc.collection<ICard>('deck', r => r.limit(count))
+      .valueChanges()
+      .pipe(take(1))
+      .toPromise()
+      .then(captions => {
+        const cardRefs = captions.map(c => this.getCardRef(c.id));
+        this.removeCardsFromDeck(cardRefs);
+        return captions;
+      });
+  }
+
+  getCardRef(cardId: string) {
+    return this._cardCollection.doc(cardId).ref;
   }
 
   // IS THERE A WAY TO DO THIS BETTER WITHOUT USING SIDE EFFECTS?
@@ -55,6 +80,14 @@ export class DeckService {
       const cardsFromDeck = deck.splice(0, numOfCards);
       p.captions.push(...cardsFromDeck);
     });
+  }
+
+  private removeCardsFromDeck(cardRefs: DocumentReference[]) {
+    const batch = this.afs.firestore.batch();
+    cardRefs.forEach(r => {
+      batch.delete(r);
+    });
+    batch.commit();
   }
 
 }
