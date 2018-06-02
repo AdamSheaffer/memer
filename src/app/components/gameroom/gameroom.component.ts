@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Renderer, OnDestroy, HostListener } from '@angular/core';
-import { ActivatedRoute, Router, NavigationStart, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { IGame, IGameChanges } from '../../interfaces/IGame';
 import { IPlayer, IPlayerChanges } from '../../interfaces/IPlayer';
 import { ICard } from '../../interfaces/ICard';
@@ -59,7 +59,13 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.players$ = this.playerService.init(this.gameId, this.currentUser.uid);
         this.deckService.init(this.gameId);
         this.playerService.join(this.currentUser, g.hasStarted)
-          .then(pid => this.currentUser.gameAssignedId = pid)
+          .then(pid => {
+            if (!g.hostId) {
+              // If user joins a game with no host, they are the host
+              this.gameService.updateGame({ hostId: this.currentUser.uid });
+            }
+            this.currentUser.gameAssignedId = pid;
+          })
           .catch(err => this.returnHomeWithMessage(err.message));
         this.trackGameEvents();
         this.players$.pipe(takeUntil(this.destroy$)).subscribe(p => this.playerState = p); // keep copy of players state
@@ -165,16 +171,19 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private findNextPlayer() {
-    const index = this.playerState.findIndex(p => {
+    let index = this.playerState.findIndex(p => {
       return this.gameState.turn === p.uid;
     });
 
-    const isLastPlayerToGo = index === this.playerState.length - 1;
-    if (isLastPlayerToGo) {
-      return this.playerState[0];
+    while (index < this.playerState.length - 1) {
+      index++;
+      const nextPlayer = this.playerState[index];
+      if (nextPlayer.isActive) {
+        return nextPlayer;
+      }
     }
 
-    return this.playerState[index + 1];
+    return this.playerState.find(p => p.isActive);
   }
 
   async resetGame() {
@@ -237,7 +246,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private everyoneSubmittedCaption(players: IPlayer[], game: IGame) {
-    const playersNotSelected = players.filter(p => !p.captionPlayed);
+    const playersNotSelected = players.filter(p => !p.captionPlayed && p.isActive);
 
     return playersNotSelected.length === 1 &&
       playersNotSelected[0].uid === game.turn;
@@ -251,17 +260,18 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private leaveGame() {
     const player = this.playerState.find(p => p.uid === this.currentUser.uid);
-    const nextActivePlayer = this.playerState.find(p => p.isActive);
-    const gameChanges: IGameChanges = {};
     player.isActive = false;
+    const nextActivePlayer = this.playerState.find(p => p.isActive);
+    const nextPlayerId = !!nextActivePlayer ? nextActivePlayer.uid : null;
+    const nextPlayerUsername = !!nextActivePlayer ? nextActivePlayer.username : null;
+    const gameChanges: IGameChanges = {};
 
     if (this.isCurrentUsersTurn) {
-      gameChanges.turn = nextActivePlayer.uid;
-      gameChanges.turnUsername = nextActivePlayer.username;
+      this.startNewRound();
     }
 
     if (this.isHost) {
-      gameChanges.hostId = nextActivePlayer.uid;
+      gameChanges.hostId = nextPlayerId;
     }
 
     this.playerService.update(player, { isActive: false });
