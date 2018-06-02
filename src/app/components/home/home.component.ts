@@ -13,6 +13,7 @@ import { IGame } from '../../interfaces/IGame';
 })
 export class HomeComponent implements OnInit {
   showOpenGames = false;
+  isLoading = false;
   openGames$: Observable<IGame[]>;
   games: IGame[] = [];
 
@@ -25,6 +26,7 @@ export class HomeComponent implements OnInit {
   }
 
   hostGame() {
+    this.showOpenGames = false;
     const user = this.authService.getUser();
     this.gameService.createNewGame(user)
       .then(gameId => {
@@ -34,8 +36,12 @@ export class HomeComponent implements OnInit {
 
   findOpenGames() {
     this.showOpenGames = true;
+    this.isLoading = true;
     this.openGames$ = this.gameService.getOpenGameList(10);
-    this.openGames$.subscribe(g => this.games = g);
+    this.openGames$.subscribe(g => {
+      this.games = g;
+      this.isLoading = false;
+    });
   }
 
   joinGame(gameId: string) {
