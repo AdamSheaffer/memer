@@ -4,7 +4,7 @@
       <img class="logo" src="assets/logo.png" alt="logo">
     </div>
     <div class="login-group col-xs-12 row flex-items-xs-center">
-      <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
+      <div *ngIf="!games?.length" class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
         <button (click)="findOpenGames()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">FIND GAME</button>
       </div>
       <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">

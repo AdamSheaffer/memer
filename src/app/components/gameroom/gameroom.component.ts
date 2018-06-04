@@ -246,6 +246,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackVotingRound() {
     this.players$.pipe(
       combineLatest(this.game$),
+      filter(([players, game]) => !game.isVotingRound),
       filter(([players, game]) => this.everyoneSubmittedCaption(players, game)),
       takeUntil(this.destroy$)
     ).subscribe(([players, game]) => {
