@@ -40,7 +40,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     private themeService: ThemeService,
     private renderer: Renderer
   ) {
-    this.currentUser = this.authService.getUser();
+    this.currentUser = this.authService.getPlayer();
   }
 
   ngOnInit() {

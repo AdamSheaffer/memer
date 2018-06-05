@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   hostGame() {
     this.showOpenGames = false;
-    const user = this.authService.getUser();
+    const user = this.authService.getPlayer();
     this.gameService.createNewGame(user)
       .then(gameId => {
         this.router.navigate([`game/${gameId}`]);

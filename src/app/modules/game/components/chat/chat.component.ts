@@ -17,7 +17,7 @@ export class ChatComponent implements OnInit {
   messagesSubscription: Subscription;
 
   constructor(private authService: AuthService, private chatService: ChatService) {
-    this.currentUser = this.authService.getUser();
+    this.currentUser = this.authService.getPlayer();
   }
 
   ngOnInit() {

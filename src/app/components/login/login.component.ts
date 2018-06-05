@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authService.login().then((user) => {
+    this.authService.login().then(u => {
       this.router.navigate(['/']);
     });
   }

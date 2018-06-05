@@ -8,7 +8,8 @@ import { HomeComponent } from './components/home/home.component';
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
-    { path: 'game', loadChildren: './modules/game/game.module#GameModule', canActivate: [AuthGuard] }
+    { path: 'game', loadChildren: './modules/game/game.module#GameModule', canActivate: [AuthGuard] },
+    { path: 'admin', loadChildren: './modules/admin/admin.module#AdminModule', canActivate: [AuthGuard] }
 ];
 
 @NgModule({

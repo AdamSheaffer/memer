@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private themeService: ThemeService) {
-    this.username = this.authService.getUser().username;
+    this.username = this.authService.getPlayer().username;
   }
 
   ngOnInit() {

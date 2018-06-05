@@ -1,4 +1,4 @@
-import { ICard } from './ICard';
+import { Roles, ICard } from '.';
 
 export interface IPlayer {
   uid: string; // User ID
