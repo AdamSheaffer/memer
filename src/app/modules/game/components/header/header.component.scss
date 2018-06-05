@@ -1,0 +1,19 @@
+@import '../../../../../variables';
+
+.header {
+  background: $primary-color;
+
+  img {
+    width: 75px;
+    height: 57px;
+    margin-top: 1px;
+  }
+}
+
+.memer-title {
+  font-family: $impact;
+  color: $white-color;
+  display: inline-block;
+  font-size: 1.6rem;
+  margin: auto;
+}

@@ -1,13 +1,9 @@
 
-import {tap, map, take} from 'rxjs/operators';
-import { Injectable } from "@angular/core";
+import { tap, map, take } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from "../services/auth.service";
-import { Observable } from "rxjs";
-
-
-
-
+import { AuthService } from '../modules/core/services';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,7 +19,6 @@ export class AuthGuard implements CanActivate {
                     return false;
                 }
                 return true;
-            }),);
+            }), );
     }
-
 }

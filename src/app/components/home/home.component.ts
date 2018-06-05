@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { GameService } from '../../services/game.service';
+import { GameService, AuthService } from '../../modules/core/services';
 import { IGame } from '../../interfaces/IGame';
 
 @Component({
