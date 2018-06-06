@@ -1,3 +1,21 @@
-<p>
-  deck-manager works!
-</p>
+<div class="row flex-items-xs-center">
+  <clr-datagrid class="datagrid-compact col-xs-12 col-md-8">
+    <clr-dg-column [clrDgField]="'top'">
+      Caption Top
+    </clr-dg-column>
+    <clr-dg-column [clrDgField]="'bottom'">Caption Bottom</clr-dg-column>
+    <clr-dg-column [clrDgField]="'createdBy'">Created By</clr-dg-column>
+
+    <clr-dg-row *clrDgItems="let caption of captions$|async">
+      <clr-dg-cell>{{caption.top | uppercase}}</clr-dg-cell>
+      <clr-dg-cell>{{caption.bottom | uppercase}}</clr-dg-cell>
+      <clr-dg-cell>{{caption.createdBy}}</clr-dg-cell>
+      <clr-dg-row-detail *clrIfExpanded [clrDgReplace]="true">
+        Lorem ipsum...
+      </clr-dg-row-detail>
+    </clr-dg-row>
+
+    <clr-dg-footer>{{(captions$|async)?.length || 0}} Captions</clr-dg-footer>
+
+  </clr-datagrid>
+</div>
