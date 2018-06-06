@@ -218,6 +218,12 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  private returnHomeWithMessage(message?: string) {
+    this.router.navigate(['/']).then(() => {
+      if (message) { alert(message); }
+    });
+  }
+
   /*********************/
   /**** GAME EVENTS ****/
   /*********************/
@@ -251,12 +257,6 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
     return playersNotSelected.length === 1 &&
       playersNotSelected[0].uid === game.turn;
-  }
-
-  private returnHomeWithMessage(message?: string) {
-    this.router.navigate(['/']).then(() => {
-      if (message) { alert(message); }
-    });
   }
 
   private leaveGame() {

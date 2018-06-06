@@ -4,17 +4,18 @@ import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/not-auth.guard';
 import { HomeComponent } from './components/home/home.component';
+import { AdminGuard } from './guards/admin.guard';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'game', loadChildren: './modules/game/game.module#GameModule', canActivate: [AuthGuard] },
-    { path: 'admin', loadChildren: './modules/admin/admin.module#AdminModule', canActivate: [AuthGuard] }
+    { path: 'admin', loadChildren: './modules/admin/admin.module#AdminModule', canActivate: [AdminGuard] }
 ];
 
 @NgModule({
     declarations: [],
-    providers: [AuthGuard, NotAuthGuard],
+    providers: [AuthGuard, NotAuthGuard, AdminGuard],
     imports: [RouterModule.forRoot(appRoutes)],
     exports: [RouterModule]
 })

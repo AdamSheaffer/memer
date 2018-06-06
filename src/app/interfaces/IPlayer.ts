@@ -11,6 +11,7 @@ export interface IPlayer {
   score: number;
   captions: ICard[];
   captionPlayed?: ICard;
+  roles: Roles;
 }
 
 export interface IPlayerChanges {

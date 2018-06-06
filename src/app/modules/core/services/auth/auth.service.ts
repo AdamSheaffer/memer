@@ -80,7 +80,35 @@ export class AuthService {
       score: 0,
       username: user.username,
       isActive: true,
-      captions: []
+      captions: [],
+      roles: user.roles
     };
   }
+
+  canPlay(user: User) {
+    const allowedRoles = ['admin', 'editor', 'player'];
+    return this.checkAuthorization(user, allowedRoles);
+  }
+
+  canModify(user: User) {
+    const allowedRoles = ['admin', 'editor'];
+    return this.checkAuthorization(user, allowedRoles);
+  }
+
+  canApprove(user: User) {
+    const allowedRoles = ['admin'];
+    return this.checkAuthorization(user, allowedRoles);
+  }
+
+  private checkAuthorization(user: User, allowedRoles: string[]) {
+    if (!user) { return false; }
+
+    for (const role of allowedRoles) {
+      if (user.roles[role]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }
