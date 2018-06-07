@@ -19,6 +19,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   collapsed = false;
   isWinningModalShown: boolean;
   currentUser: IPlayer;
+  maxPlayers = 8;
   game$: Observable<IGame>;
   players$: Observable<IPlayer[]>;
   gameState: IGame;
@@ -53,10 +54,13 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.deckService.init(this.gameId);
         this.playerService.join(this.currentUser, g.hasStarted)
           .then(pid => {
+            let isHost = g.hostId === this.currentUser.uid;
             if (!g.hostId) {
               // If user joins a game with no host, they are the host
               this.gameService.updateGame({ hostId: this.currentUser.uid });
+              isHost = true;
             }
+            if (isHost) { this.trackGameFull(); }
             const playerJoinedMsg = `${this.currentUser.username.toUpperCase()} JOINED THE GAME`;
             this.chatService.postAdminMessage(playerJoinedMsg);
             this.currentUser.gameAssignedId = pid;
@@ -250,6 +254,27 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe(([players, game]) => {
       this.gameService.updateGame({ isVotingRound: true });
     });
+  }
+
+  private trackGameFull() {
+    const gameStarted$ = this.getGameStartObservable();
+    this.players$.pipe(
+      map(this.activeFilterCount),
+      filter(count => count >= this.maxPlayers),
+      takeUntil(gameStarted$),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.beginGame();
+    });
+  }
+
+  private getGameStartObservable() {
+    return this.game$.pipe(filter(g => g.hasStarted), take(1));
+  }
+
+  private activeFilterCount(players: IPlayer[]) {
+    if (!players) { return 0; }
+    return players.filter(p => p.isActive).length;
   }
 
   private everyoneSubmittedCaption(players: IPlayer[], game: IGame) {
