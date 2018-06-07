@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from 'angularfire2/firestore';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
-import { IMessage, IPlayer } from '../../../../interfaces';
+import { Message, Player } from '../../../../interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-  private _messageCollection: AngularFirestoreCollection<IMessage>;
-  private _messages$: Observable<IMessage[]>;
+  private _messageCollection: AngularFirestoreCollection<Message>;
+  private _messages$: Observable<Message[]>;
 
   gameId: string;
   get messages$() { return this._messages$; }
@@ -27,12 +27,12 @@ export class ChatService {
     this._messages$ = this._messageCollection.valueChanges();
   }
 
-  sendMessage(player: IPlayer, content: string) {
-    const msg: IMessage = {
+  sendMessage(player: Player, content: string) {
+    const msg: Message = {
       photoURL: player.photoURL,
       username: player.username,
       userUID: player.uid,
-      timeStamp: Date.now(),
+      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
       content
     };
 
@@ -40,11 +40,11 @@ export class ChatService {
   }
 
   postAdminMessage(content: string) {
-    const msg: IMessage = {
+    const msg: Message = {
       photoURL: 'assets/logo.png',
       username: 'MEMER',
       userUID: null,
-      timeStamp: Date.now(),
+      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
       content
     };
 

@@ -3,13 +3,12 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
   AngularFirestoreDocument,
-  DocumentChangeAction,
   DocumentReference
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { shuffle } from 'lodash';
-import { Game, Card, IPlayer } from '../../../../interfaces';
+import { Game, Card, Player } from '../../../../interfaces';
 import { cards } from '../../../../data/cards';
 import { CaptionService } from '../../../admin/services/caption.service';
 
@@ -75,7 +74,7 @@ export class DeckService {
   }
 
   // IS THERE A WAY TO DO THIS BETTER WITHOUT USING SIDE EFFECTS?
-  deal(deck: Card[], players: IPlayer[], numOfCards: number): void {
+  deal(deck: Card[], players: Player[], numOfCards: number): void {
     players.forEach(p => {
       const cardsFromDeck = deck.splice(0, numOfCards);
       p.captions.push(...cardsFromDeck);

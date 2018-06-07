@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IPlayer } from '../../../../interfaces';
+import { Player } from '../../../../interfaces';
 
 @Component({
   selector: 'memer-player-score',
@@ -7,7 +7,7 @@ import { IPlayer } from '../../../../interfaces';
   styleUrls: ['./player-score.component.scss']
 })
 export class PlayerScoreComponent implements OnInit {
-  @Input() player: IPlayer;
+  @Input() player: Player;
 
   constructor() { }
 

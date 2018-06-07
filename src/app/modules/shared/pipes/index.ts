@@ -1,7 +1,7 @@
-import { AbsPipe } from './abs.pipe';
+import { FromFBDatePipe } from './fromFBDate.pipe';
 
 export const PIPES = [
-  AbsPipe
+  FromFBDatePipe
 ];
 
-export * from './abs.pipe';
+export * from './fromFBDate.pipe';

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
-import { IPlayer, User } from '../../../../interfaces';
+import { Player, User } from '../../../../interfaces';
 import { AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
 
 @Injectable({
@@ -70,7 +70,7 @@ export class AuthService {
     return userRef.set(data, { merge: true });
   }
 
-  private toPlayerModel(user: User): IPlayer {
+  private toPlayerModel(user: User): Player {
     return {
       uid: user.uid,
       fullName: user.fullName,

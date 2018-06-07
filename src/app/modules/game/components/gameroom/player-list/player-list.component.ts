@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { IPlayer } from '../../../../../interfaces';
+import { Player } from '../../../../../interfaces';
 import { ThemeService, Theme } from '../../../../core/services';
 
 @Component({
@@ -8,21 +8,21 @@ import { ThemeService, Theme } from '../../../../core/services';
   styleUrls: ['./player-list.component.scss']
 })
 export class PlayerListComponent implements OnInit {
-  @Input() players: IPlayer[];
+  @Input() players: Player[];
   @Input() turn: string;
   @Input() isHost: boolean;
   @Input() hostId: string;
-  @Output() playerRemoval = new EventEmitter<IPlayer>();
+  @Output() playerRemoval = new EventEmitter<Player>();
   get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
 
-  playerStagedForRemoval: IPlayer;
+  playerStagedForRemoval: Player;
 
   constructor(private themeService: ThemeService) { }
 
   ngOnInit() {
   }
 
-  stagePlayerToRemove(player: IPlayer) {
+  stagePlayerToRemove(player: Player) {
     if (!this.isHost) { return; }
 
     this.playerStagedForRemoval = player;

@@ -1,9 +1,10 @@
-import { IPlayer } from './IPlayer';
+import { Player } from './Player';
 import { Card } from './Card';
+import * as firebase from 'firebase/app';
 
 export interface Game {
   id?: string;
-  beginDate: number;
+  beginDate: firebase.firestore.FieldValue;
   hasStarted: boolean;
   hostId: string;
   hostPhotoURL: string;
@@ -13,11 +14,11 @@ export interface Game {
   tagSelection?: string;
   gifOptionURLs: string[];
   gifSelectionURL?: string;
-  roundWinner?: IPlayer;
+  roundWinner?: Player;
   captionDeck: Card[];
   isVotingRound: boolean;
-  winner?: IPlayer;
-  lastUpdated: number;
+  winner?: Player;
+  lastUpdated: firebase.firestore.FieldValue;
 }
 
 export interface GameChanges {
@@ -29,9 +30,9 @@ export interface GameChanges {
   tagSelection?: string;
   gifOptionURLs?: string[];
   gifSelectionURL?: string;
-  roundWinner?: IPlayer;
+  roundWinner?: Player;
   captionDeck?: Card[];
   isVotingRound?: boolean;
-  winner?: IPlayer;
-  lastUpdated?: number;
+  winner?: Player;
+  lastUpdated?: firebase.firestore.FieldValue;
 }

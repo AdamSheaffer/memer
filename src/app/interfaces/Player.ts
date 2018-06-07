@@ -1,6 +1,6 @@
 import { Roles, Card } from '.';
 
-export interface IPlayer {
+export interface Player {
   uid: string; // User ID
   gameAssignedId?: string; // ID assigned by each game
   fullName: string;

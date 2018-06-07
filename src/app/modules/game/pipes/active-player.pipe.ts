@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IPlayer } from '../../../interfaces';
+import { Player } from '../../../interfaces';
 
 @Pipe({
   name: 'activePlayers',
   pure: false
 })
 export class ActivePlayersPipe implements PipeTransform {
-  transform(players: IPlayer[]): IPlayer[] {
+  transform(players: Player[]): Player[] {
     return players.filter(p => p.isActive);
   }
 }

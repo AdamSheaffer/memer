@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { IMessage, IPlayer } from '../../../../interfaces';
+import { Message, Player } from '../../../../interfaces';
 import { AuthService } from '../../../core/services';
 import { ChatService } from '../../services';
 import { Observable, Subscription } from 'rxjs';
@@ -11,8 +11,8 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class ChatComponent implements OnInit {
   @Input() gameId: string;
-  messages$: Observable<IMessage[]>;
-  currentUser: IPlayer;
+  messages$: Observable<Message[]>;
+  currentUser: Player;
   messageContent: string = null;
   messagesSubscription: Subscription;
 

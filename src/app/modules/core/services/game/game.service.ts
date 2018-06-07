@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument,
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
-import { Game, IPlayer, GameChanges } from '../../../../interfaces';
+import { Game, Player, GameChanges } from '../../../../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class GameService {
     return this.game$;
   }
 
-  async createNewGame(player: IPlayer): Promise<string> {
+  async createNewGame(player: Player): Promise<string> {
     const newGame = this.newGame(player);
     const gameId = await this._gamesCollection.add(newGame).then(ref => ref.id);
     return gameId;
@@ -53,17 +53,17 @@ export class GameService {
     return this._gameDoc.update(changes);
   }
 
-  private newGame(host: IPlayer): Game {
+  private newGame(host: Player): Game {
     return {
       hasStarted: false,
-      beginDate: (Date.now() * -1),
+      beginDate: firebase.firestore.FieldValue.serverTimestamp(),
       hostId: host.uid,
       hostPhotoURL: host.thumbnailURL,
       tagOptions: [],
       gifOptionURLs: [],
       captionDeck: [],
       isVotingRound: false,
-      lastUpdated: Date.now(),
+      lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
     };
   }
 

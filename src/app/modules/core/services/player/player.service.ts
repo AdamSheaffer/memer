@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map, filter, take, takeWhile } from 'rxjs/operators';
-import { IPlayer, IPlayerChanges, Card } from '../../../../interfaces';
+import { Player, IPlayerChanges, Card } from '../../../../interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerService {
-  private _playerCollection: AngularFirestoreCollection<IPlayer>;
-  private _players$: Observable<IPlayer[]>;
+  private _playerCollection: AngularFirestoreCollection<Player>;
+  private _players$: Observable<Player[]>;
 
   get players$() { return this._players$; }
 
@@ -23,7 +23,7 @@ export class PlayerService {
     this._players$ = this._playerCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
-          const player = a.payload.doc.data() as IPlayer;
+          const player = a.payload.doc.data() as Player;
           player.gameAssignedId = a.payload.doc.id;
           return player;
         });
@@ -33,7 +33,7 @@ export class PlayerService {
     return this.players$;
   }
 
-  join(player: IPlayer, gameHasStarted: boolean) {
+  join(player: Player, gameHasStarted: boolean) {
     const ref = this._playerCollection.ref;
     return ref.where('uid', '==', player.uid).limit(1).get()
       .then(snapshot => {
@@ -52,19 +52,19 @@ export class PlayerService {
       });
   }
 
-  addPlayer(player: IPlayer) {
+  addPlayer(player: Player) {
     return this._playerCollection.add(player).then(ref => ref.id);
   }
 
-  remove(player: IPlayer) {
+  remove(player: Player) {
     return this._playerCollection.doc(player.gameAssignedId).delete();
   }
 
-  update(player: IPlayer, changes: IPlayerChanges) {
+  update(player: Player, changes: IPlayerChanges) {
     return this._playerCollection.doc(player.gameAssignedId).update(changes);
   }
 
-  updateAll(players: IPlayer[], changes: IPlayerChanges) {
+  updateAll(players: Player[], changes: IPlayerChanges) {
     const batch = this.afs.firestore.batch();
 
     players.forEach(p => {
@@ -99,7 +99,7 @@ export class PlayerService {
 
   }
 
-  private resetPlayer(player: IPlayer) {
+  private resetPlayer(player: Player) {
     player.captionPlayed = null;
     player.captions = [];
     player.score = 0;

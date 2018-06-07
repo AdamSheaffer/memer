@@ -42,7 +42,7 @@
           <div class="col-xs-8">
             <div class="game-details">
               <img [src]="game.hostPhotoURL" class="host-img" alt="Host Photo">
-              <span class="p6 open-game-timestamp">Started {{game.beginDate|abs|amTimeAgo}}</span>
+              <span class="p6 open-game-timestamp">Started {{game.beginDate|fromFBDate|amTimeAgo}}</span>
             </div>
           </div>
           <div class="col-xs-4 col-xs flex-xs-middle">

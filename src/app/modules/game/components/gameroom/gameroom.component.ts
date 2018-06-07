@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer, OnDe
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { filter, take, map, skip, takeUntil, combineLatest } from 'rxjs/operators';
-import { IPlayer, Game, Card, GameChanges, IPlayerChanges } from '../../../../interfaces';
+import { Player, Game, Card, GameChanges, IPlayerChanges } from '../../../../interfaces';
 import { Theme, AuthService, ThemeService, GameService, PlayerService } from '../../../core/services';
 import { ChatService, DeckService, GiphyService } from '../../services';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'memer-gameroom',
@@ -18,12 +19,12 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   cardsInHand = 7;
   collapsed = false;
   isWinningModalShown: boolean;
-  currentUser: IPlayer;
+  currentUser: Player;
   maxPlayers = 8;
   game$: Observable<Game>;
-  players$: Observable<IPlayer[]>;
+  players$: Observable<Player[]>;
   gameState: Game;
-  playerState: IPlayer[];
+  playerState: Player[];
   get isCurrentUsersTurn() { return this.gameState.turn === this.currentUser.uid; }
   get isHost() { return this.gameState.hostId === this.currentUser.uid; }
   get isUpForVoting(): boolean { return !!this.gameState && !!this.gameState.gifSelectionURL; }
@@ -101,7 +102,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isCurrentUsersTurn) { return; }
 
     const tagOptions = this.giphyService.getRandomTags();
-    const lastUpdated = Date.now();
+    const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
     this.gameService.updateGame({ tagOptions, lastUpdated });
   }
 
@@ -126,7 +127,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  selectFavoriteCaption(player: IPlayer) {
+  selectFavoriteCaption(player: Player) {
     if (!this.isCurrentUsersTurn || !this.gameState.isVotingRound) { return; }
 
     const newScore = player.score + 1;
@@ -214,7 +215,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.beginGame();
   }
 
-  removePlayer(player: IPlayer) {
+  removePlayer(player: Player) {
     if (!this.isHost) { return; }
 
     this.playerService.remove(player).then(() => {
@@ -273,12 +274,12 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.game$.pipe(filter(g => g.hasStarted), take(1));
   }
 
-  private activeFilterCount(players: IPlayer[]) {
+  private activeFilterCount(players: Player[]) {
     if (!players) { return 0; }
     return players.filter(p => p.isActive).length;
   }
 
-  private everyoneSubmittedCaption(players: IPlayer[], game: Game) {
+  private everyoneSubmittedCaption(players: Player[], game: Game) {
     const playersNotSelected = players.filter(p => !p.captionPlayed && p.isActive);
 
     return playersNotSelected.length === 1 &&
@@ -291,7 +292,6 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     player.isActive = false;
     const nextActivePlayer = this.playerState.find(p => p.isActive);
     const nextPlayerId = !!nextActivePlayer ? nextActivePlayer.uid : null;
-    const nextPlayerUsername = !!nextActivePlayer ? nextActivePlayer.username : null;
     const gameChanges: GameChanges = {};
 
     this.chatService.postAdminMessage(`${player.username.toUpperCase()} HAS LEFT THE GAME`);
