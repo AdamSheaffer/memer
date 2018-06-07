@@ -11,6 +11,7 @@ import { map, take } from 'rxjs/operators';
 import { shuffle } from 'lodash';
 import { Game, Card, IPlayer } from '../../../../interfaces';
 import { cards } from '../../../../data/cards';
+import { CaptionService } from '../../../admin/services/caption.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class DeckService {
 
   private _url = '../assets/captions/captin-cards.json';
 
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, private captionService: CaptionService) {
   }
 
   init(gameId: string) {
@@ -43,15 +44,14 @@ export class DeckService {
   setDeck() {
     const batch = this.afs.firestore.batch();
 
-    this.getDeck().map(card => {
-      card.id = this.afs.createId();
-      return card;
-    }).forEach(card => {
-      const ref = this._cardCollection.doc(card.id).ref;
-      batch.set(ref, card);
+    return this.captionService.getAll().then(allCards => {
+      const shuffled = shuffle(allCards);
+      shuffled.forEach(card => {
+        const ref = this._cardCollection.doc(card.id).ref;
+        batch.set(ref, card);
+      });
+      return batch.commit();
     });
-
-    return batch.commit();
   }
 
   getDeck(): Card[] {

@@ -47,4 +47,10 @@ export class HomeComponent implements OnInit {
     this.router.navigate([`game/${gameId}`]);
   }
 
+  logout() {
+    this.authService.logout().then(() => {
+      this.router.navigate(['/login']);
+    });
+  }
+
 }

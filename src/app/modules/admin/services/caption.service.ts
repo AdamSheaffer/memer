@@ -25,6 +25,18 @@ export class CaptionService {
     );
   }
 
+  getAll() {
+    return this._captionCollection.ref.get().then(snapshot => {
+      const allCards: Card[] = [];
+      snapshot.forEach(function (doc) {
+        const card = doc.data() as Card;
+        card.id = doc.id;
+        allCards.push(card);
+      });
+      return allCards;
+    });
+  }
+
   delete(caption: Card) {
     if (!caption.id) {
       throw new Error('Caption does not have an ID');
@@ -33,8 +45,7 @@ export class CaptionService {
     return ref.delete();
   }
 
-  add(caption: Card, user: User) {
-    caption.createdBy = user.username;
+  add(caption: Card) {
     return this._captionCollection.add(caption);
   }
 

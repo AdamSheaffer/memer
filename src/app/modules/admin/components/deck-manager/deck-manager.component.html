@@ -1,4 +1,10 @@
-<h3 class="heading">DECK MANAGER</h3>
+<h1 class="heading">DECK MANAGER</h1>
+<div class="row flex-items-xs-center">
+  <div>
+    <memer-caption-add *ngIf="showingNewCardForm" (save)="add($event)" (cancel)="showAddForm(false)"></memer-caption-add>
+    <button *ngIf="!showingNewCardForm" (click)="showAddForm(true)" class="btn btn-primary">ADD CARD</button>
+  </div>
+</div>
 <div class="row flex-items-xs-center">
   <clr-datagrid class="datagrid-compact col-xs-12 col-md-8">
     <clr-dg-column [clrDgField]="'top'">
@@ -12,7 +18,7 @@
       <clr-dg-cell>{{caption.bottom | uppercase}}</clr-dg-cell>
       <clr-dg-cell>{{caption.createdBy}}</clr-dg-cell>
       <clr-dg-row-detail *clrIfExpanded [clrDgReplace]="true">
-        <memer-caption-edit [caption]="caption" (save)="update($event)"></memer-caption-edit>
+        <memer-caption-edit [caption]="caption" (save)="update($event)" (delete)="delete($event)"></memer-caption-edit>
       </clr-dg-row-detail>
     </clr-dg-row>
 

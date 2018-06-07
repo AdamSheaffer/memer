@@ -4,6 +4,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { COMPONENTS } from './components';
 import { SharedModule } from '../shared/shared.module';
 import { CaptionEditComponent } from './components/caption-edit/caption-edit.component';
+import { CaptionAddComponent } from './components/caption-add/caption-add.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { CaptionEditComponent } from './components/caption-edit/caption-edit.com
   ],
   declarations: [
     ...COMPONENTS,
-    CaptionEditComponent
+    CaptionEditComponent,
+    CaptionAddComponent
   ]
 })
 export class AdminModule { }

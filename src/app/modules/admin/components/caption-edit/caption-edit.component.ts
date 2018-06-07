@@ -10,6 +10,8 @@ import { Card } from '../../../../interfaces';
 export class CaptionEditComponent implements OnInit {
   @Input() caption: Card;
   @Output() save = new EventEmitter<Card>();
+  @Output() delete = new EventEmitter<Card>();
+  showDeleteConfirmation = false;
   form: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {
@@ -37,5 +39,13 @@ export class CaptionEditComponent implements OnInit {
       top,
       bottom
     });
+  }
+
+  onDelete() {
+    this.delete.emit(this.caption);
+  }
+
+  stageDelete() {
+    this.showDeleteConfirmation = true;
   }
 }
