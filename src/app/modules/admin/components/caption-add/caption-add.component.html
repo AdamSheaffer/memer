@@ -1,4 +1,4 @@
-<form [formGroup]="form" (submit)="onSave()">
+<form [formGroup]="form" (ngSubmit)="onSave()">
   <div class="form-group row">
     <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
       <label for="top">Top</label>
@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="btn-group btn-outline-primary">
-    <button (click)="onCancel()" class="btn">CANCEL</button>
+    <button (click)="onCancel()" type="button" class="btn">CANCEL</button>
     <button [disabled]="!form.valid" type="submit" class="btn btn-primary">SAVE</button>
   </div>
 </form>
