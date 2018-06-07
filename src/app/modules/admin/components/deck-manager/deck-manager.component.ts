@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CaptionService } from '../../services/caption.service';
 import { Observable } from 'rxjs';
-import { ICard } from '../../../../interfaces';
+import { Card } from '../../../../interfaces';
 import { ClrDatagridStringFilterInterface } from '@clr/angular';
 
 
@@ -11,8 +11,8 @@ import { ClrDatagridStringFilterInterface } from '@clr/angular';
   styleUrls: ['./deck-manager.component.scss']
 })
 export class DeckManagerComponent implements OnInit {
-  captions$: Observable<ICard[]>;
-  captions: ICard[];
+  captions$: Observable<Card[]>;
+  captions: Card[];
   expandedCaption: string;
 
   constructor(private captionService: CaptionService) {
@@ -23,7 +23,7 @@ export class DeckManagerComponent implements OnInit {
   ngOnInit() {
   }
 
-  update(caption: ICard) {
+  update(caption: Card) {
     this.captionService.update(caption).then(() => {
       this.expandedCaption = null;
     });

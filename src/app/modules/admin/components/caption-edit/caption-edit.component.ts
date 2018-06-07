@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ICard } from '../../../../interfaces';
+import { Card } from '../../../../interfaces';
 
 @Component({
   selector: 'memer-caption-edit',
@@ -8,8 +8,8 @@ import { ICard } from '../../../../interfaces';
   styleUrls: ['./caption-edit.component.scss']
 })
 export class CaptionEditComponent implements OnInit {
-  @Input() caption: ICard;
-  @Output() save = new EventEmitter<ICard>();
+  @Input() caption: Card;
+  @Output() save = new EventEmitter<Card>();
   form: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {

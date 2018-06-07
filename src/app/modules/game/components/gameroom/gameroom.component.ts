@@ -1,8 +1,8 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Renderer, OnDestroy, HostListener } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
-import { Observable, Subscription, Subject } from 'rxjs';
-import { switchMap, filter, take, map, skip, takeUntil, combineLatest } from 'rxjs/operators';
-import { IPlayer, IGame, ICard, IGameChanges, IPlayerChanges } from '../../../../interfaces';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer, OnDestroy, HostListener } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
+import { filter, take, map, skip, takeUntil, combineLatest } from 'rxjs/operators';
+import { IPlayer, Game, Card, GameChanges, IPlayerChanges } from '../../../../interfaces';
 import { Theme, AuthService, ThemeService, GameService, PlayerService } from '../../../core/services';
 import { ChatService, DeckService, GiphyService } from '../../services';
 
@@ -20,9 +20,9 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   isWinningModalShown: boolean;
   currentUser: IPlayer;
   maxPlayers = 8;
-  game$: Observable<IGame>;
+  game$: Observable<Game>;
   players$: Observable<IPlayer[]>;
-  gameState: IGame;
+  gameState: Game;
   playerState: IPlayer[];
   get isCurrentUsersTurn() { return this.gameState.turn === this.currentUser.uid; }
   get isHost() { return this.gameState.hostId === this.currentUser.uid; }
@@ -45,7 +45,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('id');
       this.gameId = id;
       this.game$ = this.gameService.init(this.gameId);
@@ -115,7 +115,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gameService.updateGame({ gifSelectionURL });
   }
 
-  selectCaption(captionPlayed: ICard) {
+  selectCaption(captionPlayed: Card) {
     const player = this.playerState.find(p => p.uid === this.currentUser.uid);
     const captionIndex = player.captions.findIndex(c => c.id === captionPlayed.id);
     const captions = [...player.captions];
@@ -133,7 +133,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     const hasGameWinner = newScore >= 10;
     this.playerService.update(player, { score: newScore });
 
-    const gameChanges: IGameChanges = { roundWinner: player };
+    const gameChanges: GameChanges = { roundWinner: player };
 
     if (hasGameWinner) {
       gameChanges.winner = player;
@@ -150,7 +150,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   startNewRound() {
     const playerChanges: IPlayerChanges = {};
-    const gameChanges: IGameChanges = {};
+    const gameChanges: GameChanges = {};
     const players = [...this.playerState];
 
     playerChanges.captionPlayed = null;
@@ -189,7 +189,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async resetGame() {
-    const gameChanges: IGameChanges = {
+    const gameChanges: GameChanges = {
       tagOptions: [],
       tagSelection: null,
       gifOptionURLs: [],
@@ -239,7 +239,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackPlayerRemoval() {
     this.players$.pipe(
       skip(1), // This will fire when you a player enters. Skip this
-      filter(players => !players.find(p => p.uid === this.currentUser.uid))
+      filter(players => !players.find(p => p.uid === this.currentUser.uid)),
+      takeUntil(this.destroy$)
     ).subscribe(() => {
       this.returnHomeWithMessage('You\'ve been removed from the game');
     });
@@ -277,7 +278,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     return players.filter(p => p.isActive).length;
   }
 
-  private everyoneSubmittedCaption(players: IPlayer[], game: IGame) {
+  private everyoneSubmittedCaption(players: IPlayer[], game: Game) {
     const playersNotSelected = players.filter(p => !p.captionPlayed && p.isActive);
 
     return playersNotSelected.length === 1 &&
@@ -291,7 +292,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     const nextActivePlayer = this.playerState.find(p => p.isActive);
     const nextPlayerId = !!nextActivePlayer ? nextActivePlayer.uid : null;
     const nextPlayerUsername = !!nextActivePlayer ? nextActivePlayer.username : null;
-    const gameChanges: IGameChanges = {};
+    const gameChanges: GameChanges = {};
 
     this.chatService.postAdminMessage(`${player.username.toUpperCase()} HAS LEFT THE GAME`);
 

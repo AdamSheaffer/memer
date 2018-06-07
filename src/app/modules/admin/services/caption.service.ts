@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
-import { ICard, User } from '../../../interfaces';
+import { Card, User } from '../../../interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { cards } from '../../../data/cards';
@@ -9,15 +9,15 @@ import { cards } from '../../../data/cards';
   providedIn: 'root'
 })
 export class CaptionService {
-  private _captionCollection: AngularFirestoreCollection<ICard>;
-  captions$: Observable<ICard[]>;
+  private _captionCollection: AngularFirestoreCollection<Card>;
+  captions$: Observable<Card[]>;
 
   constructor(private afs: AngularFirestore) {
     this._captionCollection = this.afs.collection('captions');
     this.captions$ = this._captionCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
-          const caption = a.payload.doc.data() as ICard;
+          const caption = a.payload.doc.data() as Card;
           caption.id = a.payload.doc.id;
           return caption;
         });
@@ -25,7 +25,7 @@ export class CaptionService {
     );
   }
 
-  delete(caption: ICard) {
+  delete(caption: Card) {
     if (!caption.id) {
       throw new Error('Caption does not have an ID');
     }
@@ -33,12 +33,12 @@ export class CaptionService {
     return ref.delete();
   }
 
-  add(caption: ICard, user: User) {
+  add(caption: Card, user: User) {
     caption.createdBy = user.username;
     return this._captionCollection.add(caption);
   }
 
-  update(caption: ICard) {
+  update(caption: Card) {
     if (!caption.id) {
       throw new Error('Caption does not have an ID');
     }

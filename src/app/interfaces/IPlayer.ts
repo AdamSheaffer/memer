@@ -1,4 +1,4 @@
-import { Roles, ICard } from '.';
+import { Roles, Card } from '.';
 
 export interface IPlayer {
   uid: string; // User ID
@@ -9,14 +9,14 @@ export interface IPlayer {
   thumbnailURL: string;
   isActive: boolean;
   score: number;
-  captions: ICard[];
-  captionPlayed?: ICard;
+  captions: Card[];
+  captionPlayed?: Card;
   roles: Roles;
 }
 
 export interface IPlayerChanges {
   isActive?: boolean;
   score?: number;
-  captions?: ICard[];
-  captionPlayed?: ICard;
+  captions?: Card[];
+  captionPlayed?: Card;
 }

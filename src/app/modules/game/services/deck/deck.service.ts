@@ -9,16 +9,16 @@ import {
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { shuffle } from 'lodash';
-import { IGame, ICard, IPlayer } from '../../../../interfaces';
+import { Game, Card, IPlayer } from '../../../../interfaces';
 import { cards } from '../../../../data/cards';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeckService {
-  private _gameDoc: AngularFirestoreDocument<IGame>;
-  private _cardCollection: AngularFirestoreCollection<ICard>;
-  private _deck$: Observable<ICard[]>;
+  private _gameDoc: AngularFirestoreDocument<Game>;
+  private _cardCollection: AngularFirestoreCollection<Card>;
+  private _deck$: Observable<Card[]>;
 
   private _url = '../assets/captions/captin-cards.json';
 
@@ -32,7 +32,7 @@ export class DeckService {
     this._deck$ = this._cardCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
-          const card = a.payload.doc.data() as ICard;
+          const card = a.payload.doc.data() as Card;
           card.id = a.payload.doc.id;
           return card;
         });
@@ -54,12 +54,12 @@ export class DeckService {
     return batch.commit();
   }
 
-  getDeck(): ICard[] {
+  getDeck(): Card[] {
     return shuffle(cards);
   }
 
   getCards(count: number) {
-    return this._gameDoc.collection<ICard>('deck', r => r.limit(count))
+    return this._gameDoc.collection<Card>('deck', r => r.limit(count))
       .valueChanges()
       .pipe(take(1))
       .toPromise()
@@ -75,7 +75,7 @@ export class DeckService {
   }
 
   // IS THERE A WAY TO DO THIS BETTER WITHOUT USING SIDE EFFECTS?
-  deal(deck: ICard[], players: IPlayer[], numOfCards: number): void {
+  deal(deck: Card[], players: IPlayer[], numOfCards: number): void {
     players.forEach(p => {
       const cardsFromDeck = deck.splice(0, numOfCards);
       p.captions.push(...cardsFromDeck);

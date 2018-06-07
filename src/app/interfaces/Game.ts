@@ -1,8 +1,7 @@
 import { IPlayer } from './IPlayer';
-import { ICard } from './ICard';
-import { IMessage } from './IMessage';
+import { Card } from './Card';
 
-export interface IGame {
+export interface Game {
   id?: string;
   beginDate: number;
   hasStarted: boolean;
@@ -15,13 +14,13 @@ export interface IGame {
   gifOptionURLs: string[];
   gifSelectionURL?: string;
   roundWinner?: IPlayer;
-  captionDeck: ICard[];
+  captionDeck: Card[];
   isVotingRound: boolean;
   winner?: IPlayer;
   lastUpdated: number;
 }
 
-export interface IGameChanges {
+export interface GameChanges {
   hasStarted?: boolean;
   hostId?: string;
   turn?: string;
@@ -31,7 +30,7 @@ export interface IGameChanges {
   gifOptionURLs?: string[];
   gifSelectionURL?: string;
   roundWinner?: IPlayer;
-  captionDeck?: ICard[];
+  captionDeck?: Card[];
   isVotingRound?: boolean;
   winner?: IPlayer;
   lastUpdated?: number;

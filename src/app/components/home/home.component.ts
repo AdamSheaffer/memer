@@ -3,7 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { GameService, AuthService } from '../../modules/core/services';
-import { IGame } from '../../interfaces/IGame';
+import { Game } from '../../interfaces/Game';
 
 @Component({
   selector: 'memer-home',
@@ -13,8 +13,8 @@ import { IGame } from '../../interfaces/IGame';
 export class HomeComponent implements OnInit {
   showOpenGames = false;
   isLoading = false;
-  openGames$: Observable<IGame[]>;
-  games: IGame[] = [];
+  openGames$: Observable<Game[]>;
+  games: Game[] = [];
 
   constructor(
     private gameService: GameService,

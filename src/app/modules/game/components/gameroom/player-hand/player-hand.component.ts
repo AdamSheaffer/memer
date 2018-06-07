@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ICard } from '../../../../../interfaces';
+import { Card } from '../../../../../interfaces';
 
 @Component({
   selector: 'memer-player-hand',
@@ -7,16 +7,16 @@ import { ICard } from '../../../../../interfaces';
   styleUrls: ['./player-hand.component.scss']
 })
 export class PlayerHandComponent implements OnInit {
-  @Input() playerHand: ICard[];
+  @Input() playerHand: Card[];
   @Input() playerCanSelect: boolean;
-  @Output() cardSelect = new EventEmitter<ICard>();
+  @Output() cardSelect = new EventEmitter<Card>();
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  selectCard(card: ICard) {
+  selectCard(card: Card) {
     if (!this.playerCanSelect) { return; }
     this.cardSelect.emit(card);
   }

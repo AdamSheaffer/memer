@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map, filter, take, takeWhile } from 'rxjs/operators';
-import { IPlayer, IPlayerChanges, ICard } from '../../../../interfaces';
+import { IPlayer, IPlayerChanges, Card } from '../../../../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -75,7 +75,7 @@ export class PlayerService {
     return batch.commit();
   }
 
-  dealToAllPlayers(cards: ICard[], cardsPerPlayer: number) {
+  dealToAllPlayers(cards: Card[], cardsPerPlayer: number) {
     // For now, it's going to be the responsibility of the caller
     // to make sure they pass in the correct amount of cards.
     // otherwise, throw an error

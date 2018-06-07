@@ -3,16 +3,16 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument,
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
-import { IGame, IPlayer, IGameChanges } from '../../../../interfaces';
+import { Game, IPlayer, GameChanges } from '../../../../interfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
 
-  private _gamesCollection: AngularFirestoreCollection<IGame>;
-  private _gameDoc: AngularFirestoreDocument<IGame>;
-  private _game$: Observable<IGame>;
+  private _gamesCollection: AngularFirestoreCollection<Game>;
+  private _gameDoc: AngularFirestoreDocument<Game>;
+  private _game$: Observable<Game>;
 
   get game$() { return this._game$; }
 
@@ -32,13 +32,13 @@ export class GameService {
     return gameId;
   }
 
-  getOpenGameList(gameCount: number): Observable<IGame[]> {
+  getOpenGameList(gameCount: number): Observable<Game[]> {
     const gamesCollection = this.afs.collection('games', ref => {
       return ref.orderBy('beginDate').where('hasStarted', '==', false).limit(gameCount);
     });
 
     return gamesCollection.snapshotChanges().pipe(
-      map((actions: DocumentChangeAction<IGame>[]) => {
+      map((actions: DocumentChangeAction<Game>[]) => {
         const games$ = actions.map(a => {
           const game = a.payload.doc.data();
           game.id = a.payload.doc.id;
@@ -49,11 +49,11 @@ export class GameService {
     );
   }
 
-  updateGame(changes: IGameChanges): Promise<void> {
+  updateGame(changes: GameChanges): Promise<void> {
     return this._gameDoc.update(changes);
   }
 
-  private newGame(host: IPlayer): IGame {
+  private newGame(host: IPlayer): Game {
     return {
       hasStarted: false,
       beginDate: (Date.now() * -1),
