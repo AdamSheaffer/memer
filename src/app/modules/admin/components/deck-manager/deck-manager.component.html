@@ -1,3 +1,4 @@
+<h3 class="heading">DECK MANAGER</h3>
 <div class="row flex-items-xs-center">
   <clr-datagrid class="datagrid-compact col-xs-12 col-md-8">
     <clr-dg-column [clrDgField]="'top'">
@@ -11,7 +12,7 @@
       <clr-dg-cell>{{caption.bottom | uppercase}}</clr-dg-cell>
       <clr-dg-cell>{{caption.createdBy}}</clr-dg-cell>
       <clr-dg-row-detail *clrIfExpanded [clrDgReplace]="true">
-        Lorem ipsum...
+        <memer-caption-edit [caption]="caption" (save)="update($event)"></memer-caption-edit>
       </clr-dg-row-detail>
     </clr-dg-row>
 

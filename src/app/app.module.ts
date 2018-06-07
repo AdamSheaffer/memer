@@ -14,12 +14,11 @@ import { HomeComponent } from './components/home/home.component';
 import { CoreModule } from './modules/core/core.module';
 import { SharedModule } from './modules/shared/shared.module';
 
-
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent,
+    HomeComponent
   ],
   imports: [
     AngularFireAuthModule,

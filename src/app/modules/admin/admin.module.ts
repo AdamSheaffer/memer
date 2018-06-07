@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AdminRoutingModule } from './admin-routing.module';
 import { COMPONENTS } from './components';
 import { SharedModule } from '../shared/shared.module';
+import { CaptionEditComponent } from './components/caption-edit/caption-edit.component';
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { SharedModule } from '../shared/shared.module';
     SharedModule
   ],
   declarations: [
-    ...COMPONENTS
+    ...COMPONENTS,
+    CaptionEditComponent
   ]
 })
 export class AdminModule { }

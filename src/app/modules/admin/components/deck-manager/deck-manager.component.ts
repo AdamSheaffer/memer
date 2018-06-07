@@ -13,7 +13,7 @@ import { ClrDatagridStringFilterInterface } from '@clr/angular';
 export class DeckManagerComponent implements OnInit {
   captions$: Observable<ICard[]>;
   captions: ICard[];
-  topFilter = new TopFilter();
+  expandedCaption: string;
 
   constructor(private captionService: CaptionService) {
     this.captions$ = captionService.captions$;
@@ -22,10 +22,10 @@ export class DeckManagerComponent implements OnInit {
 
   ngOnInit() {
   }
-}
 
-class TopFilter implements ClrDatagridStringFilterInterface<string> {
-  accepts(captionTop: string, search: string) {
-    return captionTop.toLowerCase().includes(search.toLowerCase());
+  update(caption: ICard) {
+    this.captionService.update(caption).then(() => {
+      this.expandedCaption = null;
+    });
   }
 }

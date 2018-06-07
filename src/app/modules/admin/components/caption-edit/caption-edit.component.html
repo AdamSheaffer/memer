@@ -1,0 +1,26 @@
+<form [formGroup]="form" (submit)="onSave()">
+  <div class="form-group row">
+    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+      <label for="top">Top</label>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+      <label for="validTop" aria-haspopup="true" role="tooltip" [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.top.errors?.maxlength}">
+        <input formControlName="top" class="form-control" type="text" id="top" size="120">
+        <span *ngIf="form.controls.top.errors?.maxlength" class="tooltip-content">Caption is too long</span>
+      </label>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+      <label for="bottom" class="required">Bottom</label>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+      <label for="validTop" aria-haspopup="true" role="tooltip" [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.bottom.errors?.maxlength || form.controls.bottom.errors?.required}">
+        <input formControlName="bottom" class="form-control" type="text" id="top" size="120">
+        <span *ngIf="form.controls.bottom.errors?.maxlength" class="tooltip-content">Caption is too long</span>
+        <span *ngIf="form.controls.bottom.errors?.required" class="tooltip-content">Bottom caption is required</span>
+      </label>
+    </div>
+  </div>
+  <button [disabled]="!form.valid" type="submit" class="btn btn-outline">Update</button>
+</form>

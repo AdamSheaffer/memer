@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PIPES } from './pipes';
 import { ClarityModule } from '@clr/angular';
@@ -15,7 +16,8 @@ import '@clr/icons/shapes/social-shapes';
   ],
   exports: [
     ...PIPES,
-    ClarityModule
+    ClarityModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule { }
