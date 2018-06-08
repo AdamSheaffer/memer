@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CaptionService } from '../../services/caption.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Card } from '../../../../interfaces';
 import { AuthService } from '../../../core/services';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -10,15 +11,17 @@ import { AuthService } from '../../../core/services';
   templateUrl: './deck-manager.component.html',
   styleUrls: ['./deck-manager.component.scss']
 })
-export class DeckManagerComponent implements OnInit {
+export class DeckManagerComponent implements OnInit, OnDestroy {
   captions$: Observable<Card[]>;
   captions: Card[];
   expandedCaption: string;
   showingNewCardForm = false;
+  destroy$ = new Subject<boolean>();
 
   constructor(private captionService: CaptionService, private authService: AuthService) {
     this.captions$ = captionService.captions$;
-    this.captions$.subscribe(c => this.captions = c);
+    this.captions$.pipe(takeUntil(this.destroy$))
+      .subscribe(c => this.captions = c);
   }
 
   ngOnInit() {
@@ -44,5 +47,10 @@ export class DeckManagerComponent implements OnInit {
 
   showAddForm(showing: boolean) {
     this.showingNewCardForm = showing;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
