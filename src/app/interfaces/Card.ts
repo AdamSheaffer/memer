@@ -3,4 +3,5 @@ export interface Card {
   top: string;
   bottom: string;
   createdBy?: string;
+  safeForWork?: boolean;
 }

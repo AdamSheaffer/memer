@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CaptionService } from '../../services/caption.service';
 import { Observable } from 'rxjs';
 import { Card } from '../../../../interfaces';
-import { ClrDatagridStringFilterInterface } from '@clr/angular';
 import { AuthService } from '../../../core/services';
 
 

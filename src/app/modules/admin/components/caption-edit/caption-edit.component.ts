@@ -27,17 +27,19 @@ export class CaptionEditComponent implements OnInit {
       bottom: [this.caption.bottom, Validators.compose([
         Validators.required,
         Validators.maxLength(60)
-      ])]
+      ])],
+      safeForWork: [this.caption.safeForWork]
     });
   }
 
   onSave() {
-    const { top, bottom } = this.form.getRawValue();
+    const { top, bottom, safeForWork } = this.form.getRawValue();
     this.save.emit({
       id: this.caption.id,
       createdBy: this.caption.createdBy,
       top,
-      bottom
+      bottom,
+      safeForWork
     });
   }
 
