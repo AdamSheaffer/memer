@@ -40,10 +40,13 @@ export class DeckService {
     );
   }
 
-  setDeck() {
+  setDeck(safeForWork: boolean) {
     const batch = this.afs.firestore.batch();
 
     return this.captionService.getAll().then(allCards => {
+      if (safeForWork) {
+        allCards = allCards.filter(c => c.safeForWork);
+      }
       const shuffled = shuffle(allCards);
       shuffled.forEach(card => {
         const ref = this._cardCollection.doc(card.id).ref;

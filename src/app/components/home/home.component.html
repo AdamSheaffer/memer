@@ -1,3 +1,9 @@
+<div class="row flex-items-xs-right sfw">
+  <div class="toggle-switch">
+    <input [(ngModel)]="sfw" (ngModelChange)="sfwModeChanged()" type="checkbox" id="safe-for-work">
+    <label for="safe-for-work">Safe For Work Mode:</label>
+  </div>
+</div>
 <div class="home">
   <div class="row flex-items-xs-center">
     <div class="col-xs-12">
@@ -9,7 +15,9 @@
           <button (click)="findOpenGames()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">FIND GAME</button>
         </div>
         <div class="col-xs-12">
-          <button (click)="hostGame()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">HOST NEW GAME</button>
+          <button (click)="hostGame()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">
+            HOST NEW GAME {{sfw ? '(SFW)' : ''}}
+          </button>
         </div>
         <div class="col-xs-12">
           <button (click)="logout()" class="btn btn-link btn-block sign-in-btn text-center">LOG OUT</button>
@@ -40,9 +48,16 @@
       <div *ngFor="let game of games" class="card col-xs-12">
         <div class="row">
           <div class="col-xs-8">
-            <div class="game-details">
+            <div class="game-details row">
               <img [src]="game.hostPhotoURL" class="host-img" alt="Host Photo">
-              <span class="p6 open-game-timestamp">Started {{game.beginDate|fromFBDate|amTimeAgo}}</span>
+              <div>
+                <div class="p6 open-game-timestamp">
+                  Started {{game.beginDate|fromFBDate|amTimeAgo}}
+                </div>
+                <div class="p8 game-indicator" *ngIf="game.safeForWork">
+                  Safe For Work
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-xs-4 col-xs flex-xs-middle">

@@ -1,5 +1,9 @@
 @import '../../../variables';
 
+.sfw {
+  margin-top: 10px;
+}
+
 .home {
   margin-top: 80px;
   
@@ -13,11 +17,18 @@
     border: 2px solid $accent-color;
     display: inline-block;
     height: 60px;
+    margin-left: 10px;
   }
 
   .open-game-timestamp {
     margin-left: 12px;
     color: $dark-gray;
+  }
+
+  .game-indicator {
+    margin-top: 8px;
+    margin-left: 12px;
+    color: $accent-color;
   }
 
   .game-details {
@@ -33,4 +44,8 @@
       cursor: pointer;
     }
   }
+}
+
+label {
+  color: $white-color;
 }
