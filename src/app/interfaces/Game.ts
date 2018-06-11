@@ -19,6 +19,7 @@ export interface Game {
   isVotingRound: boolean;
   winner?: Player;
   lastUpdated: firebase.firestore.FieldValue;
+  safeForWork: boolean;
 }
 
 export interface GameChanges {

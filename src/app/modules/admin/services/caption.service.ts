@@ -4,7 +4,7 @@ import { Card } from '../../../interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { cards } from '../../../data/cards';
-import { PromiseState } from 'q';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
