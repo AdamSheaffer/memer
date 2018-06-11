@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DeckManagerComponent } from './components';
+import { DeckManagerComponent, AdminHomeComponent } from './components';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'DeckManager' },
-  { path: 'DeckManager', component: DeckManagerComponent }
+  { path: '', redirectTo: 'home' },
+  { path: 'home', component: AdminHomeComponent }
 ];
 
 @NgModule({

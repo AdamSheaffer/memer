@@ -1,18 +1,18 @@
-<h1 class="heading">DECK MANAGER</h1>
+<h3 class="heading">CAPTION MANAGER</h3>
 <div class="row flex-items-xs-center">
   <div>
     <memer-caption-add *ngIf="showingNewCardForm" (save)="add($event)" (cancel)="showAddForm(false)"></memer-caption-add>
     <button *ngIf="!showingNewCardForm" (click)="showAddForm(true)" class="btn btn-primary">ADD CARD</button>
   </div>
 </div>
-<div class="row flex-items-xs-center">
-  <clr-datagrid class="datagrid-compact col-xs-12 col-md-10">
+<div *ngIf="captions" class="row flex-items-xs-center">
+  <clr-datagrid class="datagrid-compact col-xs-12">
     <clr-dg-column [clrDgField]="'top'">Caption Top</clr-dg-column>
     <clr-dg-column [clrDgField]="'bottom'">Caption Bottom</clr-dg-column>
     <clr-dg-column [clrDgField]="'safeForWork'">SFW</clr-dg-column>
     <clr-dg-column [clrDgField]="'createdBy'">Created By</clr-dg-column>
 
-    <clr-dg-row *clrDgItems="let caption of captions$|async">
+    <clr-dg-row *clrDgItems="let caption of captions">
       <clr-dg-cell>{{caption.top | uppercase}}</clr-dg-cell>
       <clr-dg-cell>{{caption.bottom | uppercase}}</clr-dg-cell>
       <clr-dg-cell>
@@ -24,7 +24,7 @@
       </clr-dg-row-detail>
     </clr-dg-row>
 
-    <clr-dg-footer>{{(captions$|async)?.length || 0}} Captions</clr-dg-footer>
+    <clr-dg-footer>{{captions?.length || 0}} Captions</clr-dg-footer>
 
   </clr-datagrid>
 </div>

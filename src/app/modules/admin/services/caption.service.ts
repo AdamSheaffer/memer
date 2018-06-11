@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
-import { Card, User } from '../../../interfaces';
+import { Card } from '../../../interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { cards } from '../../../data/cards';
+import { PromiseState } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -45,8 +46,12 @@ export class CaptionService {
     return ref.delete();
   }
 
-  add(caption: Card) {
-    return this._captionCollection.add(caption);
+  add(caption: Card): Promise<Card> {
+    return this._captionCollection.add(caption).then(c => {
+      const newCaption = Object.assign({}, caption);
+      newCaption.id = c.id;
+      return newCaption;
+    });
   }
 
   update(caption: Card) {

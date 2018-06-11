@@ -1,0 +1,10 @@
+@import '../../../../../variables';
+
+.heading {
+  text-align: center;
+  color: $primary-color;
+}
+
+#captions-link.active, #categories-link.active {
+  color: $primary-color;
+}

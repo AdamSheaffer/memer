@@ -5,3 +5,4 @@ export * from './Message';
 export * from './Player';
 export * from './User';
 export * from './Role';
+export * from './Category';

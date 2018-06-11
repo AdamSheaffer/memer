@@ -44,6 +44,7 @@ export class CaptionEditComponent implements OnInit {
   }
 
   onDelete() {
+    this.showDeleteConfirmation = false;
     this.delete.emit(this.caption);
   }
 

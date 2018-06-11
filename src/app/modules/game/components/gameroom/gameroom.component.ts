@@ -4,7 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { filter, take, map, skip, takeUntil, combineLatest } from 'rxjs/operators';
 import { Player, Game, Card, GameChanges, IPlayerChanges } from '../../../../interfaces';
 import { Theme, AuthService, ThemeService, GameService, PlayerService } from '../../../core/services';
-import { ChatService, DeckService, GiphyService } from '../../services';
+import { ChatService, DeckService, GiphyService, CategoryService } from '../../services';
 import * as firebase from 'firebase/app';
 
 @Component({
@@ -32,6 +32,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private categoryService: CategoryService,
     private chatService: ChatService,
     private deckService: DeckService,
     private gameService: GameService,
@@ -101,9 +102,12 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   beginTurn() {
     if (!this.isCurrentUsersTurn) { return; }
 
-    const tagOptions = this.giphyService.getRandomTags();
-    const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-    this.gameService.updateGame({ tagOptions, lastUpdated });
+    this.categoryService.getNCategories(4)
+      .then(categories => {
+        const tagOptions = categories.map(c => c.description);
+        const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+        this.gameService.updateGame({ tagOptions, lastUpdated });
+      });
   }
 
   selectTag(tagSelection: string) {

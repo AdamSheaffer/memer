@@ -1,0 +1,19 @@
+<h1 class="heading">GAME MANAGER</h1>
+<div class="row flex-items-xs-center">
+  <div class="col-xs-12 col-md-10">
+    <clr-tabs>
+      <clr-tab>
+        <button clrTabLink id="categories-link">Categories</button>
+        <clr-tab-content id="categories-content" *clrIfActive>
+          <memer-category-manager></memer-category-manager>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab>
+        <button clrTabLink id="captions-link">Captions</button>
+        <clr-tab-content id="captions-content" *clrIfActive>
+          <memer-deck-manager></memer-deck-manager>
+        </clr-tab-content>
+      </clr-tab>
+    </clr-tabs>
+  </div>
+</div>
