@@ -41,7 +41,7 @@ export class ChatService {
 
   postAdminMessage(content: string) {
     const msg: Message = {
-      photoURL: 'assets/logo.png',
+      photoURL: 'assets/header_logo_thumb.png',
       username: 'MEMER',
       userUID: null,
       timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
