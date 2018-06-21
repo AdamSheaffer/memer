@@ -7,10 +7,9 @@ import {
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { shuffle } from 'lodash';
 import { Game, Card, Player } from '../../../../interfaces';
-import { cards } from '../../../../data/cards';
 import { CaptionService } from '../../../admin/services/caption.service';
+import { firestore } from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +18,6 @@ export class DeckService {
   private _gameDoc: AngularFirestoreDocument<Game>;
   private _cardCollection: AngularFirestoreCollection<Card>;
   private _deck$: Observable<Card[]>;
-
-  private _url = '../assets/captions/captin-cards.json';
 
   constructor(private afs: AngularFirestore, private captionService: CaptionService) {
   }
@@ -47,17 +44,14 @@ export class DeckService {
       if (safeForWork) {
         allCards = allCards.filter(c => c.safeForWork);
       }
-      const shuffled = shuffle(allCards);
-      shuffled.forEach(card => {
+
+      allCards.forEach(card => {
+        card.id = this.afs.createId();
         const ref = this._cardCollection.doc(card.id).ref;
         batch.set(ref, card);
       });
       return batch.commit();
     });
-  }
-
-  getDeck(): Card[] {
-    return shuffle(cards);
   }
 
   getCards(count: number) {
@@ -84,12 +78,20 @@ export class DeckService {
     });
   }
 
+  emptyDeck() {
+    return this._cardCollection.ref.get().then(snapshot => {
+      if (snapshot.empty) { return; }
+      const cardRefs = snapshot.docs.map(doc => doc.ref);
+      return this.removeCardsFromDeck(cardRefs);
+    });
+  }
+
   private removeCardsFromDeck(cardRefs: DocumentReference[]) {
     const batch = this.afs.firestore.batch();
     cardRefs.forEach(r => {
       batch.delete(r);
     });
-    batch.commit();
+    return batch.commit();
   }
 
 }

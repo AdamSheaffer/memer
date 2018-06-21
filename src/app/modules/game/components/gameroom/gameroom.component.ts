@@ -82,13 +82,14 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   beginGame() {
-    this.deckService.setDeck(this.gameState.safeForWork).then(() => {
-      const playerCount = this.playerState.length;
-
-      this.deckService.getCards(this.cardsInHand * playerCount)
-        .then(cards => {
-          this.playerService.dealToAllPlayers(cards, this.cardsInHand);
-        });
+    this.deckService.emptyDeck().then(() => {
+      this.deckService.setDeck(this.gameState.safeForWork).then(() => {
+        const playerCount = this.playerState.length;
+        this.deckService.getCards(this.cardsInHand * playerCount)
+          .then(cards => {
+            this.playerService.dealToAllPlayers(cards, this.cardsInHand);
+          });
+      });
     });
 
 
