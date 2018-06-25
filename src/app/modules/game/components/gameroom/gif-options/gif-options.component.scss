@@ -15,6 +15,10 @@
   .selecting {
     color: $dark-gray;
   }
+
+  .selecting.dark {
+    color: $white-color;
+  }
 }
 
 .gif-option {

@@ -27,6 +27,6 @@
       {{usernameSelecting | uppercase}} PICKED
       <span class="tag">{{chosenTag | uppercase}}</span>
     </h2>
-    <h2 class="selecting">{{selectingIndicator}}</h2>
+    <h2 class="selecting" [ngClass]="{'dark': isDarkTheme}">{{selectingIndicator}}</h2>
   </div>
 </div>

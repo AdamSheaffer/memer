@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+import { ThemeService, Theme } from '../../../../core/services';
 
 @Component({
   selector: 'memer-gif-options',
@@ -13,11 +14,13 @@ export class GifOptionsComponent implements OnInit, OnDestroy {
   @Input() chosenTag: string;
   @Output() optionSelect = new EventEmitter<string>();
 
+  get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
+
   imageIndex = 0;
   selectingIndicator = 'SELECTING   ';
   timerId;
 
-  constructor() {
+  constructor(private themeService: ThemeService) {
   }
 
   ngOnInit() {

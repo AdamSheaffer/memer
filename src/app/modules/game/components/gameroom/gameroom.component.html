@@ -20,7 +20,7 @@
               <button *ngIf="game.hostId === currentUser.uid && !game?.hasStarted" (click)="beginGame()" [disabled]="(players|activePlayers)?.length < 2"
                 class="btn btn-outline-info btn-block">START GAME</button>
               <span *ngIf="currentUser?.id !== game.hostId && !game?.hasStarted" class="spinner spinner-lg">
-                  Waiting...
+                Waiting...
               </span>
             </div>
           </div>
@@ -28,7 +28,9 @@
 
         <!-- Voting label -->
         <h3 *ngIf="game?.isVotingRound" class="voting-indicator">
-          <span class="username">{{game.turnUsername | uppercase}}</span> IS VOTING
+          <span class="username">{{game.turnUsername | uppercase}}
+            <span [ngClass]="{'dark-theme': isDarkTheme}">IS VOTING</span>
+          </span>
         </h3>
 
         <!-- Button to begin when it's your turn -->

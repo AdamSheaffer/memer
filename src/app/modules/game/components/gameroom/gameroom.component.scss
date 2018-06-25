@@ -54,6 +54,9 @@
 
   .username {
     color: $accent-color;
+    .dark-theme {
+      color:  $white-color;
+    }
   }
 }
 
