@@ -11,13 +11,17 @@ service cloud.firestore {
   
   	match /games/{document=**} {
     	allow read;
-    	allow create, update: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['player'] == true;
-      allow delete: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['admin'] == true; 
+    	allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['player'] == true;
     }
     
     match /users/{document} {
       allow read;
       allow create: if request.resource.data.roles.keys().hasAny(['admin', 'editor']) == false;
+      allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['admin'] == true;
+    }
+
+    match /categories/{category} {
+      allow read;
       allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['admin'] == true;
     }
   }
