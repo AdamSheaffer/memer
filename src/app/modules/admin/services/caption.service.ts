@@ -3,8 +3,7 @@ import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/fires
 import { Card } from '../../../interfaces';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { cards } from '../../../data/cards';
-import * as firebase from 'firebase/app';
+// import { cards } from '../../../data/cards';
 
 @Injectable({
   providedIn: 'root'
@@ -62,19 +61,20 @@ export class CaptionService {
     return ref.set(caption, { merge: true });
   }
 
-  load() {
-    const deck = cards;
-    const batch = this.afs.firestore.batch();
+  // UNCOMMENT TO ENABLE LOADING NEW DECK
+  // load() {
+  //   const deck = cards;
+  //   const batch = this.afs.firestore.batch();
 
-    deck.map(card => {
-      card.id = this.afs.createId();
-      card.createdBy = 'James';
-      return card;
-    }).forEach(card => {
-      const ref = this._captionCollection.doc(card.id).ref;
-      batch.set(ref, card);
-    });
+  //   deck.map(card => {
+  //     card.id = this.afs.createId();
+  //     card.createdBy = 'James';
+  //     return card;
+  //   }).forEach(card => {
+  //     const ref = this._captionCollection.doc(card.id).ref;
+  //     batch.set(ref, card);
+  //   });
 
-    batch.commit();
-  }
+  //   batch.commit();
+  // }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Category } from '../../../../interfaces';
 import { map } from 'rxjs/operators';
-import { CATEGORIES } from '../../../../data/categories';
+// import { CATEGORIES } from '../../../../data/categories';
 
 @Injectable({
   providedIn: 'root'
@@ -78,18 +78,19 @@ export class CategoryService {
     return ref.set(category, { merge: true });
   }
 
-  load() {
-    const allCategories = CATEGORIES;
-    const batch = this.afs.firestore.batch();
+  // UNCOMMENT TO ENABLE LOADING NEW CATEGORIES
+  // load() {
+  //   const allCategories = CATEGORIES;
+  //   const batch = this.afs.firestore.batch();
 
-    allCategories.forEach(cat => {
-      const id = this.afs.createId();
-      const ref = this._categoryCollection.doc(id).ref;
-      batch.set(ref, cat);
-    });
+  //   allCategories.forEach(cat => {
+  //     const id = this.afs.createId();
+  //     const ref = this._categoryCollection.doc(id).ref;
+  //     batch.set(ref, cat);
+  //   });
 
-    return batch.commit();
-  }
+  //   return batch.commit();
+  // }
 
   private randomNumbersWithMax(max: number, count: number, ): number[] {
     const rands = [];
