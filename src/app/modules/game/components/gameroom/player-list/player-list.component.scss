@@ -5,6 +5,11 @@
 //     @include grayscale_element(100%);    
 // }
 
+.voting-indicator {
+  padding-bottom: 4px;
+  margin-right: 2px;
+}
+
 .player-img {
   border-radius: 100px;
   border: 4px solid $accent-color;
