@@ -19,6 +19,7 @@ export class GifOptionsComponent implements OnInit, OnDestroy {
   imageIndex = 0;
   selectingIndicator = 'SELECTING   ';
   timerId;
+  wildcardImage = 'assets/wildcard.png';
 
   constructor(private themeService: ThemeService) {
   }

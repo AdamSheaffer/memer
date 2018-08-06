@@ -15,22 +15,32 @@ export class GiphyService {
 
   constructor(private http: Http) { }
 
-  getRandomTags(): string[] {
-    const rands = this.randomWithMax(GiphyService.tags.length, this.tagCount);
-    return rands.map(n => GiphyService.tags[n]);
-  }
-
   getRandomImages(tagName: string): Promise<any> {
-    const imageRequests = [];
     const randomNums = this.randomWithMax(100, this.imageCount);
-    for (let i = 0; i < randomNums.length; i++) {
-      const args = this.buildParams(tagName, randomNums[i]);
-      const req = this.http.get(this.baseURL, args).toPromise().then(res => res.json());
-      imageRequests.push(req);
-    }
+    const categoryRequests = this.getRandomImagePromises(tagName, randomNums);
+    const wildcardRequest = this.getWildcardPromise();
+    const imageRequests = [...categoryRequests, wildcardRequest];
+
     return Promise.all(imageRequests).then(responses => {
       return responses.map(r => r.data[0].images.fixed_height.url);
     });
+  }
+
+  private getRandomImagePromises(tagName: string, indices: number[]): Promise<any>[] {
+    const imageRequests = [];
+    for (let i = 0; i < indices.length; i++) {
+      const args = this.buildParams(tagName, indices[i]);
+      const req = this.http.get(this.baseURL, args).toPromise().then(res => res.json());
+      imageRequests.push(req);
+    }
+    return imageRequests;
+  }
+
+  private getWildcardPromise(): Promise<any> {
+    const rands = this.randomWithMax(200, 1);
+    const rand = rands[0];
+    const args = this.buildParams('gifsoup', rand);
+    return this.http.get(this.baseURL, args).toPromise().then(res => res.json());
   }
 
   private buildParams(tagName: string, offset: number): RequestOptionsArgs {
@@ -57,112 +67,5 @@ export class GiphyService {
     }
     return rands;
   }
-
-  // tslint:disable-next-line:member-ordering
-  private static tags: string[] = [
-    'CRYING',
-    'DANCING',
-    'EATING',
-    'FALLING',
-    'FINGER GUNS',
-    'LAUGHING',
-    'MIDDLE FINGER',
-    'SLEEPING',
-    'CAT',
-    'DOG',
-    'GOAT',
-    'MONKEY',
-    'PANDA',
-    'SLOTH',
-    'POKEMON',
-    'ADVENTURE TIME',
-    'ARCHER',
-    'FUTURAMA',
-    'ARRESTED DEVELOPMENT',
-    'RICK AND MORTY',
-    'SIMPSONS',
-    'SPONGEBOB',
-    'GAME OF THRONES',
-    'LORD OF THE RINGS',
-    'BILL MURRAY',
-    'SAMUEL L JACKSON',
-    'JOHN TRAVOLTA',
-    'CHUCK NORRIS',
-    'RON SWANSON',
-    'JUDGE JUDY',
-    'SMH',
-    'WEED',
-    'THUG LIFE',
-    'ALIENS',
-    'FLIGHT OF THE CONCORDS',
-    'PARKS AND REC',
-    'BREAKING BAD',
-    'THE FAST AND THE FURIOUS',
-    '80S',
-    '90S',
-    'AWKWARD',
-    'EXCITED',
-    'MIND BLOWN',
-    'HUNGRY',
-    'BORED',
-    'CONFUSED',
-    'TIRED',
-    'DRUNK',
-    'UNIMPRESSED',
-    'RELAXED',
-    'ANGRY',
-    'SASSY',
-    'ALCOHOL',
-    'BACON',
-    'HOT DOG',
-    'PIZZA',
-    'GTA',
-    'PWNED',
-    'FAIL',
-    'RICH',
-    'BABY',
-    'BOOBS',
-    'DONALD TRUMP',
-    'IDGAF',
-    'FEELS',
-    'DEAL WITH IT',
-    'STAR WARS',
-    'TERMINATOR',
-    'HARRY POTTER',
-    'BIG LEBOWSKI',
-    'AMERICAN PSYCHO',
-    'EYE ROLL',
-    'FACEPALM',
-    'HIGH FIVE',
-    'WINK',
-    'MICHAEL SCOTT',
-    'SNOOP DOG',
-    'MIRIN',
-    'CARTOONS',
-    'H3H3',
-    'MICHAEL CERA',
-    'TITUS ANDROMEDON',
-    'COMMUNITY',
-    'RAP',
-    'DAVE CHAPPELLE',
-    'MOUSTACHE',
-    'BOOTY',
-    'TIM AND ERIC',
-    'FOOD',
-    'GAMING',
-    'THE GRIND',
-    'NIPPLES',
-    'DICKS',
-    'MAN BUTTS',
-    'SLOW CLAP',
-    'FML',
-    'GTFO',
-    'YAS',
-    'YAS QUEEN',
-    'BABE',
-    'WES ANDERSON',
-    'BROAD CITY',
-    'WORKAHOLICS'
-  ];
 
 }

@@ -7,7 +7,8 @@
       <span class="tag">{{chosenTag | uppercase}}</span>
     </h2>
     <div *ngFor="let option of options; index as i">
-      <img *ngIf="i === imageIndex" [src]="option" [alt]="'Option ' + i" (click)="selectOption(option)" class="col gif-option">
+      <img *ngIf="i === imageIndex" [src]="i === 4 ? wildcardImage : option" [alt]="'Option ' + i" (click)="selectOption(option)"
+        class="col gif-option">
     </div>
   </div>
   <div *ngIf="playerCanSelect" class="col-xs-12 col-md-4 offset-md-4 row flex-items-xs-center">
