@@ -9,7 +9,6 @@ import { RequestOptionsArgs } from '@angular/http/src/interfaces';
 export class GiphyService {
 
   private imageCount = 4;
-  private tagCount = 4;
   private baseURL = 'https://api.giphy.com/v1/gifs/search';
   private giphy = environment.giphy;
 
