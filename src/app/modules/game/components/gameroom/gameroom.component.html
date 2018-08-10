@@ -88,10 +88,10 @@
 
         <!-- Winning Meme -->
         <clr-modal [(clrModalOpen)]="game.roundWinner" *ngIf="game?.roundWinner" [clrModalClosable]="false">
-          <h2 *ngIf="!game.winner" class="modal-title animated pulse infinite">
+          <h2 *ngIf="!game.winner" class="modal-title animated pulse infinite winner-header">
             <span class="winner-name">{{game.roundWinner.username | uppercase}} </span> WINS THE ROUND!
           </h2>
-          <h2 *ngIf="game.winner" class="modal-title animated pulse infinite">
+          <h2 *ngIf="game.winner" class="modal-title animated tada infinite winner-header">
             <span class="winner-name">{{game.roundWinner.username | uppercase}}</span> WINS THE GAME!
           </h2>
           <div class="modal-body">
