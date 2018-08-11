@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
 import { Card } from '../../../../../interfaces';
 
 @Component({
@@ -11,13 +11,28 @@ export class PlayerHandComponent implements OnInit {
   @Input() playerCanSelect: boolean;
   @Output() cardSelect = new EventEmitter<Card>();
 
-  constructor() { }
+  constructor(private renderer: Renderer2) { }
 
   ngOnInit() {
   }
 
-  selectCard(card: Card) {
+  selectCard(card: Card, cardBlockEl: any) {
     if (!this.playerCanSelect) { return; }
-    this.cardSelect.emit(card);
+
+    const cardEl = cardBlockEl.parentElement;
+
+    this.animateCardSelect(cardEl);
+
+    cardEl.addEventListener('webkitAnimationEnd', () => {
+      this.cardSelect.emit(card);
+    });
+
+    cardEl.addEventListener('animationend', () => {
+      this.cardSelect.emit(card);
+    });
+  }
+
+  private animateCardSelect(cardEl: any) {
+    this.renderer.addClass(cardEl, 'zoomOutUp');
   }
 }

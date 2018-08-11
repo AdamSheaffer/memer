@@ -14,8 +14,8 @@
     $w: random(8);
     $l: random(100);
     .confetti-#{$i} {
-      width: #{$w}px;
-      height:#{$w*0.4}px;
+      width: #{$w*4}px;
+      height:#{$w*2}px;
       background-color: nth($colors, random(3));
       top: -10%;
       left: unquote($l+"%");
