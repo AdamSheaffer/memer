@@ -4,7 +4,6 @@ import { PIPES } from './pipes';
 import { COMPONENTS } from './components';
 import { SharedModule } from '../shared/shared.module';
 import { GameRoutingModule } from './game-routing.module';
-import { ConfettiComponent } from './components/confetti/confetti.component';
 
 @NgModule({
   imports: [
@@ -14,8 +13,7 @@ import { ConfettiComponent } from './components/confetti/confetti.component';
   ],
   declarations: [
     ...COMPONENTS,
-    ...PIPES,
-    ConfettiComponent
+    ...PIPES
   ]
 })
 export class GameModule { }
