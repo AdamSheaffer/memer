@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
-  AngularFirestoreDocument,
-  DocumentReference
+  AngularFirestoreDocument
 } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Game, Card, Player } from '../../../../interfaces';
 import { CaptionService } from '../../../admin/services/caption.service';
-import { firestore } from 'firebase';
+import shuffle from 'lodash/shuffle';
+import chunk from 'lodash/chunk';
 
 @Injectable({
   providedIn: 'root'
@@ -37,61 +37,22 @@ export class DeckService {
     );
   }
 
-  setDeck(safeForWork: boolean) {
-    const batch = this.afs.firestore.batch();
-
-    return this.captionService.getAll().then(allCards => {
-      if (safeForWork) {
-        allCards = allCards.filter(c => c.safeForWork);
-      }
-
-      allCards.forEach(card => {
-        card.id = this.afs.createId();
-        const ref = this._cardCollection.doc(card.id).ref;
-        batch.set(ref, card);
-      });
-      return batch.commit();
-    });
-  }
-
-  getCards(count: number) {
-    return this._gameDoc.collection<Card>('deck', r => r.limit(count))
-      .valueChanges()
-      .pipe(take(1))
-      .toPromise()
-      .then(captions => {
-        const cardRefs = captions.map(c => this.getCardRef(c.id));
-        this.removeCardsFromDeck(cardRefs);
-        return captions;
+  getShuffledDeck() {
+    return this.captionService.getAll()
+      .then(cards => {
+        return shuffle(cards);
       });
   }
 
-  getCardRef(cardId: string) {
-    return this._cardCollection.doc(cardId).ref;
-  }
-
-  // IS THERE A WAY TO DO THIS BETTER WITHOUT USING SIDE EFFECTS?
-  deal(deck: Card[], players: Player[], numOfCards: number): void {
-    players.forEach(p => {
-      const cardsFromDeck = deck.splice(0, numOfCards);
-      p.captions.push(...cardsFromDeck);
-    });
-  }
-
-  emptyDeck() {
-    return this._cardCollection.ref.get().then(snapshot => {
-      if (snapshot.empty) { return; }
-      const cardRefs = snapshot.docs.map(doc => doc.ref);
-      return this.removeCardsFromDeck(cardRefs);
-    });
-  }
-
-  private removeCardsFromDeck(cardRefs: DocumentReference[]) {
-    const batch = this.afs.firestore.batch();
-    cardRefs.forEach(r => {
-      batch.delete(r);
-    });
-    return batch.commit();
+  createPlayerHandsFromDeck(deck: Card[], playerCount: number) {
+    const handSize = Math.floor(deck.length / playerCount);
+    const hands = chunk(deck, handSize);
+    // If the deck can't be split evenly, lodash will add the remaining elements in the last array
+    // I'll consider these cards as extra and they'll be gotten rid of
+    while (hands.length > playerCount) {
+      hands.pop();
+    }
+    return hands;
   }
 
 }

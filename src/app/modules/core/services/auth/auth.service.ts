@@ -80,7 +80,6 @@ export class AuthService {
       score: 0,
       username: user.username,
       isActive: true,
-      captions: [],
       roles: user.roles
     };
   }

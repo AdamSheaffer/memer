@@ -75,37 +75,73 @@ export class PlayerService {
     return batch.commit();
   }
 
-  dealToAllPlayers(cards: Card[], cardsPerPlayer: number) {
-    // For now, it's going to be the responsibility of the caller
-    // to make sure they pass in the correct amount of cards.
-    // otherwise, throw an error
-    const batch = this.afs.firestore.batch();
+  getCurrentPlayersHand(playerId: string, cardsShown: number) {
+    const handCollection = this.getPlayerHandCollection(playerId);
+    return handCollection.snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const card = a.payload.doc.data();
+          card.id = a.payload.doc.id;
+          return card;
+        });
+      }),
+      map(cards => {
+        return cards.slice(0, cardsShown);
+      })
+    );
+  }
 
-    this._playerCollection.ref.get().then(snapshot => {
-      const playerCount = snapshot.docs.length;
+  dealToAllPlayers(playerIds: string[], hands: Card[][]) {
+    if (playerIds.length !== hands.length) {
+      throw new Error(`Game has ${playerIds.length} but ${hands.length} hands`);
+    }
 
-      if (!this.hasTheCorrectAmountOfCards(cards.length, playerCount, cardsPerPlayer)) {
-        throw new Error(`Incorrect number of cards passed. ${cards.length} cards and ${playerCount} players`);
-      }
-
-      snapshot.docs.forEach(q => {
-        const ref = q.ref;
-        const captions = cards.splice(0, cardsPerPlayer);
-        batch.update(ref, { captions });
+    playerIds.forEach((playerId, index) => {
+      const batch = this.afs.firestore.batch();
+      const handCollection = this.getPlayerHandCollection(playerId);
+      const hand = hands[index];
+      hand.forEach(card => {
+        const id = this.afs.createId();
+        const ref = handCollection.doc(id).ref;
+        batch.set(ref, card);
       });
-
       batch.commit();
     });
+  }
 
+  submitCaption(playerId: string, card: Card) {
+    const handCollection = this.getPlayerHandCollection(playerId);
+    return handCollection.doc(card.id).delete();
+  }
+
+  emptyAllPlayerHands(playerIds: string[]) {
+    const promises = playerIds.map(pid => {
+      return this.emptyPlayerHand(pid);
+    });
+    return Promise.all(promises);
+  }
+
+  emptyPlayerHand(playerId: string) {
+    const handCollection = this.getPlayerHandCollection(playerId);
+
+    return handCollection.ref.get().then(snapshot => {
+      const batch = this.afs.firestore.batch();
+      snapshot.forEach(doc => batch.delete(doc.ref));
+      batch.commit();
+    });
+  }
+
+
+  private getPlayerHandDocumentRefs(playerId: string) {
+    const handCollection = this.getPlayerHandCollection(playerId);
+  }
+
+  private getPlayerHandCollection(playerId: string) {
+    return this._playerCollection.doc(playerId).collection<Card>('cards');
   }
 
   private resetPlayer(player: Player) {
     player.captionPlayed = null;
-    player.captions = [];
     player.score = 0;
-  }
-
-  private hasTheCorrectAmountOfCards(cardCount: number, playerCount: number, cardsPerPlayer: number) {
-    return (playerCount * cardsPerPlayer) === cardCount;
   }
 }

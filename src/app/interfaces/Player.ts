@@ -9,7 +9,6 @@ export interface Player {
   thumbnailURL: string;
   isActive: boolean;
   score: number;
-  captions: Card[];
   captionPlayed?: Card;
   roles: Roles;
 }
@@ -17,6 +16,5 @@ export interface Player {
 export interface IPlayerChanges {
   isActive?: boolean;
   score?: number;
-  captions?: Card[];
   captionPlayed?: Card;
 }

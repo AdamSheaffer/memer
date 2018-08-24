@@ -23,6 +23,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   maxPlayers = 8;
   game$: Observable<Game>;
   players$: Observable<Player[]>;
+  cards$: Observable<Card[]>;
   gameState: Game;
   playerState: Player[];
   get isCurrentUsersTurn() { return this.gameState.turn === this.currentUser.uid; }
@@ -66,6 +67,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
             const playerJoinedMsg = `${this.currentUser.username.toUpperCase()} JOINED THE GAME`;
             this.chatService.postAdminMessage(playerJoinedMsg);
             this.currentUser.gameAssignedId = pid;
+            this.cards$ = this.playerService.getCurrentPlayersHand(pid, this.cardsInHand).pipe(takeUntil(this.destroy$));
           })
           .catch(err => this.returnHomeWithMessage(err.message));
         this.trackGameEvents();
@@ -82,21 +84,20 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   beginGame() {
-    this.deckService.emptyDeck().then(() => {
-      this.deckService.setDeck(this.gameState.safeForWork).then(() => {
-        const playerCount = this.playerState.length;
-        this.deckService.getCards(this.cardsInHand * playerCount)
-          .then(cards => {
-            this.playerService.dealToAllPlayers(cards, this.cardsInHand);
-          });
+    const playerIds = this.playerState.map(p => p.gameAssignedId);
+    const playerCount = playerIds.length;
+    const getShuffledDeckPromise = this.deckService.getShuffledDeck();
+    const emptyHandsPromise = this.playerService.emptyAllPlayerHands(playerIds);
+
+    Promise.all([getShuffledDeckPromise, emptyHandsPromise]).then(results => {
+      const [shuffledDeck] = results;
+      const allHands = this.deckService.createPlayerHandsFromDeck(shuffledDeck, playerCount);
+      this.playerService.dealToAllPlayers(playerIds, allHands);
+      this.gameService.updateGame({
+        hasStarted: true,
+        turn: this.currentUser.uid,
+        turnUsername: this.currentUser.username
       });
-    });
-
-
-    this.gameService.updateGame({
-      hasStarted: true,
-      turn: this.currentUser.uid,
-      turnUsername: this.currentUser.username
     });
   }
 
@@ -123,13 +124,10 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   selectCaption(captionPlayed: Card) {
     const player = this.playerState.find(p => p.uid === this.currentUser.uid);
-    const captionIndex = player.captions.findIndex(c => c.id === captionPlayed.id);
-    const captions = [...player.captions];
-    captions.splice(captionIndex, 1);
-    this.deckService.getCards(1).then(cards => {
-      captions.push(...cards);
-      this.playerService.update(player, { captionPlayed, captions });
-    });
+    this.playerService.submitCaption(player.gameAssignedId, captionPlayed)
+      .then(() => {
+        this.playerService.update(player, { captionPlayed });
+      });
   }
 
   selectFavoriteCaption(player: Player) {
@@ -208,8 +206,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     const players = [...this.playerState];
     const playerChanges: IPlayerChanges = {
       captionPlayed: null,
-      score: 0,
-      captions: []
+      score: 0
     };
 
     const playersUpdated = this.playerService.updateAll(players, playerChanges);

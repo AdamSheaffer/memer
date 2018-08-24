@@ -108,8 +108,8 @@
 
         <!-- Hand of Caption Cards -->
         <div *ngIf="players|currentUser:currentUser.uid as player">
-          <div *ngIf="player?.captions">
-            <memer-player-hand [playerCanSelect]="isUpForVoting && !isCurrentUsersTurn && !player.captionPlayed" [playerHand]="player.captions"
+          <div *ngIf="cards$|async as cards">
+            <memer-player-hand [playerCanSelect]="isUpForVoting && !isCurrentUsersTurn && !player.captionPlayed" [playerHand]="cards"
               (cardSelect)="selectCaption($event)">
             </memer-player-hand>
           </div>

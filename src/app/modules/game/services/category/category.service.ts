@@ -43,13 +43,13 @@ export class CategoryService {
   getNCategories(n: number) {
     if (this._categoriesCache) {
       const categoryCount = this._categoriesCache.length;
-      const randomIndexes = this.randomNumbersWithMax(categoryCount, n);
+      const randomIndexes = this.randomNumbersWithMax(categoryCount - 1, n);
       const categories = randomIndexes.map(i => this._categoriesCache[i]);
       return Promise.resolve(categories);
     }
     return this.getAll().then((allCategories) => {
       const categoryCount = allCategories.length;
-      const randomIndexes = this.randomNumbersWithMax(categoryCount, n);
+      const randomIndexes = this.randomNumbersWithMax(categoryCount - 1, n);
       return randomIndexes.map(i => allCategories[i]);
     });
   }
