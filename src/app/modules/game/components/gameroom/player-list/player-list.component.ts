@@ -12,6 +12,7 @@ export class PlayerListComponent implements OnInit {
   @Input() turn: string;
   @Input() isHost: boolean;
   @Input() hostId: string;
+  @Input() pointsToWin: number;
   @Output() playerRemoval = new EventEmitter<Player>();
   get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
 

@@ -8,10 +8,14 @@ import { Player } from '../../../../interfaces';
 })
 export class PlayerScoreComponent implements OnInit {
   @Input() player: Player;
+  @Input() pointsToWin: number;
+
+  hearts: number[] = [];
 
   constructor() { }
 
   ngOnInit() {
+    this.hearts = Array(this.pointsToWin).fill(null);
   }
 
 }

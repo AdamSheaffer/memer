@@ -20,7 +20,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   collapsed = false;
   isWinningModalShown: boolean;
   currentUser: Player;
-  maxPlayers = 8;
+  maxPlayers: number;
+  pointsToWin: number;
   game$: Observable<Game>;
   players$: Observable<Player[]>;
   cards$: Observable<Card[]>;
@@ -53,6 +54,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
       this.gameId = id;
       this.game$ = this.gameService.init(this.gameId);
       this.game$.pipe(take(1)).subscribe(g => {
+        this.maxPlayers = g.maxPlayers;
+        this.pointsToWin = g.pointsToWin;
         this.players$ = this.playerService.init(this.gameId, this.currentUser.uid);
         this.deckService.init(this.gameId);
         this.playerService.join(this.currentUser, g.hasStarted)
@@ -134,7 +137,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isCurrentUsersTurn || !this.gameState.isVotingRound) { return; }
 
     const newScore = player.score + 1;
-    const hasGameWinner = newScore >= 10;
+    const hasGameWinner = newScore >= this.pointsToWin;
     this.playerService.update(player, { score: newScore });
 
     const gameChanges: GameChanges = { roundWinner: player };

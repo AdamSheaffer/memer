@@ -1,0 +1,58 @@
+<clr-wizard #wizard [(clrWizardOpen)]="show" clrWizardSize="md" (clrWizardOnCancel)="cancel()">
+  <clr-wizard-title>GAME SETTINGS</clr-wizard-title>
+
+  <!-- <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button> -->
+  <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+  <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+  <clr-wizard-button [type]="'finish'">Begin</clr-wizard-button>
+
+  <clr-wizard-page>
+    <ng-template clrPageTitle>
+      PLAYERS
+    </ng-template>
+    <div>
+      <span>What's the max # of players?</span>
+    </div>
+    <div class="row flex-items-xs-center setting-count-container">
+      <clr-icon shape="users" size="96"></clr-icon>
+      <h2 class="setting-count">{{gameSettings.maxPlayers}}</h2>
+    </div>
+    <input [(ngModel)]="gameSettings.maxPlayers" type="range" min="3" max="8" step="1">
+  </clr-wizard-page>
+
+  <clr-wizard-page>
+    <ng-template clrPageTitle>SCORING</ng-template>
+    <div>
+      <span>How many points to win?</span>
+    </div>
+    <div class="row flex-items-xs-center setting-count-container">
+      <clr-icon shape="heart" size="96"></clr-icon>
+      <h2 class="setting-count">{{gameSettings.pointsToWin}}</h2>
+    </div>
+    <input [(ngModel)]="gameSettings.pointsToWin" type="range" min="1" max="10" step="1">
+  </clr-wizard-page>
+
+  <clr-wizard-page (clrWizardPageOnCommit)="createGame()">
+    <ng-template clrPageTitle>SFW</ng-template>
+    <div>
+      <span>Should the game be safe for work?</span>
+    </div>
+    <div class="setting-count-container">
+      <div class="row flex-items-xs-center">
+        <clr-icon shape="briefcase" size="96" [ngClass]="{'is-solid': gameSettings.sfw}"></clr-icon>
+      </div>
+      <div class="row flex-items-xs-center">
+        <div class="btn-group">
+          <div class="radio btn">
+            <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="true" name="btn-group-demo-radios" id="btn-radio-yes">
+            <label for="btn-radio-yes">YES</label>
+          </div>
+          <div class="radio btn">
+            <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="false" name="btn-group-demo-radios" id="btn-radio-no">
+            <label for="btn-radio-no">NO</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </clr-wizard-page>
+</clr-wizard>

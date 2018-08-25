@@ -10,7 +10,7 @@
         <!-- Player images and scores -->
         <div>
           <memer-player-list [turn]="game?.turn" [players]="players" [hostId]="game.hostId" [isHost]="game.hostId === currentUser.uid"
-            (playerRemoval)="removePlayer($event)"></memer-player-list>
+            (playerRemoval)="removePlayer($event)" [pointsToWin]="pointsToWin"></memer-player-list>
         </div>
 
         <!-- Button for Host to start the game -->

@@ -20,6 +20,8 @@ export interface Game {
   winner?: Player;
   lastUpdated: firebase.firestore.FieldValue;
   safeForWork: boolean;
+  maxPlayers: number;
+  pointsToWin: number;
 }
 
 export interface GameChanges {

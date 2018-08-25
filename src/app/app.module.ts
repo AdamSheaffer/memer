@@ -8,6 +8,7 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
+import { GameSetupComponent } from './components/game-setup/game-setup.component';
 import { LoginComponent } from './components/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './components/home/home.component';
@@ -18,7 +19,8 @@ import { SharedModule } from './modules/shared/shared.module';
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    GameSetupComponent
   ],
   imports: [
     AngularFireAuthModule,

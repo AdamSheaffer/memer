@@ -13,8 +13,8 @@
           <img class="player-img" [src]="player.thumbnailURL" [ngClass]="{'player-img-turn': player.uid === turn}">
         </div>
       </div>
-      <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-score">SCORE: {{player.score}} / 10</div>
-      <memer-player-score [player]="player"></memer-player-score>
+      <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-score">SCORE: {{player.score}} / {{pointsToWin}}</div>
+      <memer-player-score [player]="player" [pointsToWin]="pointsToWin"></memer-player-score>
     </div>
   </div>
 </div>

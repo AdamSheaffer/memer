@@ -6,3 +6,4 @@ export * from './Player';
 export * from './User';
 export * from './Role';
 export * from './Category';
+export * from './GameSettings';

@@ -3,7 +3,7 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument,
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { take, map, switchMap } from 'rxjs/operators';
-import { Game, Player, GameChanges } from '../../../../interfaces';
+import { Game, Player, GameChanges, GameSettings } from '../../../../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +26,8 @@ export class GameService {
     return this.game$;
   }
 
-  async createNewGame(player: Player, safeForWork: boolean): Promise<string> {
-    const newGame = this.newGame(player, safeForWork);
+  async createNewGame(player: Player, gameSettings: GameSettings): Promise<string> {
+    const newGame = this.newGame(player, gameSettings);
     const gameId = await this._gamesCollection.add(newGame).then(ref => ref.id);
     return gameId;
   }
@@ -58,7 +58,7 @@ export class GameService {
     return this._gameDoc.update(changes);
   }
 
-  private newGame(host: Player, safeForWork: boolean): Game {
+  private newGame(host: Player, gameSettings: GameSettings): Game {
     return {
       hasStarted: false,
       beginDate: firebase.firestore.FieldValue.serverTimestamp(),
@@ -69,7 +69,9 @@ export class GameService {
       captionDeck: [],
       isVotingRound: false,
       lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-      safeForWork
+      safeForWork: gameSettings.sfw,
+      maxPlayers: gameSettings.maxPlayers,
+      pointsToWin: gameSettings.pointsToWin
     };
   }
 

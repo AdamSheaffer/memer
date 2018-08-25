@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { GameService, AuthService, SettingsService } from '../../modules/core/services';
 import { Game } from '../../interfaces/Game';
 import { takeUntil } from 'rxjs/operators';
+import { Player } from '../../interfaces';
 
 @Component({
   selector: 'memer-home',
@@ -12,12 +13,14 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   showOpenGames = false;
+  showGameSetup = false;
   isLoading = false;
   openGames$: Observable<Game[]>;
   games: Game[] = [];
   sfw: boolean;
   sfwFilter$: BehaviorSubject<boolean>;
   destroy$ = new Subject<boolean>();
+  user: Player;
 
   constructor(
     private authService: AuthService,
@@ -29,15 +32,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.user = this.authService.getPlayer();
   }
 
   hostGame() {
-    this.showOpenGames = false;
-    const user = this.authService.getPlayer();
-    this.gameService.createNewGame(user, this.sfw)
-      .then(gameId => {
-        this.router.navigate([`game/${gameId}`]);
-      });
+    this.showGameSetup = true;
+  }
+
+  onGameCreated(gameId: string) {
+    this.router.navigate([`game/${gameId}`]);
   }
 
   findOpenGames() {

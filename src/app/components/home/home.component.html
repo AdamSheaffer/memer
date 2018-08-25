@@ -1,7 +1,8 @@
+<memer-game-setup *ngIf="showGameSetup" [user]="user" [show]="showGameSetup" (cancelled)="showGameSetup = false" (createdGame)="onGameCreated($event)"></memer-game-setup>
 <div class="row flex-items-xs-right sfw">
   <div class="toggle-switch">
     <input [(ngModel)]="sfw" (ngModelChange)="sfwModeChanged()" type="checkbox" id="safe-for-work">
-    <label for="safe-for-work">Safe For Work Mode:</label>
+    <label for="safe-for-work">Show only safe for work games:</label>
   </div>
 </div>
 <div class="home">
@@ -16,7 +17,7 @@
         </div>
         <div class="col-xs-12">
           <button (click)="hostGame()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">
-            HOST NEW GAME {{sfw ? '(SFW)' : ''}}
+            HOST NEW GAME
           </button>
         </div>
         <div class="col-xs-12">
