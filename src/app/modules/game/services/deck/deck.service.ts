@@ -37,9 +37,13 @@ export class DeckService {
     );
   }
 
-  getShuffledDeck() {
+  getShuffledDeck(gameIsSfw: boolean) {
     return this.captionService.getAll()
       .then(cards => {
+        if (gameIsSfw) {
+          const filtered = cards.filter(c => c.safeForWork);
+          return shuffle(filtered);
+        }
         return shuffle(cards);
       });
   }

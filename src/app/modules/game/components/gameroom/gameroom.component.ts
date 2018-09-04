@@ -22,6 +22,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   currentUser: Player;
   maxPlayers: number;
   pointsToWin: number;
+  sfw: boolean;
   game$: Observable<Game>;
   players$: Observable<Player[]>;
   cards$: Observable<Card[]>;
@@ -56,6 +57,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
       this.game$.pipe(take(1)).subscribe(g => {
         this.maxPlayers = g.maxPlayers;
         this.pointsToWin = g.pointsToWin;
+        this.sfw = g.safeForWork;
         this.players$ = this.playerService.init(this.gameId, this.currentUser.uid);
         this.deckService.init(this.gameId);
         this.playerService.join(this.currentUser, g.hasStarted)
@@ -89,7 +91,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   beginGame() {
     const playerIds = this.playerState.map(p => p.gameAssignedId);
     const playerCount = playerIds.length;
-    const getShuffledDeckPromise = this.deckService.getShuffledDeck();
+    const getShuffledDeckPromise = this.deckService.getShuffledDeck(this.sfw);
     const emptyHandsPromise = this.playerService.emptyAllPlayerHands(playerIds);
 
     Promise.all([getShuffledDeckPromise, emptyHandsPromise]).then(results => {

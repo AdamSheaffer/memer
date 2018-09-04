@@ -20,7 +20,7 @@
 </div>
 
 <clr-modal *ngIf="playerStagedForRemoval && isHost" [(clrModalOpen)]="playerStagedForRemoval && isHost" [clrModalClosable]="false">
-  <h3 class="modal-title">IS {{playerStagedForRemoval.username | uppercase}} BEING A DICK?</h3>
+  <h3 class="modal-title">REMOVE {{playerStagedForRemoval.username | uppercase}}? ORLY?</h3>
   <div class="modal-body">
     <p>Do you want to remove {{playerStagedForRemoval.username}} from the game?</p>
   </div>

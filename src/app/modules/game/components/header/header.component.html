@@ -12,9 +12,9 @@
         <clr-icon shape="caret down"></clr-icon>
       </button>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a (click)="changeTheme()" clrDropdownItem>{{isLightTheme ? 'DARK THEME' : 'LIGHT THEME'}}</a>
         <a routerLink="/" clrDropdownItem>LEAVE GAME</a>
         <a (click)="logout()" clrDropdownItem>LOG OUT</a>
-        <a (click)="changeTheme()" clrDropdownItem>{{isLightTheme ? 'DARK THEME' : 'LIGHT THEME'}}</a>
       </clr-dropdown-menu>
     </clr-dropdown>
   </div>
