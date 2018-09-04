@@ -5,7 +5,7 @@ A multiplayer card game a la _Cards Against Humanity_ or _Know Your Meme_. Memer
 #### Disclaimer!
 By default _MEMER_ is NSFW, but if you want to get your meme on at the office, there is now a **Safe For Work** mode that can be toggled on and off. 
 
-PLAY [HERE](https://i-memer.firebaseapp.com)
+PLAY [HERE](https://memer.app)
 
 ![Screenshot][screenshot]
 
