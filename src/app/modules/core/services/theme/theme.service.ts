@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 
+export enum Theme {
+  LIGHT = 1,
+  DARK
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,7 +28,3 @@ export class ThemeService {
   }
 }
 
-export enum Theme {
-  LIGHT = 1,
-  DARK
-}

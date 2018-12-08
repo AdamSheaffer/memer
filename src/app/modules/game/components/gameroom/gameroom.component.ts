@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer2, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
-import { filter, take, map, skip, takeUntil, combineLatest } from 'rxjs/operators';
+import { Observable, Subject, combineLatest } from 'rxjs';
+import { filter, take, map, skip, takeUntil } from 'rxjs/operators';
 import { Player, Game, Card, GameChanges, IPlayerChanges } from '../../../../interfaces';
 import { Theme, AuthService, ThemeService, GameService, PlayerService } from '../../../core/services';
 import { ChatService, DeckService, GiphyService, CategoryService } from '../../services';
@@ -44,7 +44,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private themeService: ThemeService,
-    private renderer: Renderer
+    private renderer: Renderer2
   ) {
     this.currentUser = this.authService.getPlayer();
   }
@@ -85,7 +85,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   // To position the chat at the bottom
   ngAfterViewInit(): void {
     const el = this.chatEl.nativeElement.getElementsByClassName('nav-content')[0];
-    this.renderer.setElementStyle(el, 'flex-direction', 'column-reverse');
+    this.renderer.setStyle(el, 'flex-direction', 'column-reverse');
   }
 
   beginGame() {
@@ -255,12 +255,11 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private trackVotingRound() {
-    this.players$.pipe(
-      combineLatest(this.game$),
-      filter(([players, game]) => !game.isVotingRound),
+    combineLatest(this.players$, this.game$).pipe(
+      filter(([_p, game]) => !game.isVotingRound),
       filter(([players, game]) => this.everyoneSubmittedCaption(players, game)),
       takeUntil(this.destroy$)
-    ).subscribe(([players, game]) => {
+    ).subscribe(([_p, _g]) => {
       this.gameService.updateGame({ isVotingRound: true });
     });
   }

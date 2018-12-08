@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
@@ -30,7 +30,7 @@ import { SharedModule } from './modules/shared/shared.module';
     BrowserAnimationsModule,
     BrowserModule,
     CoreModule,
-    HttpModule,
+    HttpClientModule,
     SharedModule
   ],
   bootstrap: [AppComponent]

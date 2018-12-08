@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
-import { Http } from '@angular/http';
-import { RequestOptionsArgs } from '@angular/http/src/interfaces';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,7 @@ export class GiphyService {
   private baseURL = 'https://api.giphy.com/v1/gifs/search';
   private giphy = environment.giphy;
 
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   getRandomImages(tagName: string): Promise<any> {
     const randomNums = this.randomWithMax(100, this.imageCount);
@@ -28,8 +27,8 @@ export class GiphyService {
   private getRandomImagePromises(tagName: string, indices: number[]): Promise<any>[] {
     const imageRequests = [];
     for (let i = 0; i < indices.length; i++) {
-      const args = this.buildParams(tagName, indices[i]);
-      const req = this.http.get(this.baseURL, args).toPromise().then(res => res.json());
+      const params = this.buildParams(tagName, indices[i]);
+      const req = this.http.get(this.baseURL, { params }).toPromise();
       imageRequests.push(req);
     }
     return imageRequests;
@@ -38,19 +37,17 @@ export class GiphyService {
   private getWildcardPromise(): Promise<any> {
     const rands = this.randomWithMax(200, 1);
     const rand = rands[0];
-    const args = this.buildParams('gifsoup', rand);
-    return this.http.get(this.baseURL, args).toPromise().then(res => res.json());
+    const params = this.buildParams('gifsoup', rand);
+    return this.http.get(this.baseURL, { params }).toPromise();
   }
 
-  private buildParams(tagName: string, offset: number): RequestOptionsArgs {
-    const params = {
-      api_key: this.giphy,
-      q: this.encodeTag(tagName),
-      rating: 'pg-13',
-      limit: '1',
-      offset
-    };
-    return { params };
+  private buildParams(tagName: string, offset: number): HttpParams {
+    return new HttpParams()
+      .append('api_key', this.giphy)
+      .append('q', this.encodeTag(tagName))
+      .append('rating', 'pg-13')
+      .append('limit', '1')
+      .append('offset', offset.toString());
   }
 
   private encodeTag(tagName: string): string {

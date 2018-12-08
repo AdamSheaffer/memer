@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Renderer, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Card } from '../../../../interfaces';
 
 @Component({
@@ -17,7 +17,7 @@ export class MemeComponent implements AfterViewInit {
   private maxFontSize = 62;
   private maxHeight = 80;
 
-  constructor(private renderer: Renderer) {
+  constructor(private renderer: Renderer2) {
 
   }
 
@@ -26,8 +26,8 @@ export class MemeComponent implements AfterViewInit {
 
     const imgWidth = this.getElementWidth(this.img);
 
-    this.renderer.setElementStyle(this.topCaption.nativeElement, 'width', `${imgWidth}px`);
-    this.renderer.setElementStyle(this.bottomCaption.nativeElement, 'width', `${imgWidth}px`);
+    this.renderer.setStyle(this.topCaption.nativeElement, 'width', `${imgWidth}px`);
+    this.renderer.setStyle(this.bottomCaption.nativeElement, 'width', `${imgWidth}px`);
 
     const topHeight = this.getElementHeight(this.topCaption);
     const bottomHeight = this.getElementHeight(this.bottomCaption);
@@ -44,11 +44,11 @@ export class MemeComponent implements AfterViewInit {
 
   private scaleDownFont(captionRef: ElementRef) {
     let fontSize = this.maxFontSize;
-    this.renderer.setElementStyle(captionRef.nativeElement, 'font-size', `${fontSize}px`);
+    this.renderer.setStyle(captionRef.nativeElement, 'font-size', `${fontSize}px`);
 
     while (this.getElementHeight(captionRef) > this.maxHeight) {
       fontSize -= 4;
-      this.renderer.setElementStyle(captionRef.nativeElement, 'font-size', `${fontSize}px`);
+      this.renderer.setStyle(captionRef.nativeElement, 'font-size', `${fontSize}px`);
     }
   }
 

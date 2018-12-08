@@ -7,7 +7,7 @@ import * as firebase from 'firebase/app';
 export class FromFBDatePipe implements PipeTransform {
 
   transform(value: firebase.firestore.Timestamp): Date {
-    return value.toDate();
+    return !!value ? value.toDate() : null;
   }
 
 }
