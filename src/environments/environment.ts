@@ -7,11 +7,11 @@ export const environment = {
   production: false,
   giphy: 'qEa9PRz9I3z9tOubAtepqn0va4M9dss0',
   firebase: {
-    apiKey: 'AIzaSyCjQYaYdae8MbCOVJj4vC1mb2k17A3yx7Y',
-    authDomain: 'i-memer.firebaseapp.com',
-    databaseURL: 'https://i-memer.firebaseio.com',
-    projectId: 'i-memer',
-    storageBucket: 'i-memer.appspot.com',
-    messagingSenderId: '335422779142'
+    apiKey: "AIzaSyBPNxvgVqIbhX8n2mDJLG1aNoNtU7dIt5I",
+    authDomain: "memer-dev.firebaseapp.com",
+    databaseURL: "https://memer-dev.firebaseio.com",
+    projectId: "memer-dev",
+    storageBucket: "memer-dev.appspot.com",
+    messagingSenderId: "244867986651"
   }
 };
