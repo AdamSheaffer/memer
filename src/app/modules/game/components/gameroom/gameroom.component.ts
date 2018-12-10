@@ -18,7 +18,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   gameId: string;
   cardsInHand = 7;
   collapsed = false;
-  isWinningModalShown: boolean;
+  canShowModal: true;
   currentUser: Player;
   maxPlayers: number;
   pointsToWin: number;
@@ -260,6 +260,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
       filter(([players, game]) => this.everyoneSubmittedCaption(players, game)),
       takeUntil(this.destroy$)
     ).subscribe(([_p, _g]) => {
+      this.canShowModal = true;
       this.gameService.updateGame({ isVotingRound: true });
     });
   }
