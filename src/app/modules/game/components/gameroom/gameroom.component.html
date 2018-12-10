@@ -1,4 +1,4 @@
-<memer-confetti *ngIf="gameState?.winner"></memer-confetti>
+<memer-confetti *ngIf="gameState?.winner && canShowModal"></memer-confetti>
 <!-- Header -->
 <memer-header></memer-header>
 
@@ -28,18 +28,29 @@
         </div>
 
         <!-- Voting label -->
-        <h3 *ngIf="game?.isVotingRound" class="voting-indicator">
+        <h3 *ngIf="game?.isVotingRound && !game?.winner" class="voting-indicator">
           <span class="username">{{game.turnUsername | uppercase}}
             <span [ngClass]="{'dark-theme': isDarkTheme}">IS VOTING</span>
           </span>
         </h3>
 
+        <div *ngIf="game?.isVotingRound && !!game?.winner && !canShowModal" class="voting-indicator">
+          <h3 class="username animated fadeInLeft">{{game.winner.username | uppercase}}
+            <span [ngClass]="{'dark-theme': isDarkTheme}">WON THE GAME</span>
+          </h3>
+          <h5 class="animated fadeInRight new-game-waiting">WAITING FOR HOST TO START A NEW GAME</h5>
+        </div>
+
         <!-- Button to begin when it's your turn -->
         <div *ngIf="game?.hasStarted" class="row">
           <div *ngIf="isCurrentUsersTurn" class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
-            <h2 *ngIf="!game.tagOptions.length" class="animated pulse infinite">{{currentUser.username | uppercase}}, IT'S YOUR TURN!</h2>
+            <h2 *ngIf="!game.tagOptions.length" class="animated pulse infinite">{{currentUser.username | uppercase}},
+              IT'S YOUR TURN!</h2>
             <h2 *ngIf="game.tagOptions.length && !game.tagSelection" class="animated pulse infinite">SELECT A TAG</h2>
             <button *ngIf="!game.tagOptions.length" class="btn btn-outline-primary btn-block" (click)="beginTurn()">START</button>
+            <button *ngIf="game.winner && isHost && !canShowModal" class="btn btn-outline-primary btn-block" (click)="resetGame()">
+              NEW GAME
+            </button>
           </div>
           <div *ngIf="!isCurrentUsersTurn && !game.tagSelection" class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
             <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] === 'S'">
@@ -58,8 +69,8 @@
 
         <!-- Gif Options to choose from -->
         <div *ngIf="game?.gifOptionURLs && !game.gifSelectionURL">
-          <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [usernameSelecting]="game.turnUsername" (optionSelect)="selectGif($event)"
-            [options]="game.gifOptionURLs" [chosenTag]="game.tagSelection"></memer-gif-options>
+          <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [usernameSelecting]="game.turnUsername"
+            (optionSelect)="selectGif($event)" [options]="game.gifOptionURLs" [chosenTag]="game.tagSelection"></memer-gif-options>
         </div>
 
         <!-- Gif that judge has selected -->
@@ -67,8 +78,10 @@
           <div *ngIf="game?.gifSelectionURL && !game.isVotingRound" class="selected-gif">
             <div class="row align-items-center">
               <div class="d-flex align-items-center flex-column meme-container">
-                <h2 *ngIf="!isCurrentUsersTurn && !player.captionPlayed" class="animated pulse infinite">SUBMIT A CAPTION</h2>
-                <h2 *ngIf="(isCurrentUsersTurn || (player.captionPlayed && !game.roundWinner)) && !game.isVotingRound">WAITING FOR OTHER PLAYERS...</h2>
+                <h2 *ngIf="!isCurrentUsersTurn && !player.captionPlayed" class="animated pulse infinite">SUBMIT A
+                  CAPTION</h2>
+                <h2 *ngIf="(isCurrentUsersTurn || (player.captionPlayed && !game.roundWinner)) && !game.isVotingRound">WAITING
+                  FOR OTHER PLAYERS...</h2>
                 <div class="animated bounceIn">
                   <memer-meme [imageURL]="game.gifSelectionURL"></memer-meme>
                 </div>
@@ -87,7 +100,7 @@
         </div>
 
         <!-- Winning Meme -->
-        <clr-modal [(clrModalOpen)]="game.roundWinner" *ngIf="game?.roundWinner" [clrModalClosable]="false">
+        <clr-modal [(clrModalOpen)]="game.roundWinner && canShowModal" *ngIf="game?.roundWinner" [clrModalClosable]="false">
           <h2 *ngIf="!game.winner" class="modal-title animated pulse infinite winner-header">
             <span class="winner-name">{{game.roundWinner.username | uppercase}} </span> WINS THE ROUND!
           </h2>
@@ -99,18 +112,17 @@
               <memer-meme [caption]="game.roundWinner.captionPlayed" [imageURL]="game.gifSelectionURL"></memer-meme>
             </div>
           </div>
-          <div *ngIf="game.winner && isHost" class="modal-footer">
-            <div (click)="resetGame()" class="btn btn-outline-info">
-              NEW GAME
-            </div>
+          <div *ngIf="game.winner" class="modal-footer">
+            <button (click)="canShowModal = false" class="btn btn-info-outline">CLOSE</button>
+            <button *ngIf="isHost" (click)="resetGame()" class="btn btn-primary">NEW GAME</button>
           </div>
         </clr-modal>
 
         <!-- Hand of Caption Cards -->
         <div *ngIf="players|currentUser:currentUser.uid as player">
           <div *ngIf="cards$|async as cards">
-            <memer-player-hand [playerCanSelect]="isUpForVoting && !isCurrentUsersTurn && !player.captionPlayed" [playerHand]="cards"
-              (cardSelect)="selectCaption($event)">
+            <memer-player-hand *ngIf="!game.winner" [playerCanSelect]="isUpForVoting && !isCurrentUsersTurn && !player.captionPlayed"
+              [playerHand]="cards" (cardSelect)="selectCaption($event)">
             </memer-player-hand>
           </div>
         </div>
@@ -119,7 +131,8 @@
     </div>
 
     <!-- Chat -->
-    <clr-vertical-nav #chat [clrVerticalNavCollapsible]="true" [(clrVerticalNavCollapsed)]="collapsed" id="chat" [ngClass]="{'dark-theme': isDarkTheme}">
+    <clr-vertical-nav #chat [clrVerticalNavCollapsible]="true" [(clrVerticalNavCollapsed)]="collapsed" id="chat"
+      [ngClass]="{'dark-theme': isDarkTheme}">
       <div *ngIf="!collapsed">
         <memer-chat [gameId]="gameId" class="chat-sidebar"></memer-chat>
       </div>
