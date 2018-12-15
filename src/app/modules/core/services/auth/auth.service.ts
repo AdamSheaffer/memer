@@ -67,7 +67,7 @@ export class AuthService {
       roles: {
         player: true
       }
-    }
+    };
   }
 
   private getUserDataFromGoogleProvider(credentialUser, provider): User {
@@ -80,7 +80,7 @@ export class AuthService {
       roles: {
         player: true
       }
-    }
+    };
   }
 
   private updateUserData(user) {
@@ -88,7 +88,7 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const facebook = user.providerData.find(p => p.providerId.includes('facebook'));
     const google = user.providerData.find(p => p.providerId.includes('google.com'));
-    let data: User
+    let data: User;
 
     // try facebook first
     if (facebook) {
