@@ -1,5 +1,5 @@
 language: node_js
-node_js
+node_js:
   - "10"
 
 branches:
@@ -10,6 +10,7 @@ addons:
   chrome: stable
 
 before_script:
+  - npm install -g firebase-tools
   - npm install -g @angular/cli
 
 cache:
@@ -18,4 +19,8 @@ cache:
     - node_modules
 
 script:
+  - ng-lint
   - ng build --prod
+
+after_success:
+  - firebase deploy --token $FIREBASE_TOKEN
