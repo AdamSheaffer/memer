@@ -14,12 +14,11 @@ before_script:
   - npm install -g @angular/cli
 
 cache:
-  npm: true
   directories:
     - node_modules
 
 script:
-  - ng-lint
+  - ng lint
   - ng build --prod
 
 after_success:
