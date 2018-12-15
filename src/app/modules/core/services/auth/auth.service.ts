@@ -29,15 +29,20 @@ export class AuthService {
     this.user$.subscribe(u => this.user = u);
   }
 
-  login() {
+  facebookLogin() {
     const provider = new firebase.auth.FacebookAuthProvider();
+    return this.oAuthLogin(provider);
+  }
+
+  googleLogin() {
+    const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   private oAuthLogin(provider) {
     return this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
-        this.updateUserData(credential.user);
+        return this.updateUserData(credential.user);
       });
   }
 
@@ -49,23 +54,48 @@ export class AuthService {
     return this.toPlayerModel(this.user);
   }
 
+  private getUserDataFromFacebookProvider(credentialUser, provider): User {
+    const photoURL = `https://graph.facebook.com/${provider.uid}/picture?height=300&width=300`;
+    const thumbnailURL = `https://graph.facebook.com/${provider.uid}/picture?height=100&width=100`;
+
+    return {
+      photoURL,
+      thumbnailURL,
+      uid: credentialUser.uid,
+      fullName: provider.displayName,
+      username: provider.displayName.split(' ')[0],
+      roles: {
+        player: true
+      }
+    }
+  }
+
+  private getUserDataFromGoogleProvider(credentialUser, provider): User {
+    return {
+      photoURL: provider.photoURL,
+      thumbnailURL: provider.photoURL,
+      uid: credentialUser.uid,
+      fullName: provider.displayName,
+      username: provider.displayName.split(' ')[0],
+      roles: {
+        player: true
+      }
+    }
+  }
+
   private updateUserData(user) {
     // Sets user data to firestore on login
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const facebook = user.providerData.find(p => p.providerId.includes('facebook'));
-    const photoURL = `https://graph.facebook.com/${facebook.uid}/picture?height=300&width=300`;
-    const thumbnailURL = `https://graph.facebook.com/${facebook.uid}/picture?height=100&width=100`;
+    const google = user.providerData.find(p => p.providerId.includes('google.com'));
+    let data: User
 
-    const data: User = {
-      uid: user.uid,
-      fullName: facebook.displayName,
-      username: facebook.displayName.split(' ')[0],
-      photoURL,
-      thumbnailURL,
-      roles: {
-        player: true
-      }
-    };
+    // try facebook first
+    if (facebook) {
+      data = this.getUserDataFromFacebookProvider(user, facebook);
+    } else {
+      data = this.getUserDataFromGoogleProvider(user, google);
+    }
 
     return userRef.set(data, { merge: true });
   }
