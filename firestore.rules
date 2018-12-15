@@ -3,26 +3,25 @@ service cloud.firestore {
     function getRole(role) {
     	return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles[role] == true;
     }
-  
+
     match /captions/{caption} {
     	allow read;
-      allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['editor'] == true;
+      allow write: if getRole('editor') == true;
     }
-  
+
   	match /games/{document=**} {
     	allow read;
-    	allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['player'] == true;
+    	allow write: if getRole('player') == true;
     }
-    
+
     match /users/{document} {
       allow read;
-      allow create: if request.resource.data.roles.keys().hasAny(['admin', 'editor']) == false;
-      allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['admin'] == true;
+      allow write: if request.resource.data.roles.keys().hasAny(['admin', 'editor']) == false;
     }
 
     match /categories/{category} {
       allow read;
-      allow write: if get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles['admin'] == true;
+      allow write: if getRole('admin') == true;
     }
   }
 }
