@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { GameroomComponent } from './components/gameroom';
-import { GameGuard } from '../../guards/game.guard';
+import { GameGuard } from '../../guards';
 
 const routes: Routes = [
   { path: ':id', component: GameroomComponent, canActivate: [GameGuard] }
