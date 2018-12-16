@@ -8,10 +8,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
-import { GameSetupComponent } from './components/game-setup/game-setup.component';
-import { LoginComponent } from './components/login/login.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
+import { APP_COMPONENTS } from './components';
 
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './modules/core/core.module';
@@ -20,10 +17,7 @@ import { SharedModule } from './modules/shared/shared.module';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    HomeComponent,
-    GameSetupComponent,
-    NotFoundComponent
+    ...APP_COMPONENTS
   ],
   imports: [
     AngularFireAuthModule,
