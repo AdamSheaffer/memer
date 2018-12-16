@@ -26,6 +26,10 @@ export class GameService {
     return this.game$;
   }
 
+  getGameById(gameId: string) {
+    return this._gamesCollection.doc<Game>(gameId).snapshotChanges();
+  }
+
   async createNewGame(player: Player, gameSettings: GameSettings): Promise<string> {
     const newGame = this.newGame(player, gameSettings);
     const gameId = await this._gamesCollection.add(newGame).then(ref => ref.id);
