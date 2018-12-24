@@ -8,6 +8,7 @@ const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'game', loadChildren: './modules/game/game.module#GameModule', canActivate: [AuthGuard] },
     { path: 'admin', loadChildren: './modules/admin/admin.module#AdminModule', canActivate: [AdminGuard] },
+    { path: 'profile', loadChildren: './modules/profile/profile.module#ProfileModule', canActivate: [AuthGuard]},
     { path: '404', component: NotFoundComponent },
     { path: '**', redirectTo: '404' }
 ];
