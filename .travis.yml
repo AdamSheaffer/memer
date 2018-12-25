@@ -19,7 +19,7 @@ cache:
 
 script:
   - ng lint
-  - ng test --no-watch --no-progress
+  - npm run test-headless
   - ng build --prod
 
 deploy:
