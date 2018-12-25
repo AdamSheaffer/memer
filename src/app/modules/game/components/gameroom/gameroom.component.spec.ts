@@ -8,28 +8,75 @@ import { AuthService, PlayerService, Theme, ThemeService, GameService } from '..
 import { CategoryService, ChatService, DeckService, GiphyService } from '../../services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { Game } from '../../../../interfaces';
 
 describe('GameroomComponent', () => {
   let component: GameroomComponent;
   let fixture: ComponentFixture<GameroomComponent>;
-  const authService = jasmine.createSpyObj('AuthService', ['getPlayer']);
-  authService.getPlayer.and.returnValue({});
-  const playerService = jasmine.createSpyObj('PlayerService', ['init', 'join', 'getCurrentPlayersHand']);
-  // playerService.join.and.returnValue(Promise.resolve('player123'));
-  const categoryService = jasmine.createSpyObj('CategoryService', ['getNCategories']);
-  const chatService = jasmine.createSpyObj('ChatService', ['postAdminMessage']);
-  const deckService = jasmine.createSpyObj('DeckService', ['init']);
-  const giphyService = jasmine.createSpyObj('GiphyService', ['getRandomImages']);
-  const router = jasmine.createSpyObj('Router', ['navigate']);
-  const gameService = jasmine.createSpyObj('GameService', ['init', 'updateGame']);
-  const themeService = { theme: Theme.LIGHT };
-  const route = {
-    paramMap: of({
-      params: { get: () => 'gameABC' }
-    })
-  };
+  let authService: jasmine.SpyObj<AuthService>;
+  let playerService: jasmine.SpyObj<PlayerService>;
+  let categoryService: jasmine.SpyObj<CategoryService>;
+  let chatService: jasmine.SpyObj<ChatService>;
+  let deckService: jasmine.SpyObj<DeckService>;
+  let giphyService: jasmine.SpyObj<GiphyService>;
+  let router: jasmine.SpyObj<Router>;
+  let gameService: jasmine.SpyObj<GameService>;
+  let themeService: any;
+  let route: any;
 
   beforeEach(async(() => {
+    // AuthService
+    authService = jasmine.createSpyObj<AuthService>('AuthService', ['getPlayer']);
+    authService.getPlayer.and.returnValue({ uid: '123abc', username: 'Jeff Lebowski' });
+
+    // Player Service
+    playerService = jasmine.createSpyObj<PlayerService>('PlayerService', ['init', 'join', 'getCurrentPlayersHand', 'update']);
+    playerService.init.and.returnValue(of([{ uid: '123abc', username: 'Jeff Lebowksi' }]));
+    playerService.join.and.returnValue(Promise.resolve('player123'));
+    playerService.getCurrentPlayersHand.and.returnValue(of([]));
+
+    // Category Service
+    categoryService = jasmine.createSpyObj<CategoryService>('CategoryService', ['getNCategories']);
+
+    // Chat Service
+    chatService = jasmine.createSpyObj<ChatService>('ChatService', ['postAdminMessage']);
+
+    // Deck Service
+    deckService = jasmine.createSpyObj<DeckService>('DeckService', ['init']);
+
+    // Giphy Service
+    giphyService = jasmine.createSpyObj<GiphyService>('GiphyService', ['getRandomImages']);
+
+    // Router
+    router = jasmine.createSpyObj<Router>('Router', ['navigate']);
+
+    // Game Service
+    gameService = jasmine.createSpyObj<GameService>('GameService', ['init', 'updateGame']);
+    gameService.init.and.returnValue(of<Game>({
+      maxPlayers: 5,
+      pointsToWin: 7,
+      safeForWork: false,
+      hasStarted: false,
+      beginDate: null,
+      hostId: 'hostId',
+      hostPhotoURL: 'host.png',
+      tagOptions: [],
+      gifOptionURLs: [],
+      captionDeck: [],
+      isVotingRound: false,
+      lastUpdated: null
+    }));
+
+    // Theme Service
+    themeService = { theme: Theme.LIGHT };
+
+    // Activated Route
+    route = {
+      paramMap: of({
+        get: () => 'gameABC'
+      })
+    };
+
     TestBed.configureTestingModule({
       imports: [ClarityModule],
       schemas: [NO_ERRORS_SCHEMA],
@@ -80,6 +127,10 @@ describe('GameroomComponent', () => {
         {
           provide: GameService,
           useValue: gameService
+        },
+        {
+          provide: PlayerService,
+          useValue: playerService
         }
       ]
     })

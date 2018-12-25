@@ -6,7 +6,7 @@
   <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
   <clr-wizard-button [type]="'finish'">Begin</clr-wizard-button>
 
-  <clr-wizard-page>
+  <clr-wizard-page class="player-count-page">
     <ng-template clrPageTitle>
       PLAYERS
     </ng-template>
@@ -20,7 +20,7 @@
     <input [(ngModel)]="gameSettings.maxPlayers" type="range" min="3" max="8" step="1">
   </clr-wizard-page>
 
-  <clr-wizard-page>
+  <clr-wizard-page class="scoring-page">
     <ng-template clrPageTitle>SCORING</ng-template>
     <div>
       <span>How many points to win?</span>
@@ -32,7 +32,7 @@
     <input [(ngModel)]="gameSettings.pointsToWin" type="range" min="1" max="10" step="1">
   </clr-wizard-page>
 
-  <clr-wizard-page (clrWizardPageOnCommit)="createGame()">
+  <clr-wizard-page (clrWizardPageOnCommit)="createGame()" class="sfw-page">
     <ng-template clrPageTitle>SFW</ng-template>
     <div>
       <span>Should the game be safe for work?</span>
