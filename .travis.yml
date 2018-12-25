@@ -19,6 +19,7 @@ cache:
 
 script:
   - ng lint
+  - ng test --no-watch --no-progress
   - ng build --prod
 
 deploy:
