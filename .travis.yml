@@ -19,6 +19,7 @@ cache:
 
 script:
   - ng lint
+  - npm run test-headless
   - ng build --prod
 
 deploy:

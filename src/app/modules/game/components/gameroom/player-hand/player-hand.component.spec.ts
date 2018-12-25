@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlayerHandComponent } from './player-hand.component';
+import { Renderer2 } from '@angular/core';
 
 describe('PlayerHandComponent', () => {
   let component: PlayerHandComponent;
@@ -8,7 +9,8 @@ describe('PlayerHandComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlayerHandComponent ]
+      declarations: [ PlayerHandComponent ],
+      providers: [Renderer2]
     })
     .compileComponents();
   }));
