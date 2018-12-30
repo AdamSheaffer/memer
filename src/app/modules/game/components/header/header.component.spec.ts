@@ -13,7 +13,7 @@ describe('HeaderComponent', () => {
   const router = jasmine.createSpyObj('Router', ['createTreeUrl', 'navigate']);
   const route = { params: of({ dark: 'true' }) };
   const location = jasmine.createSpyObj('Location', ['go']);
-  const themeService = jasmine.createSpyObj('ThemeService', ['changeTheme']);
+  const themeService = jasmine.createSpyObj('ThemeService', ['changeTheme', 'setDark']);
   const authService = {
     getPlayer() {
       return { username: 'MEMER' };
