@@ -5,7 +5,7 @@ import { AuthGuard, NotAuthGuard, AdminGuard } from './guards';
 
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-    { path: 'login', component: LoginComponent },
+    { path: 'login', component: LoginComponent, canActivate: [NotAuthGuard] },
     { path: 'game', loadChildren: './modules/game/game.module#GameModule', canActivate: [AuthGuard] },
     { path: 'admin', loadChildren: './modules/admin/admin.module#AdminModule', canActivate: [AdminGuard] },
     { path: '404', component: NotFoundComponent },

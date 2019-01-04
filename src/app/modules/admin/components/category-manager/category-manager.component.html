@@ -16,7 +16,7 @@
           <clr-dg-cell>
             <clr-icon (click)="stageCategoryForDelete(category)" shape="trash" class="delete is-danger" title="delete"></clr-icon>
           </clr-dg-cell>
-          <clr-dg-cell>{{category.description|uppercase}}</clr-dg-cell>
+          <clr-dg-cell class="description">{{category.description|uppercase}}</clr-dg-cell>
         </clr-dg-row>
 
         <clr-dg-footer>{{categories.length}} categories</clr-dg-footer>

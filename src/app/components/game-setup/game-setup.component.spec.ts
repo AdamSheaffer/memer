@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { GameSetupComponent } from './game-setup.component';
 import { FormsModule } from '@angular/forms';
@@ -31,6 +31,8 @@ describe('GameSetupComponent', () => {
     fixture = TestBed.createComponent(GameSetupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    spyOn(component.cancelled, 'emit');
   });
 
   it('should create', () => {
@@ -69,4 +71,30 @@ describe('GameSetupComponent', () => {
       sfw: false
     });
   });
+
+  it('should emit a cancel event to exit', () => {
+    component.cancel();
+    expect(component.cancelled.emit).toHaveBeenCalled();
+  });
+
+  it('should prevent creating multiple games', () => {
+    gameService.createNewGame.and.returnValue(Promise.resolve('some-game-Id'));
+    component.createGame();
+    component.createGame();
+    component.createGame();
+
+    expect(gameService.createNewGame).toHaveBeenCalledTimes(1);
+  });
+
+  it('should allow calling createNewGame a second time if it originally fails', fakeAsync(() => {
+    gameService.createNewGame.and.returnValue(Promise.reject('failed'));
+    component.createGame();
+
+    tick();
+
+    gameService.createNewGame.and.returnValue(Promise.resolve('some-game-id'));
+    component.createGame();
+
+    expect(gameService.createNewGame).toHaveBeenCalledTimes(2);
+  }));
 });
