@@ -12,4 +12,13 @@ describe('SettingsService', () => {
   it('should be created', inject([SettingsService], (service: SettingsService) => {
     expect(service).toBeTruthy();
   }));
+
+  it('should set default to nsfw', inject([SettingsService], (service: SettingsService) => {
+    expect(service.safeForWork).toBe(false);
+  }));
+
+  it('should set toggle to sfw', inject([SettingsService], (service: SettingsService) => {
+    service.setSafeForWorkMode(true);
+    expect(service.safeForWork).toBe(true);
+  }));
 });

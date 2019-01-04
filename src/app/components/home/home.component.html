@@ -1,4 +1,4 @@
-<memer-game-setup *ngIf="showGameSetup" [user]="user" [show]="showGameSetup" (cancelled)="showGameSetup = false" (createdGame)="onGameCreated($event)"></memer-game-setup>
+<memer-game-setup id="game-setup" *ngIf="showGameSetup" [user]="user" [show]="showGameSetup" (cancelled)="showGameSetup = false" (createdGame)="onGameCreated($event)"></memer-game-setup>
 <div class="row flex-items-xs-right sfw">
   <div class="toggle-switch">
     <input [(ngModel)]="sfw" (ngModelChange)="sfwModeChanged()" type="checkbox" id="safe-for-work">
@@ -13,10 +13,10 @@
     <div class="login-group col-xs-12 row flex-items-xs-center">
       <div class="col-xs-12 col-sm-10 col-md-6 col-lg-4">
         <div *ngIf="!games?.length" class="col-xs-12">
-          <button (click)="findOpenGames()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">FIND GAME</button>
+          <button (click)="findOpenGames()" class="find-game btn btn-primary btn-outline btn-block sign-in-btn text-center">FIND GAME</button>
         </div>
         <div class="col-xs-12">
-          <button (click)="hostGame()" class="btn btn-primary btn-outline btn-block sign-in-btn text-center">
+          <button (click)="hostGame()" class="host-game btn btn-primary btn-outline btn-block sign-in-btn text-center">
             HOST NEW GAME
           </button>
         </div>
@@ -47,7 +47,7 @@
     </div>
     <div class="col-xs-12 col-md-6 col-xl-4">
       <div *ngFor="let game of games" class="card col-xs-12">
-        <div class="row">
+        <div class="row game-listing">
           <div class="col-xs-8">
             <div class="game-details row">
               <img [src]="game.hostPhotoURL" class="host-img" alt="Host Photo">
