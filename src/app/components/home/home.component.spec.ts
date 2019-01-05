@@ -16,7 +16,7 @@ describe('HomeComponent', () => {
     {
       id: '1',
       hasStarted: false,
-      hostPhotoURL: 'foo.jpg',
+      hostPhotoURL: '/foo.jpg',
       beginDate: null,
       safeForWork: true,
       hostId: 'abc',
@@ -31,7 +31,7 @@ describe('HomeComponent', () => {
     {
       id: '2',
       hasStarted: false,
-      hostPhotoURL: 'foo2.jpg',
+      hostPhotoURL: '/foo2.jpg',
       beginDate: null,
       safeForWork: true,
       hostId: 'abc2',
@@ -46,7 +46,7 @@ describe('HomeComponent', () => {
     {
       id: '3',
       hasStarted: false,
-      hostPhotoURL: 'foo3.jpg',
+      hostPhotoURL: '/foo3.jpg',
       beginDate: null,
       safeForWork: true,
       hostId: 'abc3',

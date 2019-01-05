@@ -47,6 +47,7 @@ export class CategoryService {
       const categories = randomIndexes.map(i => this._categoriesCache[i]);
       return Promise.resolve(categories);
     }
+
     return this.getAll().then((allCategories) => {
       const categoryCount = allCategories.length;
       const randomIndexes = this.randomNumbersWithMax(categoryCount - 1, n);
