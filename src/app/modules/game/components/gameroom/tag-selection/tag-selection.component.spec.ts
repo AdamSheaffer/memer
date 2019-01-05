@@ -22,4 +22,22 @@ describe('TagSelectionComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should not emit if it is not players turn', () => {
+    spyOn(component.tagSelect, 'emit');
+
+    component.playerCanSelect = false;
+    component.selectTag('tag');
+
+    expect(component.tagSelect.emit).not.toHaveBeenCalled();
+  });
+
+  it('should emit if it is players turn', () => {
+    spyOn(component.tagSelect, 'emit');
+
+    component.playerCanSelect = true;
+    component.selectTag('tag');
+
+    expect(component.tagSelect.emit).toHaveBeenCalled();
+  });
 });
