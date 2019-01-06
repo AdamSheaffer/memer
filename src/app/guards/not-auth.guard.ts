@@ -6,20 +6,20 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class NotAuthGuard implements CanActivate {
-    constructor(private router: Router, private authService: AuthService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
-    canActivate(): Observable<boolean> {
-        return this.authService.user$.pipe(
-            take(1),
-            map(authState => !!authState),
-            tap(authenticated => {
-                if (!!authenticated) {
-                    this.router.navigate(['/']);
-                    return false;
-                } else {
-                  return true;
-                }
-            })
-        );
-    }
+  canActivate(): Observable<boolean> {
+      return this.authService.user$.pipe(
+          take(1),
+          map(authState => !!authState),
+          tap(authenticated => {
+              if (!!authenticated) {
+                  this.router.navigate(['/']);
+                  return false;
+              } else {
+                return true;
+              }
+          })
+      );
+  }
 }
