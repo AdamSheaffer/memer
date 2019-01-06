@@ -17,8 +17,8 @@ service cloud.firestore {
     match /users/{document} {
       allow read;
       allow create: if request.resource.data.roles.keys().hasAny(['admin', 'editor']) == false
-      allow write: if request.resource.data.roles.keys().hasAny(['admin', 'editor']) == false
-      								&& resource.data.uid == request.auth.uid;
+      allow write: if (request.resource.data.roles.keys().hasAny(['admin', 'editor']) == false
+      								&& resource.data.uid == request.auth.uid) || getRole('admin') == true;
     }
 
     match /categories/{category} {
