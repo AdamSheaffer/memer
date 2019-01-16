@@ -1,5 +1,5 @@
 import { Component, Input, Renderer2, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Card } from '../../../../interfaces';
+import { Card, Meme } from '../../../../interfaces';
 
 @Component({
   selector: 'memer-meme',
@@ -7,9 +7,8 @@ import { Card } from '../../../../interfaces';
   styleUrls: ['./meme.component.scss']
 })
 export class MemeComponent implements AfterViewInit {
-  @Input() caption: Card = { top: null, bottom: '????' };
-  @Input() imageURL: string;
-  @ViewChild('meme', { read: ElementRef }) meme: ElementRef;
+  @Input() meme: Meme = { top: null, bottom: '????' };
+  @ViewChild('memeEl', { read: ElementRef }) memeEl: ElementRef;
   @ViewChild('memetop', { read: ElementRef }) topCaption: ElementRef;
   @ViewChild('memeimg', { read: ElementRef }) img: ElementRef;
   @ViewChild('memebottom', { read: ElementRef }) bottomCaption: ElementRef;

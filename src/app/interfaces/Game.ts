@@ -1,5 +1,4 @@
-import { Player } from './Player';
-import { Card } from './Card';
+import { Meme, Player, Card, Round } from '.';
 import * as firebase from 'firebase/app';
 
 export interface Game {
@@ -13,7 +12,7 @@ export interface Game {
   tagOptions: string[];
   tagSelection?: string;
   gifOptionURLs: string[];
-  gifSelectionURL?: string;
+  memeTemplate?: Meme;
   roundWinner?: Player;
   captionDeck: Card[];
   isVotingRound: boolean;
@@ -22,6 +21,7 @@ export interface Game {
   safeForWork: boolean;
   maxPlayers: number;
   pointsToWin: number;
+  round?: Round;
 }
 
 export interface GameChanges {
@@ -32,10 +32,11 @@ export interface GameChanges {
   tagOptions?: string[];
   tagSelection?: string;
   gifOptionURLs?: string[];
-  gifSelectionURL?: string;
+  memeTemplate?: Meme;
   roundWinner?: Player;
   captionDeck?: Card[];
   isVotingRound?: boolean;
   winner?: Player;
   lastUpdated?: firebase.firestore.FieldValue;
+  round?: Round;
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map, filter, take, takeWhile } from 'rxjs/operators';
-import { Player, IPlayerChanges, Card } from '../../../../interfaces';
+import { Player, PlayerChanges, Card } from '../../../../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -60,11 +60,11 @@ export class PlayerService {
     return this._playerCollection.doc(player.gameAssignedId).delete();
   }
 
-  update(player: Player, changes: IPlayerChanges) {
+  update(player: Player, changes: PlayerChanges) {
     return this._playerCollection.doc(player.gameAssignedId).update(changes);
   }
 
-  updateAll(players: Player[], changes: IPlayerChanges) {
+  updateAll(players: Player[], changes: PlayerChanges) {
     const batch = this.afs.firestore.batch();
 
     players.forEach(p => {
@@ -131,7 +131,6 @@ export class PlayerService {
     });
   }
 
-
   private getPlayerHandDocumentRefs(playerId: string) {
     const handCollection = this.getPlayerHandCollection(playerId);
   }
@@ -141,7 +140,7 @@ export class PlayerService {
   }
 
   private resetPlayer(player: Player) {
-    player.captionPlayed = null;
+    player.memePlayed = null;
     player.score = 0;
   }
 }

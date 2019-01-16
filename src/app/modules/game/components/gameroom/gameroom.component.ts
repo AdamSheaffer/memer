@@ -2,9 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer2, OnD
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { filter, take, map, skip, takeUntil } from 'rxjs/operators';
-import { Player, Game, Card, GameChanges, IPlayerChanges } from '../../../../interfaces';
+import get from 'lodash/get';
+import { Player, Game, Card, GameChanges, PlayerChanges, RoundType, Meme, Round } from '../../../../interfaces';
 import { Theme, AuthService, ThemeService, GameService, PlayerService } from '../../../core/services';
-import { ChatService, DeckService, GiphyService, CategoryService } from '../../services';
+import { ChatService, DeckService, GiphyService, CategoryService, RoundPickerService } from '../../services';
 import * as firebase from 'firebase/app';
 
 @Component({
@@ -30,8 +31,10 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   playerState: Player[];
   get isCurrentUsersTurn() { return this.gameState.turn === this.currentUser.uid; }
   get isHost() { return this.gameState.hostId === this.currentUser.uid; }
-  get isUpForVoting(): boolean { return !!this.gameState && !!this.gameState.gifSelectionURL; }
+  get isUpForVoting(): boolean { return !!this.gameState && !!this.gameState.memeTemplate; }
   get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
+  get isStandardRound(): boolean { return get(this.gameState, 'round.roundType') === RoundType.Standard; }
+  get isReverseRound(): boolean { return get(this.gameState, 'round.roundType') === RoundType.Reverse; }
 
   constructor(
     private authService: AuthService,
@@ -44,7 +47,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private themeService: ThemeService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private roundPicker: RoundPickerService
   ) {
     this.currentUser = this.authService.getPlayer();
   }
@@ -108,12 +112,27 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
   beginTurn() {
     if (!this.isCurrentUsersTurn) { return; }
+    const round = this.roundPicker.getRound();
 
+    switch (round.roundType) {
+      case RoundType.Standard:
+        this.beginStandardTurn(round);
+        break;
+      case RoundType.Reverse:
+      const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+      this.gameService.updateGame({ lastUpdated, round });
+    }
+  }
+
+  /*********************/
+  /** STANDARD  ROUND **/
+  /*********************/
+  beginStandardTurn(round: Round) {
     this.categoryService.getNCategories(4)
       .then(categories => {
         const tagOptions = categories.map(c => c.description);
         const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-        this.gameService.updateGame({ tagOptions, lastUpdated });
+        this.gameService.updateGame({ tagOptions, lastUpdated, round });
       });
   }
 
@@ -124,14 +143,28 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   selectGif(gifSelectionURL: string) {
-    this.gameService.updateGame({ gifSelectionURL });
+    const memeTemplate: Meme = {
+      photoURL: gifSelectionURL
+    };
+    this.gameService.updateGame({ memeTemplate });
   }
 
   selectCaption(captionPlayed: Card) {
     const player = this.playerState.find(p => p.uid === this.currentUser.uid);
     this.playerService.submitCaption(player.gameAssignedId, captionPlayed)
       .then(() => {
-        this.playerService.update(player, { captionPlayed });
+        const meme: Meme = {
+          top: captionPlayed.top,
+          bottom: captionPlayed.bottom
+        };
+
+        if (this.isReverseRound) {
+          meme.photoURL = 'assets/question-mark.jpg';
+          this.gameService.updateGame({ memeTemplate: meme });
+        } else {
+          meme.photoURL = this.gameState.memeTemplate.photoURL;
+          this.playerService.update(player, { memePlayed: meme });
+        }
       });
   }
 
@@ -157,25 +190,37 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /*********************/
+  /*** REVERSE ROUND ***/
+  /*********************/
+
+  playReverseRoundGif(photoURL: string) {
+    const player = this.playerState.find(p => p.uid === this.currentUser.uid);
+    const { top, bottom } = this.gameState.memeTemplate;
+    const memePlayed: Meme = { top, bottom, photoURL };
+    this.playerService.update(player, { memePlayed });
+  }
+
   startNewRound() {
-    const playerChanges: IPlayerChanges = {};
+    const playerChanges: PlayerChanges = {};
     const gameChanges: GameChanges = {};
     const players = [...this.playerState];
 
-    playerChanges.captionPlayed = null;
+    playerChanges.memePlayed = null;
 
     const nextPlayer = this.findNextPlayer();
     const nextPlayerUid = nextPlayer ? nextPlayer.uid : null;
     const nextPlayerUsername = nextPlayer ? nextPlayer.username : null;
 
     gameChanges.gifOptionURLs = [];
-    gameChanges.gifSelectionURL = null;
+    gameChanges.memeTemplate = null;
     gameChanges.tagOptions = [];
     gameChanges.tagSelection = null;
     gameChanges.isVotingRound = false;
     gameChanges.roundWinner = null;
     gameChanges.turn = nextPlayerUid;
     gameChanges.turnUsername = nextPlayerUsername;
+    gameChanges.round = null;
 
     this.playerService.updateAll(players, playerChanges);
     this.gameService.updateGame(gameChanges);
@@ -205,12 +250,12 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
       isVotingRound: false,
       roundWinner: null,
       winner: null,
-      gifSelectionURL: null
+      memeTemplate: null
     };
 
     const players = [...this.playerState];
-    const playerChanges: IPlayerChanges = {
-      captionPlayed: null,
+    const playerChanges: PlayerChanges = {
+      memePlayed: null,
       score: 0
     };
 
@@ -257,7 +302,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackVotingRound() {
     combineLatest(this.players$, this.game$).pipe(
       filter(([_p, game]) => !game.isVotingRound),
-      filter(([players, game]) => this.everyoneSubmittedCaption(players, game)),
+      filter(([players, game]) => this.everyoneSubmitted(players, game)),
       takeUntil(this.destroy$)
     ).subscribe(([_p, _g]) => {
       this.canShowModal = true;
@@ -286,8 +331,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     return players.filter(p => p.isActive).length;
   }
 
-  private everyoneSubmittedCaption(players: Player[], game: Game) {
-    const playersNotSelected = players.filter(p => !p.captionPlayed && p.isActive);
+  private everyoneSubmitted(players: Player[], game: Game) {
+    const playersNotSelected = players.filter(p => !p.memePlayed && p.isActive);
 
     return playersNotSelected.length === 1 &&
       playersNotSelected[0].uid === game.turn;

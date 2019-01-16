@@ -7,3 +7,4 @@ export * from './User';
 export * from './Role';
 export * from './Category';
 export * from './GameSettings';
+export * from './RoundType';
