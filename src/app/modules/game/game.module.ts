@@ -4,6 +4,7 @@ import { PIPES } from './pipes';
 import { COMPONENTS } from './components';
 import { SharedModule } from '../shared/shared.module';
 import { GameRoutingModule } from './game-routing.module';
+import { GiphySearchComponent } from './components/gameroom/giphy-search/giphy-search.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,8 @@ import { GameRoutingModule } from './game-routing.module';
   ],
   declarations: [
     ...COMPONENTS,
-    ...PIPES
+    ...PIPES,
+    GiphySearchComponent
   ]
 })
 export class GameModule { }

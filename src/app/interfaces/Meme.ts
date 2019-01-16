@@ -1,4 +1,5 @@
 export interface Meme {
-  caption: string;
-  photoURL: string;
+  top?: string;
+  bottom?: string;
+  photoURL?: string;
 }

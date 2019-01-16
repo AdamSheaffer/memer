@@ -8,6 +8,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 export class GiphyService {
 
   private imageCount = 4;
+  private pageSize = 12;
   private baseURL = 'https://api.giphy.com/v1/gifs/search';
   private giphy = environment.giphy;
 
@@ -22,6 +23,18 @@ export class GiphyService {
     return Promise.all(imageRequests).then(responses => {
       return responses.map(r => r.data[0].images.fixed_height.url);
     });
+  }
+
+  getPage(query: string, page: number): Promise<{ thumbnail: string, img: string }> {
+    const params = this.buildParams(query, page * this.pageSize, this.pageSize);
+    return this.http.get(this.baseURL, { params }).toPromise()
+      .then((response: any) => {
+        return response.data.map(i => {
+          const thumbnail = i.images.fixed_width_small.url;
+          const img = i.images.fixed_height.url;
+          return { thumbnail, img };
+        });
+      });
   }
 
   private getRandomImagePromises(tagName: string, indices: number[]): Promise<any>[] {
@@ -41,12 +54,12 @@ export class GiphyService {
     return this.http.get(this.baseURL, { params }).toPromise();
   }
 
-  private buildParams(tagName: string, offset: number): HttpParams {
+  private buildParams(tagName: string, offset: number, limit = 1): HttpParams {
     return new HttpParams()
       .append('api_key', this.giphy)
       .append('q', this.encodeTag(tagName))
       .append('rating', 'pg-13')
-      .append('limit', '1')
+      .append('limit', `${limit}`)
       .append('offset', offset.toString());
   }
 

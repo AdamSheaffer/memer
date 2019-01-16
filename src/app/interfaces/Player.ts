@@ -1,4 +1,4 @@
-import { Roles, Card } from '.';
+import { Roles, Card, Meme } from '.';
 
 export interface Player {
   uid: string; // User ID
@@ -9,12 +9,13 @@ export interface Player {
   thumbnailURL: string;
   isActive: boolean;
   score: number;
-  captionPlayed?: Card;
+  memePlayed?: Meme;
+  imageUrlPlayed?: string;
   roles: Roles;
 }
 
-export interface IPlayerChanges {
+export interface PlayerChanges {
   isActive?: boolean;
   score?: number;
-  captionPlayed?: Card;
+  memePlayed?: Meme;
 }

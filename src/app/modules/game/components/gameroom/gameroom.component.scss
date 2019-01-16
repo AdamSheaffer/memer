@@ -31,6 +31,14 @@
   margin: auto;
 }
 
+.round-description {
+  text-align: center;
+
+  .round-type {
+    color: $accent-color;
+  }
+}
+
 .selected-gif {
   margin: 20px 0 30px 0;
 

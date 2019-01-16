@@ -106,7 +106,7 @@ export class AuthService {
       fullName: user.fullName,
       photoURL: user.photoURL,
       thumbnailURL: user.thumbnailURL,
-      captionPlayed: null,
+      memePlayed: null,
       score: 0,
       username: user.username,
       isActive: true,

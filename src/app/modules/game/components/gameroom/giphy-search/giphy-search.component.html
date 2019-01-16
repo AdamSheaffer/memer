@@ -1,0 +1,14 @@
+<div class="row flex-items-xs-center">
+  <div class="col-lg-6 col-xs-12">
+    <label class="search-label">
+      <clr-icon class="search-icon" shape="search" size="24"></clr-icon>
+      <input (keyup)="searchText$.next($event.target.value)" placeholder="SEARCH GIPHY" type="text" class="searchbar-input">
+    </label>
+    <div *ngIf="searchText$|async">
+      <div *ngIf="searchResults$|async as results" class="row flex-items-xs-center">
+        <img *ngFor="let item of results" (click)="select(item.img)" [src]="item.thumbnail" class="preview-img">
+        <button (click)="nextPage()" class="btn btn-link">LOAD MORE</button>
+      </div>
+    </div>
+  </div>
+</div>
