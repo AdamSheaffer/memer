@@ -52,6 +52,7 @@ describe('GameSetupComponent', () => {
     pointsToWinInput.dispatchEvent(new Event('input'));
 
     component.gameSettings.sfw = true;
+    component.gameSettings.reverseRoundFrequency = 0.25;
 
     fixture.detectChanges();
     component.createGame();
@@ -59,7 +60,8 @@ describe('GameSetupComponent', () => {
     expect(component.gameSettings).toEqual({
       maxPlayers: 4,
       pointsToWin: 5,
-      sfw: true
+      sfw: true,
+      reverseRoundFrequency: 0.25
     });
     expect(gameService.createNewGame).toHaveBeenCalled();
   });
@@ -68,7 +70,8 @@ describe('GameSetupComponent', () => {
     expect(component.gameSettings).toEqual({
       maxPlayers: 5,
       pointsToWin: 7,
-      sfw: false
+      sfw: false,
+      reverseRoundFrequency: 0.25
     });
   });
 

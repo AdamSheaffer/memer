@@ -32,6 +32,22 @@
     <input [(ngModel)]="gameSettings.pointsToWin" type="range" min="1" max="10" step="1">
   </clr-wizard-page>
 
+  <clr-wizard-page class="special-round-page">
+    <ng-template clrPageTitle>REVERSE ROUNDS</ng-template>
+    <div>
+      <span>How often should there be reverse rounds?</span>
+    </div>
+    <div class="row flex-items-xs-center setting-count-container">
+      <div>
+        <clr-icon shape="repeat" size="96"></clr-icon>
+      </div>
+    </div>
+      <input [(ngModel)]="gameSettings.reverseRoundFrequency" type="range" min="0" max="0.5" step="0.25">
+      <h3 *ngIf="gameSettings.reverseRoundFrequency === 0" class="value-description">NEVER</h3>
+      <h3 *ngIf="gameSettings.reverseRoundFrequency === 0.25" class="value-description">OCCASIONALLY</h3>
+      <h3 *ngIf="gameSettings.reverseRoundFrequency === 0.5" class="value-description">HALF N' HALF</h3>
+    </clr-wizard-page>
+
   <clr-wizard-page (clrWizardPageOnCommit)="createGame()" class="sfw-page">
     <ng-template clrPageTitle>SFW</ng-template>
     <div>

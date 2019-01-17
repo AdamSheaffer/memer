@@ -22,6 +22,7 @@ export interface Game {
   maxPlayers: number;
   pointsToWin: number;
   round?: Round;
+  reverseRoundFrequency?: number;
 }
 
 export interface GameChanges {
@@ -39,4 +40,5 @@ export interface GameChanges {
   winner?: Player;
   lastUpdated?: firebase.firestore.FieldValue;
   round?: Round;
+  reverseRoundFrequency?: number;
 }

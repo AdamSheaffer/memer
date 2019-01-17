@@ -63,6 +63,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.pointsToWin = g.pointsToWin;
         this.sfw = g.safeForWork;
         this.players$ = this.playerService.init(this.gameId, this.currentUser.uid);
+        this.roundPicker.setChanceOfSpecialRound(g.reverseRoundFrequency);
         this.deckService.init(this.gameId);
         this.playerService.join(this.currentUser, g.hasStarted)
           .then(pid => {

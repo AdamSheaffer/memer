@@ -5,7 +5,7 @@ import { Round, RoundType } from '../../../../interfaces';
   providedIn: 'root'
 })
 export class RoundPickerService {
-  private chanceOfSpecial = .2;
+  private chanceOfSpecial = .5;
 
   private roundTypes: Round[] = [
     { roundType: RoundType.Standard, isSpecial: false },

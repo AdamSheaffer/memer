@@ -23,7 +23,8 @@ export class GameSetupComponent implements OnInit {
     const defaults = {
       maxPlayers: 5,
       pointsToWin: 7,
-      sfw: false
+      sfw: false,
+      reverseRoundFrequency: 0.25
     };
 
     this.gameSettings = Object.assign({}, defaults);

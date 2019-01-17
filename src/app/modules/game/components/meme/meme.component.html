@@ -1,7 +1,7 @@
 <div #memeEl class="meme" *ngIf="meme?.photoURL">
   <h2 #memetop class="meme-caption">{{meme.top | uppercase}}</h2>
-  <div>
-    <img #memeimg [src]="meme.photoURL" class="meme-image">
+  <div #memeimg class="meme-image-container" [style.background-image]="cssBackgroundImageValue">
+    <!-- <img  [src]="meme.photoURL" class="meme-image"> -->
   </div>
   <h2 #memebottom class="meme-caption">{{meme.bottom | uppercase}}</h2>
 </div>

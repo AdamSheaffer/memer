@@ -75,7 +75,8 @@ export class GameService {
       lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
       safeForWork: gameSettings.sfw,
       maxPlayers: gameSettings.maxPlayers,
-      pointsToWin: gameSettings.pointsToWin
+      pointsToWin: gameSettings.pointsToWin,
+      reverseRoundFrequency: gameSettings.reverseRoundFrequency
     };
   }
 

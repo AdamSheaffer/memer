@@ -5,6 +5,14 @@
   align-items: stretch;
 }
 
+
+.dark-theme {
+  p, .round-icon {
+    color: $white-color;
+  }
+}
+
+
 .text-indicator h1,
 .text-indicator h2,
 .text-indicator h3,

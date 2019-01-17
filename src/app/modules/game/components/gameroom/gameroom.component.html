@@ -4,7 +4,7 @@
 
 <div [ngClass]="{'dark-theme': isDarkTheme}" class="main-container">
   <div class="content-container">
-    <div *ngIf="game$|async as game" class="content-area">
+    <div *ngIf="game$|async as game" [ngClass]="{'dark-theme': isDarkTheme}" class="content-area">
       <div *ngIf="players$|async as players">
 
         <!-- Player images and scores -->

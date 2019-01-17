@@ -12,6 +12,7 @@ export class MemeComponent implements AfterViewInit {
   @ViewChild('memetop', { read: ElementRef }) topCaption: ElementRef;
   @ViewChild('memeimg', { read: ElementRef }) img: ElementRef;
   @ViewChild('memebottom', { read: ElementRef }) bottomCaption: ElementRef;
+  get cssBackgroundImageValue() { return `url(${this.meme.photoURL})`; }
 
   private maxFontSize = 62;
   private maxHeight = 80;

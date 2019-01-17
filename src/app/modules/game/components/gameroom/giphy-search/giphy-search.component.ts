@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { debounceTime, filter, distinctUntilChanged, switchMap, combineLatest } from 'rxjs/operators';
 import { GiphyService } from '../../../services';
+import { ThemeService, Theme } from '../../../../core/services';
 
 @Component({
   selector: 'memer-giphy-search',
@@ -13,8 +14,9 @@ export class GiphySearchComponent implements OnInit {
   page$ = new BehaviorSubject<number>(1);
   searchResults$: Observable<{ thumbnail: string, img: string }>;
   @Output() gifSelected = new EventEmitter<string>();
+  get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
 
-  constructor(private giphyService: GiphyService) { }
+  constructor(private giphyService: GiphyService, private themeService: ThemeService) { }
 
   ngOnInit() {
     this.searchResults$ = this.searchText$.pipe(
