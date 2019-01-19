@@ -57,7 +57,8 @@ export class PlayerService {
   }
 
   remove(player: Player) {
-    return this._playerCollection.doc(player.gameAssignedId).delete();
+    const changes: PlayerChanges = { removed: true, isActive: false };
+    return this.update(player, changes);
   }
 
   update(player: Player, changes: PlayerChanges) {

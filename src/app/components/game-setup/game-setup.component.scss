@@ -1,26 +1,26 @@
 @import '../../../variables';
 
 clr-wizard-title {
-    color: $primary-color;
+  color: $primary-color;
 }
 
 .setting-count {
-    font-size: 96px;
-    color: $gray-font;
+  font-size: 96px;
+  color: $gray-font;
 }
 
 .setting-count-container {
-    min-height: 96px;
-    margin: 40px 0 60px;
-    color:  $gray-font;
+  min-height: 96px;
+  margin: 40px 0 60px;
+  color: $gray-font;
 }
 
 .value-description {
-  color:  $gray-font;
+  color: $gray-font;
   text-align: center;
   margin: 20px;
 }
 
 .btn-group {
-    margin-right: 0;
+  margin-right: 0;
 }
