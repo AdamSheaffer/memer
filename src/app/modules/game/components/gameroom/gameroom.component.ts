@@ -293,7 +293,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   private trackPlayerRemoval() {
     this.players$.pipe(
       skip(1), // This will fire when you a player enters. Skip this
-      filter(players => !players.find(p => p.uid === this.currentUser.uid)),
+      map(players => players.find(p => p.uid === this.currentUser.uid)),
+      filter(player => player && player.removed),
       takeUntil(this.destroy$)
     ).subscribe(() => {
       this.returnHomeWithMessage('You\'ve been removed from the game');
