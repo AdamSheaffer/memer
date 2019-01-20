@@ -134,8 +134,8 @@
 
         <!-- Memes submitted -->
         <div *ngIf="game?.memeTemplate && game.isVotingRound && !game.roundWinner" class="row flex-items-xs-center">
-          <div *ngFor="let player of players|shuffle" class="player-submission flex-xs-bottom">
-            <div *ngIf="game?.turn !== player.uid">
+          <div *ngFor="let player of players|shuffle" class="flex-xs-bottom">
+            <div *ngIf="game?.turn !== player.uid" class="player-submission">
               <memer-meme (click)="selectFavoriteCaption(player)" [meme]="player.memePlayed"></memer-meme>
             </div>
           </div>
