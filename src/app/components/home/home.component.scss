@@ -6,7 +6,7 @@
 
 .home {
   margin-top: 80px;
-  
+
   .logo {
     display: block;
     margin: auto;
@@ -48,4 +48,9 @@
 
 label {
   color: $white-color;
+}
+
+#giphy-logo {
+  display: block;
+  margin: 10px auto;
 }

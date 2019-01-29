@@ -150,6 +150,18 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     this.gameService.updateGame({ memeTemplate });
   }
 
+  playerCanSelect(player: Player, game: Game) {
+    const nonJudgeAndStandardVotingRound = (
+      !this.isCurrentUsersTurn &&
+      this.isStandardRound &&
+      this.isUpForVoting &&
+      !player.memePlayed);
+
+    const judgeAndReverseRound = this.isCurrentUsersTurn && this.isReverseRound && !game.memeTemplate;
+
+    return nonJudgeAndStandardVotingRound || judgeAndReverseRound;
+  }
+
   selectCaption(captionPlayed: Card) {
     const player = this.playerState.find(p => p.uid === this.currentUser.uid);
     this.playerService.submitCaption(player.gameAssignedId, captionPlayed)

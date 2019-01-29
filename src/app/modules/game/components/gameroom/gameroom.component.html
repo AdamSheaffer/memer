@@ -164,7 +164,7 @@
         <div *ngIf="!isReverseRound || isCurrentUsersTurn">
           <div *ngIf="players|currentUser:currentUser.uid as player">
             <div *ngIf="cards$|async as cards">
-              <memer-player-hand *ngIf="!game.winner" [playerCanSelect]="(isUpForVoting || isReverseRound) && (!isCurrentUsersTurn || isReverseRound && isCurrentUsersTurn) && !player.memePlayed"
+              <memer-player-hand *ngIf="!game.winner" [playerCanSelect]="playerCanSelect(player, game)"
                 [playerHand]="cards" (cardSelect)="selectCaption($event)">
               </memer-player-hand>
             </div>
