@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { debounceTime, filter, distinctUntilChanged, switchMap, combineLatest } from 'rxjs/operators';
+import { debounceTime, filter, distinctUntilChanged, switchMap, combineLatest, tap } from 'rxjs/operators';
 import { GiphyService } from '../../../services';
 import { ThemeService, Theme } from '../../../../core/services';
 
@@ -20,10 +20,11 @@ export class GiphySearchComponent implements OnInit {
 
   ngOnInit() {
     this.searchResults$ = this.searchText$.pipe(
-      combineLatest(this.page$),
       debounceTime(400),
-      filter(([text, _page]) => text.length > 2),
       distinctUntilChanged(),
+      filter(text => text.length > 2),
+      tap(_t => this.page$.next(1)),
+      combineLatest(this.page$),
       switchMap(([text, page]) => {
         return this.giphyService.getPage(text, page);
       })
