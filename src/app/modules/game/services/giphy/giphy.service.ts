@@ -26,7 +26,8 @@ export class GiphyService {
   }
 
   getPage(query: string, page: number): Promise<{ thumbnail: string, img: string }> {
-    const params = this.buildParams(query, page * this.pageSize, this.pageSize);
+    const offset = (page - 1) * this.pageSize;
+    const params = this.buildParams(query, offset, this.pageSize);
     return this.http.get(this.baseURL, { params }).toPromise()
       .then((response: any) => {
         return response.data.map(i => {
@@ -64,7 +65,7 @@ export class GiphyService {
   }
 
   private encodeTag(tagName: string): string {
-    return tagName.replace(' ', '+');
+    return tagName.replace(/' '/g, '+');
   }
 
   private randomWithMax(max: number, count: number, ): number[] {
