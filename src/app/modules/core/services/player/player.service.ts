@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map, filter, take, takeWhile } from 'rxjs/operators';
-import { Player, PlayerChanges, Card } from '../../../../interfaces';
+import { Player, PlayerChanges, Card, GameJoinedResult } from '../../../../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +33,7 @@ export class PlayerService {
     return this.players$;
   }
 
-  join(player: Player, gameHasStarted: boolean) {
+  join(player: Player, gameHasStarted: boolean): Promise<GameJoinedResult> {
     const ref = this._playerCollection.ref;
     return ref.where('uid', '==', player.uid).limit(1).get()
       .then(snapshot => {
@@ -48,12 +48,17 @@ export class PlayerService {
         const gameAssignedId = snapshot.docs[0].id;
         player.gameAssignedId = gameAssignedId;
         this.update(player, { isActive: true });
-        return gameAssignedId; // already in game. Return their id
+        return { gameAssignedId, isReturningPlayer: true }; // already in game. Return their id
       });
   }
 
-  addPlayer(player: Player) {
-    return this._playerCollection.add(player).then(ref => ref.id);
+  addPlayer(player: Player): Promise<GameJoinedResult> {
+    return this._playerCollection.add(player).then(ref => {
+      return {
+        gameAssignedId: ref.id,
+        isReturningPlayer: false
+      };
+    });
   }
 
   remove(player: Player) {

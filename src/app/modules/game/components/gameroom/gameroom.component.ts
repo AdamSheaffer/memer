@@ -66,7 +66,10 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.roundPicker.setChanceOfSpecialRound(g.reverseRoundFrequency);
         this.deckService.init(this.gameId);
         this.playerService.join(this.currentUser, g.hasStarted)
-          .then(pid => {
+          .then(gameJoinedResult => {
+            if (!gameJoinedResult.isReturningPlayer) {
+              this.authService.registerGamePlayed(this.currentUser);
+            }
             let isHost = g.hostId === this.currentUser.uid;
             if (!g.hostId) {
               // If user joins a game with no host, they are the host
@@ -76,8 +79,9 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
             if (isHost) { this.trackGameFull(); }
             const playerJoinedMsg = `${this.currentUser.username.toUpperCase()} JOINED THE GAME`;
             this.chatService.postAdminMessage(playerJoinedMsg);
-            this.currentUser.gameAssignedId = pid;
-            this.cards$ = this.playerService.getCurrentPlayersHand(pid, this.cardsInHand).pipe(takeUntil(this.destroy$));
+            this.currentUser.gameAssignedId = gameJoinedResult.gameAssignedId;
+            this.cards$ = this.playerService.getCurrentPlayersHand(gameJoinedResult.gameAssignedId, this.cardsInHand)
+              .pipe(takeUntil(this.destroy$));
           })
           .catch(err => this.returnHomeWithMessage(err.message));
         this.trackGameEvents();

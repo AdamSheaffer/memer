@@ -8,3 +8,5 @@ export * from './Role';
 export * from './Category';
 export * from './GameSettings';
 export * from './RoundType';
+export * from './ProfileStats';
+export * from './GameJoinedResult';
