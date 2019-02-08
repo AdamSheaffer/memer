@@ -7,6 +7,9 @@
       </div>
     </div>
   </div>
-  <textarea [value]="messageContent" (input)="messageContent = $event.target.value;" (keyup.enter)="send()" class="form-control message"
-    placeholder="Message..." class="message-textarea"></textarea>
+  <div class="message-textarea">
+    <textarea [value]="messageContent" (input)="messageContent = $event.target.value;" (keyup.enter)="send()" class="form-control message"
+      placeholder="Message..." maxlength="500"></textarea>
+    <div class="counter">{{500 - messageContent?.length}}</div>
+  </div>
 </div>

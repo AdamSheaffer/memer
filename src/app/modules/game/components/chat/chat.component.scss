@@ -6,6 +6,13 @@
   padding: 8px;
 }
 
+.counter {
+  color: lighten($color: $dark-gray, $amount: 40%);
+  float:right; margin:0 3%;
+  font-size: 0.5rem;
+  font-family: 'heebo', sans-serif;
+}
+
 .message-textarea {
   margin-bottom: 60px;
 }
