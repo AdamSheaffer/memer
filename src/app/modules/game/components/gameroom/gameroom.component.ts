@@ -147,7 +147,10 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     const memeTemplate: Meme = {
       photoURL: gifSelectionURL
     };
-    this.gameService.updateGame({ memeTemplate });
+    this.gameService.updateGame({
+      memeTemplate,
+      memeTemplateTimeStamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
   }
 
   playerCanSelect(player: Player, game: Game) {
@@ -173,9 +176,10 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (this.isReverseRound) {
           meme.photoURL = 'assets/question-mark.jpg';
-          this.gameService.updateGame({ memeTemplate: meme });
+          const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+          this.gameService.updateGame({ memeTemplate: meme, memeTemplateTimeStamp: timestamp });
         } else {
-          meme.photoURL = this.gameState.memeTemplate.photoURL;
+          meme.photoURL = !!this.gameState.memeTemplate ? this.gameState.memeTemplate.photoURL : null;
           this.playerService.update(player, { memePlayed: meme });
         }
       });
@@ -227,6 +231,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
 
     gameChanges.gifOptionURLs = [];
     gameChanges.memeTemplate = null;
+    gameChanges.memeTemplateTimeStamp = null;
     gameChanges.tagOptions = [];
     gameChanges.tagSelection = null;
     gameChanges.isVotingRound = false;

@@ -13,6 +13,7 @@ export interface Game {
   tagSelection?: string;
   gifOptionURLs: string[];
   memeTemplate?: Meme;
+  memeTemplateTimeStamp?: firebase.firestore.FieldValue;
   roundWinner?: Player;
   captionDeck: Card[];
   isVotingRound: boolean;
@@ -22,6 +23,7 @@ export interface Game {
   maxPlayers: number;
   pointsToWin: number;
   round?: Round;
+  timeLimit?: number;
   reverseRoundFrequency?: number;
 }
 
@@ -34,6 +36,7 @@ export interface GameChanges {
   tagSelection?: string;
   gifOptionURLs?: string[];
   memeTemplate?: Meme;
+  memeTemplateTimeStamp?: firebase.firestore.FieldValue;
   roundWinner?: Player;
   captionDeck?: Card[];
   isVotingRound?: boolean;

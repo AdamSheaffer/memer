@@ -42,10 +42,38 @@
         <clr-icon shape="repeat" size="96"></clr-icon>
       </div>
     </div>
-      <input [(ngModel)]="gameSettings.reverseRoundFrequency" type="range" min="0" max="0.5" step="0.25">
-      <h3 *ngIf="gameSettings.reverseRoundFrequency === 0" class="value-description">NEVER</h3>
-      <h3 *ngIf="gameSettings.reverseRoundFrequency === 0.25" class="value-description">OCCASIONALLY</h3>
-      <h3 *ngIf="gameSettings.reverseRoundFrequency === 0.5" class="value-description">HALF N' HALF</h3>
+    <input [(ngModel)]="gameSettings.reverseRoundFrequency" type="range" min="0" max="0.5" step="0.25">
+    <h3 *ngIf="gameSettings.reverseRoundFrequency === 0" class="value-description">NEVER</h3>
+    <h3 *ngIf="gameSettings.reverseRoundFrequency === 0.25" class="value-description">OCCASIONALLY</h3>
+    <h3 *ngIf="gameSettings.reverseRoundFrequency === 0.5" class="value-description">HALF N' HALF</h3>
+  </clr-wizard-page>
+
+  <clr-wizard-page class="round-timer-page">
+      <ng-template clrPageTitle>ROUND TIMER</ng-template>
+      <div>
+        <span>How long should players have to submit?</span>
+      </div>
+      <div class="row flex-items-xs-center setting-count-container">
+        <div>
+          <clr-icon shape="clock" size="96"></clr-icon>
+        </div>
+      </div>
+      <div class="row flex-items-xs-center">
+        <div class="btn-group">
+          <div class="radio btn">
+            <input [(ngModel)]="gameSettings.roundTimer" type="radio" [value]="0" name="btn-group-limit-radios" id="limit-radio-0">
+            <label for="limit-radio-0">NO LIMIT</label>
+          </div>
+          <div class="radio btn">
+            <input [(ngModel)]="gameSettings.roundTimer" type="radio" [value]="30" name="btn-group-limit-radios" id="limit-radio-30">
+            <label for="limit-radio-30">30 SEC</label>
+          </div>
+          <div class="radio btn">
+            <input [(ngModel)]="gameSettings.roundTimer" type="radio" [value]="60" name="btn-group-limit-radios" id="limit-radio-60">
+            <label for="limit-radio-60">60 SEC</label>
+          </div>
+        </div>
+      </div>
     </clr-wizard-page>
 
   <clr-wizard-page (clrWizardPageOnCommit)="createGame()" class="sfw-page">
@@ -60,11 +88,11 @@
       <div class="row flex-items-xs-center">
         <div class="btn-group">
           <div class="radio btn">
-            <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="true" name="btn-group-demo-radios" id="btn-radio-yes">
+            <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="true" name="btn-group-sfw-radios" id="btn-radio-yes">
             <label for="btn-radio-yes">YES</label>
           </div>
           <div class="radio btn">
-            <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="false" name="btn-group-demo-radios" id="btn-radio-no">
+            <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="false" name="btn-group-sfw-radios" id="btn-radio-no">
             <label for="btn-radio-no">NO</label>
           </div>
         </div>
