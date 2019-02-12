@@ -2,7 +2,7 @@
 
 .chat {
   color: $dark-gray;
-  font-family: 'Heebo', sans-serif;
+  font-family: $chat-font;
   padding: 8px;
 }
 
@@ -10,7 +10,7 @@
   color: lighten($color: $dark-gray, $amount: 40%);
   float:right; margin:0 3%;
   font-size: 0.5rem;
-  font-family: 'heebo', sans-serif;
+  font-family: $chat-font;
 }
 
 .message-textarea {
@@ -28,7 +28,7 @@
     margin-left: 4px;
     color: white;
     max-width: 8.5rem;
-    font-family: 'Heebo', sans-serif;
+    font-family: $chat-font;
     overflow-wrap: break-word;
   }
 

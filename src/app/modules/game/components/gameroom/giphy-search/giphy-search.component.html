@@ -2,7 +2,7 @@
   <div class="col-lg-6 col-xs-12">
     <label class="search-label">
       <clr-icon class="search-icon" shape="search" size="24"></clr-icon>
-      <input (keyup)="searchText$.next($event.target.value)" placeholder="SEARCH GIPHY" type="text" class="searchbar-input">
+      <input (keyup)="searchText$.next($event.target.value)" placeholder="SEARCH GIPHY" type="text" class="searchbar-input" maxlength="40">
     </label>
     <div *ngIf="searchText$|async">
       <div *ngIf="searchResults$|async as results" class="row flex-items-xs-center">
