@@ -23,14 +23,11 @@ export class RoundTimerComponent implements OnInit, OnDestroy {
   @Input() reverseRound: boolean;
   @Input()
   set memeTemplate (template: Meme) {
-    if (!!template) {
-      const timestamp = moment(this.templateTimestamp.toDate());
-      const diff = Math.abs(timestamp.diff(moment(), 'seconds'));
-      if (diff > this.limit) { return; }
+    if (!template) { return; }
+    if (this.timestampDiff() > this.limit) { return; }
 
-      const timeLeft = this.limit - diff;
-      this.startTimer(timeLeft);
-    }
+    const timeLeft = this.limit - this.timestampDiff();
+    this.startTimer(timeLeft);
   }
 
   get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
@@ -40,10 +37,17 @@ export class RoundTimerComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
+  private timestampDiff(): number {
+    const timestamp = moment(this.templateTimestamp.toDate());
+    const now = moment();
+    const diff = Math.abs(now.diff(timestamp, 'seconds'));
+    return diff;
+  }
+
   private startTimer(timeLeft: number) {
     this.timer = timeLeft;
     this.intervalId = setInterval(() => {
-      this.timer -= 1;
+      this.timer = this.limit - this.timestampDiff();
       if (this.timer < 0) {
         clearInterval(this.intervalId);
         this.notify();
