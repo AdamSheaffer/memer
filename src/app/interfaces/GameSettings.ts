@@ -3,4 +3,5 @@ export interface GameSettings {
     maxPlayers: number;
     pointsToWin: number;
     reverseRoundFrequency: number;
+    roundTimer: number;
 }

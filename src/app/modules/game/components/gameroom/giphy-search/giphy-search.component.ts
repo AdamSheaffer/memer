@@ -12,7 +12,7 @@ import { ThemeService, Theme } from '../../../../core/services';
 export class GiphySearchComponent implements OnInit {
   searchText$ = new BehaviorSubject<string>('');
   page$ = new BehaviorSubject<number>(1);
-  searchResults$: Observable<{ thumbnail: string, img: string }>;
+  searchResults$: Observable<{ thumbnail: string, img: string }[]>;
   @Output() gifSelected = new EventEmitter<string>();
   get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
 

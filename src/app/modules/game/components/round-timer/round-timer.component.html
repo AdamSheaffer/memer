@@ -1,0 +1,4 @@
+<p *ngIf="timer > 0" [ngClass]="{'dark': isDarkTheme }" class="timer">
+  <span class="timer-label">TIME REMAINING: </span>
+  <span class="timer-time">{{timer || 0}}</span>
+</p>

@@ -76,7 +76,8 @@ export class GameService {
       safeForWork: gameSettings.sfw,
       maxPlayers: gameSettings.maxPlayers,
       pointsToWin: gameSettings.pointsToWin,
-      reverseRoundFrequency: gameSettings.reverseRoundFrequency
+      reverseRoundFrequency: gameSettings.reverseRoundFrequency,
+      timeLimit: gameSettings.roundTimer
     };
   }
 

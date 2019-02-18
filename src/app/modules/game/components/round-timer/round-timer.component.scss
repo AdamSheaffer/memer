@@ -1,0 +1,19 @@
+@import '../../../../../variables';
+
+.timer {
+  text-align: center;
+}
+
+.timer-label {
+  color: $dark-gray;
+}
+
+.timer-time {
+  color: $accent-color;
+}
+
+.dark {
+  .timer-label {
+    color: $white-color;
+  }
+}

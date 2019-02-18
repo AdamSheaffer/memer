@@ -164,6 +164,15 @@
         <div *ngIf="!isReverseRound || isCurrentUsersTurn">
           <div *ngIf="players|currentUser:currentUser.uid as player">
             <div *ngIf="cards$|async as cards">
+              <memer-round-timer
+                *ngIf="game.memeTemplate && !player.memePlayed && !isCurrentUsersTurn && game.timeLimit"
+                (timerComplete)="selectCaption($event)"
+                [limit]="game.timeLimit"
+                [reverseRound]="false"
+                [cards]="cards"
+                [memeTemplate]="game.memeTemplate"
+                [templateTimestamp]="game.memeTemplateTimeStamp">
+              </memer-round-timer>
               <memer-player-hand *ngIf="!game.winner" [playerCanSelect]="playerCanSelect(player, game)"
                 [playerHand]="cards" (cardSelect)="selectCaption($event)">
               </memer-player-hand>
@@ -174,6 +183,14 @@
         <!-- Giphy Search for Reverse Round -->
         <div *ngIf="players|currentUser:currentUser.uid as player">
           <div *ngIf="isReverseRound && !isCurrentUsersTurn && game.memeTemplate">
+            <memer-round-timer
+              *ngIf="game.memeTemplate && !player.memePlayed && !isCurrentUsersTurn && game.timeLimit"
+              (reverseTimerComplete)="playReverseRoundGif($event)"
+              [limit]="game.timeLimit"
+              [reverseRound]="true"
+              [memeTemplate]="game.memeTemplate"
+              [templateTimestamp]="game.memeTemplateTimeStamp">
+            </memer-round-timer>
             <memer-giphy-search *ngIf="!player.memePlayed" (gifSelected)="playReverseRoundGif($event)"></memer-giphy-search>
           </div>
         </div>

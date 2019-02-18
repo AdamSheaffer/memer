@@ -61,7 +61,8 @@ describe('GameSetupComponent', () => {
       maxPlayers: 4,
       pointsToWin: 5,
       sfw: true,
-      reverseRoundFrequency: 0.25
+      reverseRoundFrequency: 0.25,
+      roundTimer: 0
     });
     expect(gameService.createNewGame).toHaveBeenCalled();
   });
@@ -71,7 +72,8 @@ describe('GameSetupComponent', () => {
       maxPlayers: 5,
       pointsToWin: 7,
       sfw: false,
-      reverseRoundFrequency: 0.25
+      reverseRoundFrequency: 0.25,
+      roundTimer: 0
     });
   });
 

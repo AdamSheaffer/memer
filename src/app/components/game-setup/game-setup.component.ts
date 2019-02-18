@@ -20,11 +20,12 @@ export class GameSetupComponent implements OnInit {
   creatingGame = false;
 
   constructor(private gameService: GameService) {
-    const defaults = {
+    const defaults: GameSettings = {
       maxPlayers: 5,
       pointsToWin: 7,
       sfw: false,
-      reverseRoundFrequency: 0.25
+      reverseRoundFrequency: 0.25,
+      roundTimer: 0
     };
 
     this.gameSettings = Object.assign({}, defaults);

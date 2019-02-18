@@ -17,7 +17,7 @@ export class GiphyService {
   getRandomImages(tagName: string): Promise<any> {
     const randomNums = this.randomWithMax(100, this.imageCount);
     const categoryRequests = this.getRandomImagePromises(tagName, randomNums);
-    const wildcardRequest = this.getWildcardPromise();
+    const wildcardRequest = this.getWildcard();
     const imageRequests = [...categoryRequests, wildcardRequest];
 
     return Promise.all(imageRequests).then(responses => {
@@ -25,8 +25,9 @@ export class GiphyService {
     });
   }
 
-  getPage(query: string, page: number): Promise<{ thumbnail: string, img: string }> {
-    const params = this.buildParams(query, page * this.pageSize, this.pageSize);
+  getPage(query: string, page: number): Promise<{ thumbnail: string, img: string }[]> {
+    const offset = (page - 1) * this.pageSize;
+    const params = this.buildParams(query, offset, this.pageSize);
     return this.http.get(this.baseURL, { params }).toPromise()
       .then((response: any) => {
         return response.data.map(i => {
@@ -47,7 +48,7 @@ export class GiphyService {
     return imageRequests;
   }
 
-  private getWildcardPromise(): Promise<any> {
+  getWildcard(): Promise<any> {
     const rands = this.randomWithMax(200, 1);
     const rand = rands[0];
     const params = this.buildParams('gifsoup', rand);
@@ -64,7 +65,7 @@ export class GiphyService {
   }
 
   private encodeTag(tagName: string): string {
-    return tagName.replace(' ', '+');
+    return tagName.replace(/\s/g, '+');
   }
 
   private randomWithMax(max: number, count: number, ): number[] {
