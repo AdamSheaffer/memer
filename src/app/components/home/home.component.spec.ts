@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 
 import { HomeComponent } from './home.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { AuthService, GameService, SettingsService } from '../../modules/core/services';
+import { UserService, GameService, SettingsService } from '../../modules/core/services';
 import { Router } from '@angular/router';
 import { MomentModule } from 'ngx-moment';
 import { FromFBDatePipe } from '../../modules/shared/pipes';
@@ -61,21 +61,21 @@ describe('HomeComponent', () => {
   ];
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
-  let authService: jasmine.SpyObj<AuthService>;
+  let userService: jasmine.SpyObj<UserService>;
   let gameService: jasmine.SpyObj<GameService>;
   let router: jasmine.SpyObj<Router>;
   let settingsService;
 
   beforeEach(async(() => {
     // Auth Service
-    authService = jasmine.createSpyObj('AuthService', ['getPlayer', 'logout']);
-    authService.getPlayer.and.returnValue({
+    userService = jasmine.createSpyObj('UserService', ['getPlayer', 'logout']);
+    userService.getPlayer.and.returnValue({
       uid: '123',
       username: 'Jackie Treehorn',
       isActive: true,
       score: 0
     });
-    authService.logout.and.returnValue(Promise.resolve());
+    userService.logout.and.returnValue(Promise.resolve());
 
     // Game Service
     gameService = jasmine.createSpyObj('GameService', ['getOpenGameList', 'createNewGame']);
@@ -99,8 +99,8 @@ describe('HomeComponent', () => {
       declarations: [ HomeComponent, FromFBDatePipe, GameSetupComponent  ],
       providers: [
         {
-          provide: AuthService,
-          useValue: authService
+          provide: UserService,
+          useValue: userService
         },
         {
           provide: GameService,

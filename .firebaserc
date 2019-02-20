@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "i-memer"
+    "default": "i-memer",
+    "dev": "memer-dev"
   }
 }

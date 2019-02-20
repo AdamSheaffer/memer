@@ -1,4 +1,4 @@
-import { Roles, Meme, ProfileStats } from '.';
+import { Roles, Meme } from '.';
 
 export interface Player {
   uid: string; // User ID
@@ -13,7 +13,6 @@ export interface Player {
   imageUrlPlayed?: string;
   roles: Roles;
   removed?: boolean;
-  profileStats?: ProfileStats;
 }
 
 export interface PlayerChanges {
@@ -21,5 +20,4 @@ export interface PlayerChanges {
   score?: number;
   memePlayed?: Meme;
   removed?: boolean;
-  profileStats?: ProfileStats;
 }

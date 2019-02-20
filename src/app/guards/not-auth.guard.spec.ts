@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { NotAuthGuard } from './';
-import { AuthService } from '../modules/core/services';
+import { UserService } from '../modules/core/services';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 
 describe('NotAuthGuard', () => {
   let guard: NotAuthGuard;
-  const authService = { user$: of({}) };
+  const userService = { user$: of({}) };
   const router: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(() => {
@@ -14,8 +14,8 @@ describe('NotAuthGuard', () => {
       providers: [
         NotAuthGuard,
         {
-          provide: AuthService,
-          useValue: authService
+          provide: UserService,
+          useValue: userService
         },
         {
           provide: Router,
@@ -31,7 +31,7 @@ describe('NotAuthGuard', () => {
   });
 
   it('rejects authenticated users', (done: DoneFn) => {
-    const service = TestBed.get(AuthService);
+    const service = TestBed.get(UserService);
     const user = { uid: '123' };
     service.user$ = of(user);
 
@@ -42,7 +42,7 @@ describe('NotAuthGuard', () => {
   });
 
   it('allows unauthenticated players', (done: DoneFn) => {
-    const service = TestBed.get(AuthService);
+    const service = TestBed.get(UserService);
     service.user$ = of(null);
 
     guard.canActivate().subscribe(isAllowed => {

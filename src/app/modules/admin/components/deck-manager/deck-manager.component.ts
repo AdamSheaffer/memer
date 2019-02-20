@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CaptionService } from '../../services/caption.service';
 import { Subject } from 'rxjs';
 import { Card } from '../../../../interfaces';
-import { AuthService } from '../../../core/services';
+import { UserService } from '../../../core/services';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class DeckManagerComponent implements OnInit, OnDestroy {
   showingNewCardForm = false;
   destroy$ = new Subject<boolean>();
 
-  constructor(private captionService: CaptionService, private authService: AuthService) {
+  constructor(private captionService: CaptionService, private userService: UserService) {
   }
 
   ngOnInit() {
@@ -32,7 +32,7 @@ export class DeckManagerComponent implements OnInit, OnDestroy {
   }
 
   add(caption: Card) {
-    const user = this.authService.getPlayer();
+    const user = this.userService.getPlayer();
     caption.createdBy = user.username;
     this.captionService.add(caption).then((newCaption) => {
       this.captions.unshift(newCaption);

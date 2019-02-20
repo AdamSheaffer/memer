@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 import { CaptionAddComponent, CaptionEditComponent, DeckManagerComponent } from '../';
 import { ClarityModule, ClrDatagridRowDetail, ClrDatagridRow } from '@clr/angular';
 import { CaptionService } from '../../services/caption.service';
-import { AuthService } from '../../../core/services';
+import { UserService } from '../../../core/services';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { detectChanges } from '@angular/core/src/render3';
@@ -12,7 +12,7 @@ describe('DeckManagerComponent', () => {
   let component: DeckManagerComponent;
   let fixture: ComponentFixture<DeckManagerComponent>;
   const captionService = jasmine.createSpyObj('CaptionService', ['getAll', 'add', 'update', 'delete']);
-  const authService = jasmine.createSpyObj('AuthService', ['getPlayer']);
+  const userService = jasmine.createSpyObj('UserService', ['getPlayer']);
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -24,8 +24,8 @@ describe('DeckManagerComponent', () => {
           useValue: captionService
         },
         {
-          provide: AuthService,
-          useValue: authService
+          provide: UserService,
+          useValue: userService
         }
       ]
     })
@@ -44,7 +44,7 @@ describe('DeckManagerComponent', () => {
     captionService.update.and.returnValue(Promise.resolve());
     captionService.delete.and.returnValue(Promise.resolve());
 
-    authService.getPlayer.and.returnValue({ username: 'The Dude' });
+    userService.getPlayer.and.returnValue({ username: 'The Dude' });
   }));
 
   beforeEach(() => {

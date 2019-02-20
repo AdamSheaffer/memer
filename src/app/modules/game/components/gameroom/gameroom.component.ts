@@ -4,7 +4,7 @@ import { Observable, Subject, combineLatest } from 'rxjs';
 import { filter, take, map, skip, takeUntil } from 'rxjs/operators';
 import get from 'lodash/get';
 import { Player, Game, Card, GameChanges, PlayerChanges, RoundType, Meme, Round } from '../../../../interfaces';
-import { Theme, AuthService, ThemeService, GameService, PlayerService } from '../../../core/services';
+import { Theme, UserService, ThemeService, GameService, PlayerService } from '../../../core/services';
 import { ChatService, DeckService, GiphyService, CategoryService, RoundPickerService } from '../../services';
 import * as firebase from 'firebase/app';
 
@@ -37,7 +37,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
   get isReverseRound(): boolean { return get(this.gameState, 'round.roundType') === RoundType.Reverse; }
 
   constructor(
-    private authService: AuthService,
+    private userService: UserService,
     private categoryService: CategoryService,
     private chatService: ChatService,
     private deckService: DeckService,
@@ -50,7 +50,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     private roundPicker: RoundPickerService
   ) {
-    this.currentUser = this.authService.getPlayer();
+    this.currentUser = this.userService.getPlayer();
   }
 
   ngOnInit() {
@@ -67,9 +67,6 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.deckService.init(this.gameId);
         this.playerService.join(this.currentUser, g.hasStarted)
           .then(gameJoinedResult => {
-            if (!gameJoinedResult.isReturningPlayer) {
-              this.authService.registerGamePlayed(this.currentUser);
-            }
             let isHost = g.hostId === this.currentUser.uid;
             if (!g.hostId) {
               // If user joins a game with no host, they are the host

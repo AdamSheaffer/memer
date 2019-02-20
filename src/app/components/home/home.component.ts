@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
-import { GameService, AuthService, SettingsService } from '../../modules/core/services';
+import { GameService, UserService, SettingsService } from '../../modules/core/services';
 import { Game } from '../../interfaces/Game';
 import { takeUntil } from 'rxjs/operators';
 import { Player } from '../../interfaces';
@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   user: Player;
 
   constructor(
-    private authService: AuthService,
+    private userService: UserService,
     private gameService: GameService,
     private router: Router,
     private settingsService: SettingsService) {
@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.user = this.authService.getPlayer();
+    this.user = this.userService.getPlayer();
   }
 
   hostGame() {
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout().then(() => {
+    this.userService.logout().then(() => {
       this.router.navigate(['/login']);
     });
   }

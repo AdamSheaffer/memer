@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
-import { AuthService, ThemeService, Theme } from '../../../core/services';
+import { UserService, ThemeService, Theme } from '../../../core/services';
 import { of } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -20,7 +20,7 @@ describe('HeaderComponent', () => {
     setDark: () => {}
   };
 
-  const authService = {
+  const userService = {
     getPlayer() {
       return { username: 'MEMER' };
     },
@@ -33,8 +33,8 @@ describe('HeaderComponent', () => {
       declarations: [ HeaderComponent ],
       providers: [
         {
-          provide: AuthService,
-          useValue: authService
+          provide: UserService,
+          useValue: userService
         },
         {
           provide: ThemeService,

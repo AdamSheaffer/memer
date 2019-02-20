@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Message, Player } from '../../../../interfaces';
-import { AuthService } from '../../../core/services';
+import { UserService } from '../../../core/services';
 import { ChatService } from '../../services';
 import { Observable, Subscription } from 'rxjs';
 
@@ -16,8 +16,8 @@ export class ChatComponent implements OnInit {
   messageContent: string = null;
   messagesSubscription: Subscription;
 
-  constructor(private authService: AuthService, private chatService: ChatService) {
-    this.currentUser = this.authService.getPlayer();
+  constructor(private userService: UserService, private chatService: ChatService) {
+    this.currentUser = this.userService.getPlayer();
   }
 
   ngOnInit() {

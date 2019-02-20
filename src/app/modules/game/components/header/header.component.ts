@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router/';
-import { Theme, AuthService, ThemeService } from '../../../core/services';
+import { Theme, UserService, ThemeService } from '../../../core/services';
 
 @Component({
   selector: 'memer-header',
@@ -13,12 +13,12 @@ export class HeaderComponent implements OnInit {
   get isLightTheme() { return this.themeService.theme === Theme.LIGHT; }
 
   constructor(
-    private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
     private themeService: ThemeService) {
-    this.username = this.authService.getPlayer().username;
+    this.username = this.userService.getPlayer().username;
   }
 
   ngOnInit() {
@@ -38,6 +38,6 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout().then(() => this.router.navigate(['login']));
+    this.userService.logout().then(() => this.router.navigate(['login']));
   }
 }

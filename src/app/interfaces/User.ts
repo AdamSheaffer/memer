@@ -1,4 +1,4 @@
-import { Roles, ProfileStats } from '.';
+import { Roles } from '.';
 
 export interface User {
   uid: string;
@@ -7,5 +7,13 @@ export interface User {
   photoURL: string;
   thumbnailURL: string;
   roles?: Roles;
-  profileStats?: ProfileStats;
+  gamesPlayed?: number;
+  gamesWon?: number;
+  totalPoints?: number;
+}
+
+export interface UserChanges {
+  gamesPlayed?: number;
+  gamesWon?: number;
+  totalPoints?: number;
 }

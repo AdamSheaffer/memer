@@ -4,7 +4,7 @@ import { GameroomComponent } from './gameroom.component';
 import { ClarityModule } from '@clr/angular';
 import { NO_ERRORS_SCHEMA, Renderer2 } from '@angular/core';
 import { ActivePlayersPipe, CurrentUserPipe, ShufflePipe } from '../../pipes';
-import { AuthService, PlayerService, Theme, ThemeService, GameService } from '../../../core/services';
+import { UserService, PlayerService, Theme, ThemeService, GameService } from '../../../core/services';
 import { CategoryService, ChatService, DeckService, GiphyService, RoundPickerService } from '../../services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
@@ -13,7 +13,7 @@ import { Game } from '../../../../interfaces';
 describe('GameroomComponent', () => {
   let component: GameroomComponent;
   let fixture: ComponentFixture<GameroomComponent>;
-  let authService: jasmine.SpyObj<AuthService>;
+  let userService: jasmine.SpyObj<UserService>;
   let playerService: jasmine.SpyObj<PlayerService>;
   let categoryService: jasmine.SpyObj<CategoryService>;
   let chatService: jasmine.SpyObj<ChatService>;
@@ -26,9 +26,9 @@ describe('GameroomComponent', () => {
   let route: any;
 
   beforeEach(async(() => {
-    // AuthService
-    authService = jasmine.createSpyObj<AuthService>('AuthService', ['getPlayer']);
-    authService.getPlayer.and.returnValue({ uid: '123abc', username: 'Jeff Lebowski' });
+    // UserService
+    userService = jasmine.createSpyObj<UserService>('UserService', ['getPlayer']);
+    userService.getPlayer.and.returnValue({ uid: '123abc', username: 'Jeff Lebowski' });
 
     // Player Service
     playerService = jasmine.createSpyObj<PlayerService>('PlayerService', ['init', 'join', 'getCurrentPlayersHand', 'update']);
@@ -93,8 +93,8 @@ describe('GameroomComponent', () => {
       providers: [
         Renderer2,
         {
-          provide: AuthService,
-          useValue: authService
+          provide: UserService,
+          useValue: userService
         },
         {
           provide: PlayerService,

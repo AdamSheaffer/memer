@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { AdminGuard } from './';
-import { AuthService } from '../modules/core/services';
+import { UserService } from '../modules/core/services';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 
 describe('AdminGuard', () => {
   let guard: AdminGuard;
-  const authService = { user$: of({}) };
+  const userService = { user$: of({}) };
   const router: jasmine.SpyObj<Router> = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(() => {
@@ -14,8 +14,8 @@ describe('AdminGuard', () => {
       providers: [
         AdminGuard,
         {
-          provide: AuthService,
-          useValue: authService
+          provide: UserService,
+          useValue: userService
         },
         {
           provide: Router,
@@ -31,7 +31,7 @@ describe('AdminGuard', () => {
   });
 
   it('allows access for admin users', (done: DoneFn) => {
-    const service = TestBed.get(AuthService);
+    const service = TestBed.get(UserService);
     service.user$ = of({
       roles: {
         player: true,
@@ -47,7 +47,7 @@ describe('AdminGuard', () => {
   });
 
   it('redirects and rejects regular players', (done: DoneFn) => {
-    const service = TestBed.get(AuthService);
+    const service = TestBed.get(UserService);
     service.user$ = of({
       roles: {
         player: true
@@ -62,7 +62,7 @@ describe('AdminGuard', () => {
   });
 
   it('redirects and rejects unauthenticated players', (done: DoneFn) => {
-    const service = TestBed.get(AuthService);
+    const service = TestBed.get(UserService);
     service.user$ = of(null);
 
     guard.canActivate().subscribe(isAllowed => {

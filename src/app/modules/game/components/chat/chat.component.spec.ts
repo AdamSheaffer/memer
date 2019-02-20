@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 import { ChatComponent } from './chat.component';
 import { of } from 'rxjs';
 import { ChatService } from '../../services';
-import { AuthService } from '../../../core/services';
+import { UserService } from '../../../core/services';
 
 describe('ChatComponent', () => {
   let component: ChatComponent;
@@ -15,7 +15,7 @@ describe('ChatComponent', () => {
     sendMessage: (_user, _message) => Promise.resolve()
   };
 
-  const authService = jasmine.createSpyObj('AuthService', ['getPlayer']);
+  const userService = jasmine.createSpyObj('UserService', ['getPlayer']);
 
   beforeEach(async(() => {
 
@@ -27,8 +27,8 @@ describe('ChatComponent', () => {
           useValue: chatService
         },
         {
-          provide: AuthService,
-          useValue: authService
+          provide: UserService,
+          useValue: userService
         }
       ]
     })

@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
-import { Player, User, ProfileStatsChanges, ProfileStats } from '../../../../interfaces';
-import { AngularFirestoreDocument, AngularFirestore } from 'angularfire2/firestore';
+import { Player, User, UserChanges } from '../../../../interfaces';
+import { AngularFirestoreDocument, AngularFirestore, DocumentReference } from 'angularfire2/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class UserService {
 
   user$: Observable<User>;
   private user: User;
@@ -19,7 +19,8 @@ export class AuthService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+          const doc = this.afs.doc<User>(`users/${user.uid}`);
+          return doc.valueChanges();
         } else {
           return of(null);
         }
@@ -52,22 +53,6 @@ export class AuthService {
 
   getPlayer() {
     return this.toPlayerModel(this.user);
-  }
-
-  registerWin(player: Player) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${player.uid}`);
-    const changes: ProfileStatsChanges = {
-      gamesWon: player.profileStats ? player.profileStats.gamesWon + 1 : 1
-    };
-    return userRef.update(changes);
-  }
-
-  registerGamePlayed(player: Player) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${player.uid}`);
-    const changes: ProfileStatsChanges = {
-      gamesPlayed: player.profileStats ? player.profileStats.gamesPlayed + 1 : 1
-    };
-    return userRef.update(changes);
   }
 
   private getUserDataFromFacebookProvider(credentialUser, provider): User {
@@ -117,13 +102,6 @@ export class AuthService {
   }
 
   private toPlayerModel(user: User): Player {
-    const defaultProfileStats: ProfileStats = {
-      gamesPlayed: 0,
-      gamesLost: 0,
-      gamesWon: 0,
-      totalPoints: 0
-    };
-
     return {
       uid: user.uid,
       fullName: user.fullName,
@@ -133,8 +111,7 @@ export class AuthService {
       score: 0,
       username: user.username,
       isActive: true,
-      roles: user.roles,
-      profileStats: user.profileStats || defaultProfileStats
+      roles: user.roles
     };
   }
 
