@@ -23,7 +23,7 @@ export const registerGamePlayed = functions.firestore
       return Promise.reject();
     }
 
-    const gamesPlayed = user.gamesPlayed + 1;
+    const gamesPlayed = user.gamesPlayed ? user.gamesPlayed + 1 : 1;
 
     return userSnaphot.ref.update({ gamesPlayed });
 });
