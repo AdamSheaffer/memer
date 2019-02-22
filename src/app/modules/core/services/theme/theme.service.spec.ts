@@ -13,13 +13,13 @@ describe('ThemeService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should default to light theme', inject([ThemeService], (service: ThemeService) => {
-    expect(service.theme).toBe(Theme.LIGHT);
+  it('should default to dark theme', inject([ThemeService], (service: ThemeService) => {
+    expect(service.theme).toBe(Theme.DARK);
   }));
 
   it('should toggle themes', inject([ThemeService], (service: ThemeService) => {
     service.changeTheme();
-    expect(service.theme).toBe(Theme.DARK);
+    expect(service.theme).toBe(Theme.LIGHT);
   }));
 
   it('should set dark', inject([ThemeService], (service: ThemeService) => {

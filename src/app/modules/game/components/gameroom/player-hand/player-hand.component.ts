@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Renderer2 } from '@angular/core';
 import { Card } from '../../../../../interfaces';
+import { ThemeService, Theme } from '../../../../core/services';
 
 @Component({
   selector: 'memer-player-hand',
@@ -11,7 +12,9 @@ export class PlayerHandComponent implements OnInit {
   @Input() playerCanSelect: boolean;
   @Output() cardSelect = new EventEmitter<Card>();
 
-  constructor(private renderer: Renderer2) { }
+  get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
+
+  constructor(private renderer: Renderer2, private themeService: ThemeService) { }
 
   ngOnInit() {
   }

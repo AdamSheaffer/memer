@@ -71,12 +71,12 @@
 
 .voting-indicator {
   text-align: center;
+}
 
-  .username {
-    color: $accent-color;
-    .dark-theme {
-      color:  $white-color;
-    }
+.username {
+  color: $accent-color;
+  .dark-theme {
+    color:  $white-color;
   }
 }
 

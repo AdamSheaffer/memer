@@ -1,5 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
-@import 'variables';
+@import "./variables";
+@import "./theme";
+@import "../node_modules/@clr/ui/src/utils/dependencies.clarity";
+@import "../node_modules/@clr/ui/src/utils/components.clarity";
 
 body {
   background-color: $dark-gray;
@@ -19,6 +21,17 @@ h1, h2, h3, h4, h5, h6, p, .btn {
 
 .btn {
   font-size: 16px;
+}
+
+
+.btn.btn-outline-warning:disabled {
+  border-color: $clr-red-lighter;
+  color: $clr-red-lighter;
+}
+
+.btn.btn-outline-info:disabled {
+  border-color: $clr-action-blue-lighter;
+  color: $clr-action-blue-lighter;
 }
 
 input[type=range] {

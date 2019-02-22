@@ -9,7 +9,7 @@ export enum Theme {
   providedIn: 'root'
 })
 export class ThemeService {
-  private _theme: Theme = Theme.LIGHT;
+  private _theme: Theme = Theme.DARK;
 
   get theme() { return this._theme; }
 
