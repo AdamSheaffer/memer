@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Observable, of } from 'rxjs';
-import { Player, User, UserChanges } from '../../../../interfaces';
+import { Player, User } from '../../../../interfaces';
 import { AngularFirestoreDocument, AngularFirestore, DocumentReference } from 'angularfire2/firestore';
+import { PresenceService } from '../presence/presence.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,12 @@ export class UserService {
   user$: Observable<User>;
   private user: User;
 
-  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
+  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore, private presenceService: PresenceService) {
     //// Get auth data, then get firestore user document || null
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
+          this.presenceService.detect(user.uid);
           const doc = this.afs.doc<User>(`users/${user.uid}`);
           return doc.valueChanges();
         } else {

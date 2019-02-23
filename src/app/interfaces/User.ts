@@ -1,4 +1,5 @@
 import { Roles } from '.';
+import { OnlineStatus } from './OnlineStatus';
 
 export interface User {
   uid: string;
@@ -10,6 +11,7 @@ export interface User {
   gamesPlayed?: number;
   gamesWon?: number;
   totalPoints?: number;
+  presence?: OnlineStatus;
 }
 
 export interface UserChanges {

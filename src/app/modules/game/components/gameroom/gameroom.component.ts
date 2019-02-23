@@ -4,7 +4,7 @@ import { Observable, Subject, combineLatest } from 'rxjs';
 import { filter, take, map, skip, takeUntil } from 'rxjs/operators';
 import get from 'lodash/get';
 import { Player, Game, Card, GameChanges, PlayerChanges, RoundType, Meme, Round } from '../../../../interfaces';
-import { Theme, UserService, ThemeService, GameService, PlayerService } from '../../../core/services';
+import { Theme, UserService, ThemeService, GameService, PlayerService, PresenceService } from '../../../core/services';
 import { ChatService, DeckService, GiphyService, CategoryService, RoundPickerService } from '../../services';
 import * as firebase from 'firebase/app';
 
@@ -48,7 +48,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private themeService: ThemeService,
     private renderer: Renderer2,
-    private roundPicker: RoundPickerService
+    private roundPicker: RoundPickerService,
+    private presenceService: PresenceService
   ) {
     this.currentUser = this.userService.getPlayer();
   }
@@ -77,6 +78,7 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
             const playerJoinedMsg = `${this.currentUser.username.toUpperCase()} JOINED THE GAME`;
             this.chatService.postAdminMessage(playerJoinedMsg);
             this.currentUser.gameAssignedId = gameJoinedResult.gameAssignedId;
+            this.presenceService.addGame(this.gameId, gameJoinedResult.gameAssignedId); // if player goes offline they should be removed
             this.cards$ = this.playerService.getCurrentPlayersHand(gameJoinedResult.gameAssignedId, this.cardsInHand)
               .pipe(takeUntil(this.destroy$));
           })
