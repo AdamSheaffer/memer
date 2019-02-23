@@ -64,6 +64,11 @@ export class PresenceService {
   }
 
   showOffline() {
+    if (!this.userStatusDatabaseRef) { return; }
+    if (this.onlineSubscription) {
+      this.onlineSubscription.unsubscribe();
+    }
+    this.userId = null;
     this.userStatusDatabaseRef.set(this.databaseOffline);
   }
 

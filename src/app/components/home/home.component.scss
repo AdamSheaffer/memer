@@ -1,7 +1,11 @@
 @import '../../../variables';
 
-.sfw {
-  margin-top: 10px;
+.top-indicators {
+  margin: 20px;
+
+  .toggle-switch {
+    margin-right: 0;
+  }
 }
 
 .home {

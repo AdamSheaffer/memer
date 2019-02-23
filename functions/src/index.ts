@@ -31,11 +31,12 @@ export const registerGamePlayed = functions.firestore
 export const onUserStatusChanged = functions.database
   .ref('status/{uid}')
   .onUpdate(async (change, context) => {
-    if (!change || !change.after) {
+    if (!change || !change.after || !change.before) {
       console.log('No updates made');
       return Promise.resolve();
     }
     const eventStatus = change.after.val();
+    const previousStatus = change.before.val();
     const userFirestoreRef = admin.firestore().doc(`users/${context.params.uid}`);
 
     // It is likely that the Realtime Database change that triggered
@@ -46,6 +47,17 @@ export const onUserStatusChanged = functions.database
     const status = statusSnapshot.val();
     if (status.lastChanged > eventStatus.lastChanged) {
       return null;
+    }
+
+    // update the players online count
+    if (previousStatus && previousStatus.state !== eventStatus.state) {
+      const cameOnline = eventStatus.state === 'Online';
+      const countRef = admin.database().ref('playersOnline');
+      const lastCountSnap = await countRef.once('value');
+      const lastCount = lastCountSnap.val();
+      let updatedCount = cameOnline ? lastCount + 1 : lastCount - 1;
+      updatedCount = updatedCount >= 0 ? updatedCount : 0;
+      await countRef.set(updatedCount);
     }
 
     const updates = [];

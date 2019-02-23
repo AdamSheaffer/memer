@@ -50,6 +50,7 @@ export class UserService {
   }
 
   logout() {
+    this.presenceService.showOffline();
     return this.afAuth.auth.signOut();
   }
 

@@ -1,5 +1,6 @@
 <memer-game-setup id="game-setup" *ngIf="showGameSetup" [user]="user" [show]="showGameSetup" (cancelled)="showGameSetup = false" (createdGame)="onGameCreated($event)"></memer-game-setup>
-<div class="row flex-items-xs-right sfw">
+<div class="row flex-items-xs-between top-indicators">
+  <memer-online-player-count></memer-online-player-count>
   <div class="toggle-switch">
     <input [(ngModel)]="sfw" (ngModelChange)="sfwModeChanged()" type="checkbox" id="safe-for-work">
     <label for="safe-for-work">Show only safe for work games:</label>
