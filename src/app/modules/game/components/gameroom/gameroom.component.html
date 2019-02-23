@@ -38,13 +38,14 @@
           <h3 class="username animated fadeInLeft">{{game.winner.username | uppercase}}
             <span [ngClass]="{'dark-theme': isDarkTheme}">WON THE GAME</span>
           </h3>
-          <h5 class="animated fadeInRight new-game-waiting">WAITING FOR HOST TO START A NEW GAME</h5>
+          <p class="animated fadeInRight new-game-waiting">WAITING FOR HOST TO START A NEW GAME</p>
         </div>
 
         <!-- Button to begin when it's your turn -->
         <div *ngIf="game?.hasStarted" class="row">
           <div *ngIf="isCurrentUsersTurn" class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
-            <h2 *ngIf="!game.tagOptions.length && !game.memeTemplate" class="animated pulse infinite">{{currentUser.username | uppercase}},
+            <h2 *ngIf="!game.tagOptions.length && !game.memeTemplate" class="animated pulse infinite">
+              <span class="username">{{currentUser.username | uppercase}}</span>
               IT'S YOUR TURN!
             </h2>
 
@@ -67,10 +68,16 @@
           </div>
           <div *ngIf="!isCurrentUsersTurn && !game.tagSelection && !game.memeTemplate" class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
             <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] === 'S'">
-              <h2>{{game.turnUsername | uppercase}}' TURN</h2>
+              <h2>
+                <span class="username">{{game.turnUsername | uppercase}}'</span>
+                TURN
+              </h2>
             </div>
             <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] !== 'S'">
-              <h2>{{game.turnUsername | uppercase}}'S TURN</h2>
+              <h2>
+                <span class="username">{{game.turnUsername | uppercase}}'S</span>
+                TURN
+              </h2>
             </div>
           </div>
         </div>

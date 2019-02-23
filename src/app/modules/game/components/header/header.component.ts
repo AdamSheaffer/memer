@@ -23,8 +23,8 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(p => {
-      const isDarkTheme = p.dark === 'true';
-      if (isDarkTheme) { this.themeService.setDark(); }
+      const isLightTheme = p.light === 'true';
+      if (isLightTheme) { this.themeService.setLight(); }
     });
   }
 
@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
     this.themeService.changeTheme();
     const url = this
       .router
-      .createUrlTree([{ dark: !this.isLightTheme }], { relativeTo: this.route })
+      .createUrlTree([{ light: !!this.isLightTheme }], { relativeTo: this.route })
       .toString();
     this.location.go(url);
   }

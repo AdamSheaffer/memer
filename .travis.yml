@@ -9,12 +9,13 @@ branches:
 addons:
   chrome: stable
 
-before_script:
+before_install:
   - npm install -g firebase-tools
   - npm install -g @angular/cli
 
 install:
   - cd ./functions && npm install && cd ..
+  - npm install
 
 cache:
   directories:

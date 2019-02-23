@@ -1,0 +1,101 @@
+@import "variables";
+
+$clr-white: #fff;
+$clr-black: #000;
+
+$clr-near-white: #fafafa;
+$clr-light-gray: #eee;
+$clr-lighter-midtone-gray: #ddd;
+$clr-light-midtone-gray: #ccc;
+$clr-dark-midtone-gray: #9a9a9a;
+$clr-gray: #747474;
+$clr-dark-gray: #565656;
+$clr-near-black: #313131;
+
+$clr-blue: $primary-color;
+$clr-action-blue-lightest: lighten($color: $clr-blue, $amount: 20%);
+$clr-action-blue-lighter: lighten($color: $clr-blue, $amount: 15%);
+$clr-action-blue-light: lighten($color: $clr-blue, $amount: 10%);
+$clr-action-blue-light-midtone: lighten($color: $clr-blue, $amount: 5%);
+$clr-action-blue: $primary-color;
+$clr-action-blue-accessible: $primary-color;
+$clr-action-blue-dark-midtone: darken($color: $clr-blue, $amount: 5%);
+$clr-action-blue-dark: darken($color: $clr-blue, $amount: 10%);
+$clr-action-blue-darker: darken($color: $clr-blue, $amount: 15%);
+$clr-action-blue-darkest: darken($color: $clr-blue, $amount: 20%);
+
+$clr-red: $red;
+$clr-red-lightest: lighten($color: $clr-red, $amount: 20%);
+$clr-red-lighter: lighten($color: $clr-red, $amount: 15%);
+$clr-red-light: lighten($color: $clr-red, $amount: 10%);
+$clr-red-light-midtone: lighten($color: $clr-red, $amount: 5%);
+$clr-red-dark-midtone: darken($color: $clr-red, $amount: 5%);
+$clr-red-dark: darken($color: $clr-red, $amount: 10%);
+$clr-red-darker: darken($color: $clr-red, $amount: 15%);
+$clr-red-darkest: darken($color: $clr-red, $amount: 20%);
+
+$clr-yellow: $accent-color;
+$clr-yellow-lightest: lighten($color: $clr-yellow, $amount: 15%);
+$clr-yellow-lighter: lighten($color: $clr-yellow, $amount: 10%);
+$clr-yellow-light-midtone: lighten($color: $clr-yellow, $amount: 5%);
+$clr-yellow-dark-midtone: darken($color: $clr-yellow, $amount: 5%);
+$clr-yellow-dark: darken($color: $clr-yellow, $amount: 10%);
+$clr-yellow-darker: darken($color: $clr-yellow, $amount: 15%);
+$clr-yellow-darkest: darken($color: $clr-yellow, $amount: 20%);
+
+$clr-green: $green;
+$clr-green-lightest: lighten($color: $clr-green, $amount: 15%);
+$clr-green-lighter: lighten($color: $clr-green, $amount: 10%);
+$clr-green-light-midtone: lighten($color: $clr-green, $amount: 5%);
+$clr-green-dark-midtone: darken($color: $clr-green, $amount: 5%);
+$clr-green-dark: darken($color: $clr-green, $amount: 10%);
+$clr-green-darker: darken($color: $clr-green, $amount: 15%);
+$clr-green-darkest: darken($color: $clr-green, $amount: 20%);
+
+$clr-links-visited-color: $clr-action-blue-dark-midtone;
+$clr-app-level-alert-color: $clr-white;
+$clr-near-black: #313131;
+
+$clr-alert-colors:
+(
+  info: (
+          background: $clr-action-blue-lightest,
+          font: $clr-action-blue-dark,
+          border: $clr-action-blue-light
+  ),
+  success: (
+          background: $clr-green-lightest,
+          font: $clr-green-dark,
+          border: $clr-green
+  ),
+  warning: (
+          background: $clr-yellow-lighter,
+          font: $clr-near-black,
+          border: $clr-yellow
+  ),
+  danger: (
+          background: $clr-red-lighter,
+          font: $clr-red-dark,
+          border: $clr-red-light
+  ),
+  app-info: (
+          background: $clr-action-blue,
+          font: $clr-app-level-alert-color,
+          border: none
+  ),
+  app-success: (
+          background: $clr-green-light-midtone,
+          font: $clr-app-level-alert-color,
+          border: none
+  ),
+  app-warning: (
+          background: $clr-yellow-dark,
+          font: $clr-app-level-alert-color,
+          border: none
+  ),
+  app-danger: (
+          background: $clr-red,
+          font: $clr-app-level-alert-color,
+          border: none
+  )
+);

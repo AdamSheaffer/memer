@@ -5,15 +5,25 @@ import { Renderer2 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Card } from '../../../../../interfaces';
 import { detectChanges } from '@angular/core/src/render3';
+import { Theme, ThemeService } from '../../../../core/services';
 
 describe('PlayerHandComponent', () => {
   let component: PlayerHandComponent;
   let fixture: ComponentFixture<PlayerHandComponent>;
+  let themeService;
 
   beforeEach(async(() => {
+    themeService = { theme: Theme.LIGHT };
+
     TestBed.configureTestingModule({
       declarations: [ PlayerHandComponent ],
-      providers: [Renderer2]
+      providers: [
+        Renderer2,
+        {
+          provide: ThemeService,
+          useValue: themeService
+        }
+      ]
     })
     .compileComponents();
   }));

@@ -17,6 +17,7 @@
     border: 2px solid $accent-color;
     display: inline-block;
     height: 60px;
+    width: 60px;
     margin-left: 10px;
   }
 
@@ -44,6 +45,11 @@
       cursor: pointer;
     }
   }
+}
+
+.join-btn:hover {
+  color: $accent-color;
+  transition: $quick-transition;
 }
 
 label {

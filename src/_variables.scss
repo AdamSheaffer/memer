@@ -3,6 +3,8 @@ $accent-color: #1cbc9c;
 $dark-gray: #2c3d4f;
 $gray-font: #565656;
 $white-color: #fdfdfd;
+$red: #db504a;
+$green: #1cbc9c;
 $phone : '(max-width: 480px)';
 $tablet-portrait: '(max-width: 767px)';
 $tablet-landscape: '(min-width: 768px) and (max-width: 979px)';
@@ -10,6 +12,7 @@ $large-desktop: '(min-width: 1200px)';
 $non-retina: 'screen and (-webkit-max-device-pixel-ratio: 1)';
 $impact: 'Anton', sans-serif;
 $theme-transition: all .4s linear;
+$quick-transition: all .2s linear;
 $secondary-font: Metropolis,Avenir Next,Helvetica Neue,Arial,sans-serif;
 $retina: '(min--moz-device-pixel-ratio: 1.5),
           (-o-min-device-pixel-ratio: 3/2),
