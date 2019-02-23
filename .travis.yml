@@ -11,7 +11,7 @@ addons:
 
 before_script:
   - npm install -g firebase-tools
-  - npm install -g @angular/cli
+  - npm install -g @angular/cli@6.0.3
 
 install:
   - cd ./functions && npm install && cd ..
