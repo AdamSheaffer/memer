@@ -30,7 +30,7 @@ export const registerGamePlayed = functions.firestore
 
 export const onUserStatusChanged = functions.database
   .ref('status/{uid}')
-  .onUpdate(async (change, context) => {
+  .onWrite(async (change, context) => {
     if (!change || !change.after || !change.before) {
       console.log('No updates made');
       return Promise.resolve();
@@ -46,11 +46,19 @@ export const onUserStatusChanged = functions.database
     const statusSnapshot = await change.after.ref.once('value');
     const status = statusSnapshot.val();
     if (status.lastChanged > eventStatus.lastChanged) {
+      console.log('Already overwritten', status, eventStatus);
       return null;
     }
 
     // update the players online count
-    if (previousStatus && previousStatus.state !== eventStatus.state) {
+    const firstTimeOn = !previousStatus;
+    const statusChanged = previousStatus && previousStatus.state !== eventStatus.state;
+
+    if (!firstTimeOn && !statusChanged) {
+      console.log('skipping count', previousStatus, eventStatus);
+    }
+
+    if (firstTimeOn || statusChanged) {
       const cameOnline = eventStatus.state === 'Online';
       const countRef = admin.database().ref('playersOnline');
       const lastCountSnap = await countRef.once('value');
@@ -72,8 +80,53 @@ export const onUserStatusChanged = functions.database
 
     // Update lastChanged
     eventStatus.lastChanged = new Date(eventStatus.lastChanged);
-    const userUpdate = userFirestoreRef.update(eventStatus);
+    const userUpdate = userFirestoreRef.update({ presence: eventStatus });
     updates.push(userUpdate);
 
     return Promise.all(updates);
 });
+
+export const onPointWon = functions.firestore
+  .document('games/{gameId}')
+  .onUpdate(async (change, _context) => {
+    if (!change || !change.after || !change.before) {
+      console.log('No updates made');
+      return null;
+    }
+
+    const lastGame = change.before.data();
+    const game = change.after.data();
+
+    if (!game) {
+      console.log('No game found');
+      return null;
+    }
+
+    const hasPointWon = !!lastGame && !lastGame.roundWinner && !!game.roundWinner;
+    const hasGameWon = !!lastGame && !lastGame.winner && !!game.winner;
+
+    if (!hasGameWon && !hasPointWon) {
+      console.log('No updates to points. Exiting...');
+      return null;
+    }
+
+    const userId = game.roundWinner.uid;
+    const userRef = admin.firestore().doc(`users/${userId}`);
+    const userSnaphot = await userRef.get();
+    const user = userSnaphot.data();
+
+    if (!user) {
+      console.log('No user found. Cannot update points');
+      return null;
+    }
+
+    const updates: any = {
+      totalPoints: (user.totalPoints || 0) + 1
+    }
+
+    if (hasGameWon) {
+      updates.gamesWon = (user.gamesWon || 0) + 1
+    }
+
+    return userRef.update(updates);
+  });
