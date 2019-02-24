@@ -36,7 +36,6 @@ export const onUserStatusChanged = functions.database
       return Promise.resolve();
     }
     const eventStatus = change.after.val();
-    const previousStatus = change.before.val();
     const userFirestoreRef = admin.firestore().doc(`users/${context.params.uid}`);
 
     // It is likely that the Realtime Database change that triggered
@@ -48,24 +47,6 @@ export const onUserStatusChanged = functions.database
     if (status.lastChanged > eventStatus.lastChanged) {
       console.log('Already overwritten', status, eventStatus);
       return null;
-    }
-
-    // update the players online count
-    const firstTimeOn = !previousStatus;
-    const statusChanged = previousStatus && previousStatus.state !== eventStatus.state;
-
-    if (!firstTimeOn && !statusChanged) {
-      console.log('skipping count', previousStatus, eventStatus);
-    }
-
-    if (firstTimeOn || statusChanged) {
-      const cameOnline = eventStatus.state === 'Online';
-      const countRef = admin.database().ref('playersOnline');
-      const lastCountSnap = await countRef.once('value');
-      const lastCount = lastCountSnap.val();
-      let updatedCount = cameOnline ? lastCount + 1 : lastCount - 1;
-      updatedCount = updatedCount >= 0 ? updatedCount : 0;
-      await countRef.set(updatedCount);
     }
 
     const updates = [];
@@ -85,6 +66,31 @@ export const onUserStatusChanged = functions.database
 
     return Promise.all(updates);
 });
+
+export const updateOnlineCounter = functions.database
+  .ref('status/{uid}')
+  .onWrite(async (change, _context) => {
+    if (!change || !change.after || !change.before) {
+      console.log('No updates made');
+      return Promise.resolve();
+    }
+
+    const previous = change.before.val();
+    const updated = change.after.val();
+
+    if (previous.state === updated.state) {
+      console.log('No change to status. Returning...');
+      return Promise.resolve();
+    }
+
+    const cameOnline = updated.state === 'Online';
+    const countRef = admin.database().ref('playersOnline');
+    const lastCountSnap = await countRef.once('value');
+    const lastCount = lastCountSnap.val();
+    let updatedCount = cameOnline ? lastCount + 1 : lastCount - 1;
+    updatedCount = updatedCount >= 0 ? updatedCount : 0;
+    return countRef.set(updatedCount);
+  });
 
 export const onPointWon = functions.firestore
   .document('games/{gameId}')
