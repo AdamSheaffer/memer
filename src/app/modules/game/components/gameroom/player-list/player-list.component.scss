@@ -1,10 +1,6 @@
 @import '../../../../../../variables';
 @import '../../../../../../mixins';
 
-// .pending-selection {
-//     @include grayscale_element(100%);    
-// }
-
 .voting-indicator {
   padding-bottom: 4px;
   margin-right: 2px;
@@ -45,7 +41,7 @@
   color: $primary-color;
 }
 
-.modal-body p{
+.modal-body p {
   font-family: $secondary-font;
 }
 
