@@ -11,7 +11,7 @@ PLAY [HERE](https://memer.app)
 
 ![Screenshot][screenshot]
 
-[screenshot]: screenshots/screenshot1.png "MEMER screenshot"
+[screenshot]: screenshots/screenshot2.png "MEMER screenshot"
 
 ### Rules
 
