@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.com/AdamSheaffer/memer.svg?branch=master)](https://travis-ci.com/AdamSheaffer/memer)
-
-# MEMER
+# MEMER [![Build Status](https://travis-ci.com/AdamSheaffer/memer.svg?branch=master)](https://travis-ci.com/AdamSheaffer/memer)
 
 A multiplayer card game a la _Cards Against Humanity_ or _Know Your Meme_. Memer pulls from the [GIPHY API](https://developers.giphy.com/) so every game will have new and random community cards.
 
