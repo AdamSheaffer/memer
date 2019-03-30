@@ -55,8 +55,11 @@ export const onUserStatusChanged = functions.database
     const needsRemoval = status.state === 'Offline' && !!status.game && !!status.player;
     if (needsRemoval) {
       const playerFirestoreRef = admin.firestore().doc(`games/${status.game}/players/${status.player}`);
-      const playerRemoval = playerFirestoreRef.update({ isActive: false });
-      updates.push(playerRemoval);
+      const player = await playerFirestoreRef.get();
+      if (player.exists) {
+        const playerRemoval = playerFirestoreRef.update({ isActive: false });
+        updates.push(playerRemoval);
+      }
     }
 
     // Update lastChanged
@@ -78,7 +81,7 @@ export const updateOnlineCounter = functions.database
     const previous = change.before.val();
     const updated = change.after.val();
 
-    if (previous.state === updated.state) {
+    if (!!previous && previous.state === updated.state) {
       console.log('No change to status. Returning...');
       return Promise.resolve();
     }
