@@ -4,7 +4,10 @@ import * as firebase from 'firebase/app';
 import moment from 'moment';
 import sample from 'lodash/sample';
 import { ThemeService, Theme } from '../../../core/services';
-import { GiphyService } from '../../services';
+import { GiphyService, WebworkerService } from '../../services';
+import { Subject } from 'rxjs';
+
+declare function postMessage(message: any): void;
 
 @Component({
   selector: 'memer-round-timer',
@@ -13,6 +16,7 @@ import { GiphyService } from '../../services';
 })
 export class RoundTimerComponent implements OnInit, OnDestroy {
   timer: number;
+  timer$: Subject<number>;
   intervalId: any;
 
   @Output() timerComplete = new EventEmitter<Card>();
@@ -32,7 +36,10 @@ export class RoundTimerComponent implements OnInit, OnDestroy {
 
   get isDarkTheme() { return this.themeService.theme === Theme.DARK; }
 
-  constructor(private themeService: ThemeService, private giphyService: GiphyService) { }
+  constructor(
+    private themeService: ThemeService,
+    private giphyService: GiphyService,
+    private webWorkerService: WebworkerService) { }
 
   ngOnInit() {
   }
@@ -44,15 +51,27 @@ export class RoundTimerComponent implements OnInit, OnDestroy {
     return diff;
   }
 
-  private startTimer(timeLeft: number) {
-    this.timer = timeLeft;
-    this.intervalId = setInterval(() => {
-      this.timer = this.limit - this.timestampDiff();
-      if (this.timer < 0) {
-        clearInterval(this.intervalId);
-        this.notify();
+  private countdown(timeLeft: number) {
+    let remaining = timeLeft;
+    const intervalId = setInterval(() => {
+      remaining -= 1;
+      postMessage(remaining);
+      if (remaining < 0) {
+        clearInterval(intervalId);
       }
     }, 1000);
+  }
+
+  private startTimer(timeLeft: number) {
+    this.timer = timeLeft;
+    this.timer$ = this.webWorkerService.run<number>(this.countdown, this.timer);
+    this.timer$.subscribe(remaining => {
+        if (remaining < 0) {
+          this.notify();
+          this.webWorkerService.terminate(this.timer$);
+        }
+        this.timer = remaining;
+      });
   }
 
   private notify() {
@@ -67,6 +86,6 @@ export class RoundTimerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    clearInterval(this.intervalId);
+    this.webWorkerService.terminate(this.timer$);
   }
 }
