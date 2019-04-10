@@ -1,17 +1,17 @@
 # MEMER [![Build Status](https://travis-ci.com/AdamSheaffer/memer.svg?branch=master)](https://travis-ci.com/AdamSheaffer/memer)
 
-A multiplayer card game a la _Cards Against Humanity_ or _Know Your Meme_. Memer pulls from the [GIPHY API](https://developers.giphy.com/) so every game will have new and random community cards.
+A multiplayer card game similar to _Cards Against Humanity_. Memer pulls from the [GIPHY API](https://developers.giphy.com/) so every game will have new and random community cards.
 
 #### Disclaimer!
-By default _MEMER_ is NSFW, but if you want to get your meme on at the office, there is now a **Safe For Work** mode that can be toggled on and off.
+By default MEMER is **NSFW**, but if you want to get your meme on at the office, there is now a **Safe For Work** mode that can be toggled on and off.
 
-PLAY [HERE](https://memer.app)
+## PLAY [HERE](https://memer.app)
 
 ![Screenshot][screenshot]
 
-[screenshot]: screenshots/screenshot2.png "MEMER screenshot"
+[screenshot]: screenshots/memer_capture_480.gif "MEMER screenshot"
 
-### Rules
+## Rules
 
 * Players get dealt 7 **CAPTION CARDS**
 * One Player is chosen to be the **JUDGE**. The judge selects from a random set of 4 popular categories (i.e. Food, Chuck Norris, Alcohol, Sassy)
