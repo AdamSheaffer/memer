@@ -20,30 +20,30 @@ export class WebworkerService {
 
   runUrl<T>(url: string, data?: any): Subject<T> {
     const worker = new Worker(url);
-    const subject = this.createSubjectForWorker<T>(worker, data);
+    const subject$ = this.createSubjectForWorker<T>(worker, data);
 
-    this.subjectToWorkerMap.set(subject, worker);
+    this.subjectToWorkerMap.set(subject$, worker);
 
-    return subject;
+    return subject$;
   }
 
-  terminate(subject: Subject<any>): Subject<any> {
-    return this.removeSubject(subject);
+  terminate(subject$: Subject<any>): Subject<any> {
+    return this.removeSubject(subject$);
   }
 
-  getWorker(subject: Subject<any>): Worker {
-    return this.subjectToWorkerMap.get(subject);
+  getWorker(subject$: Subject<any>): Worker {
+    return this.subjectToWorkerMap.get(subject$);
   }
 
   private createSubjectForWorker<T>(worker: Worker, data: any): Subject<T> {
-    const subject = new Subject<T>();
+    const subject$ = new Subject<T>();
     worker.addEventListener('message', (event) => {
-      subject.next(event.data);
+      subject$.next(event.data);
     });
-    worker.addEventListener('error', subject.error);
+    worker.addEventListener('error', subject$.error);
     worker.postMessage(data);
 
-    return subject;
+    return subject$;
   }
 
   private getOrCreateWorkerUrl(fn: Function): string {
@@ -66,12 +66,12 @@ export class WebworkerService {
     return URL.createObjectURL(blob);
   }
 
-  private removeSubject<T>(subject: Subject<T>): Subject<T> {
-    const worker = this.subjectToWorkerMap.get(subject);
+  private removeSubject<T>(subject$: Subject<T>): Subject<T> {
+    const worker = this.subjectToWorkerMap.get(subject$);
     if (worker) {
       worker.terminate();
     }
-    this.subjectToWorkerMap.delete(subject);
-    return subject;
+    this.subjectToWorkerMap.delete(subject$);
+    return subject$;
   }
 }
