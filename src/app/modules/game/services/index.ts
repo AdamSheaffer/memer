@@ -3,3 +3,4 @@ export * from './deck/deck.service';
 export * from './giphy/giphy.service';
 export * from './category/category.service';
 export * from './round-picker/round-picker.service';
+export * from './web-worker/web-worker.service';
