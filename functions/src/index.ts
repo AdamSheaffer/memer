@@ -3,6 +3,59 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp();
 
+const deletePlayers = (gameId: string): Promise<string[]> => {
+  console.log(`Deleting players from game ${gameId}`);
+
+  const batch = admin.firestore().batch();
+  const ids: string[] = [];
+
+  return admin.firestore()
+    .collection(`games/${gameId}/players`)
+    .listDocuments()
+    .then(refs => {
+      refs.forEach(ref => {
+        batch.delete(ref);
+        ids.push(ref.id);
+      });
+      return batch.commit()
+    })
+    .then(() => ids);
+}
+
+const deletePlayerCards = (gameId: string, playerIds: string[]): Promise<any> => {
+  console.log(`Deleting cards from game ${gameId}`);
+
+  const promises: Promise<any>[] = [];
+
+  playerIds.forEach(playerId => {
+    const batch = admin.firestore().batch();
+
+    const promise = admin.firestore()
+      .collection(`games/${gameId}/players/${playerId}/cards`)
+      .listDocuments()
+      .then(refs => {
+        refs.forEach(ref => {
+          batch.delete(ref);
+        });
+        return batch.commit();
+      });
+
+    promises.push(promise);
+  });
+
+  return Promise.all(promises);
+}
+
+const deleteGame = (gameId: string) => {
+  console.log(`Deleting data from game ${gameId}`);
+
+  return admin.firestore()
+    .doc(`games/${gameId}`)
+    .delete()
+    .then(() => deletePlayers(gameId))
+    .then(ids => deletePlayerCards(gameId, ids))
+}
+
 export const registerGamePlayed = functions.firestore
   .document('games/{gameId}/players/{playerId}')
   .onCreate(async (playerSnapshot, _event) => {
@@ -26,7 +79,7 @@ export const registerGamePlayed = functions.firestore
     const gamesPlayed = user.gamesPlayed ? user.gamesPlayed + 1 : 1;
 
     return userSnaphot.ref.update({ gamesPlayed });
-});
+  });
 
 export const onUserStatusChanged = functions.database
   .ref('status/{uid}')
@@ -57,18 +110,31 @@ export const onUserStatusChanged = functions.database
       const playerFirestoreRef = admin.firestore().doc(`games/${status.game}/players/${status.player}`);
       const player = await playerFirestoreRef.get();
       if (player.exists) {
-        const playerRemoval = playerFirestoreRef.update({ isActive: false });
-        updates.push(playerRemoval);
+        // If player was last one remaining, delete the whole game
+        const remainingPlayers = await admin.firestore()
+          .collection(`games/${status.game}/players`)
+          .where('isActive', '==', true)
+          .get();
+
+        if (remainingPlayers.size <= 1) {
+          const gameDeletion = deleteGame(status.game);
+
+          updates.push(gameDeletion);
+        } else {
+          const playerRemoval = playerFirestoreRef.update({ isActive: false });
+          updates.push(playerRemoval);
+        }
+
       }
     }
 
-    // Update lastChanged
+    // Update lastChanged on user
     eventStatus.lastChanged = new Date(eventStatus.lastChanged);
     const userUpdate = userFirestoreRef.update({ presence: eventStatus });
     updates.push(userUpdate);
 
     return Promise.all(updates);
-});
+  });
 
 export const updateOnlineCounter = functions.database
   .ref('status/{uid}')
