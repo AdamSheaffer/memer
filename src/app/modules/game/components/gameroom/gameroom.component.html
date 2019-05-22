@@ -9,8 +9,9 @@
 
         <!-- Player images and scores -->
         <div>
-          <memer-player-list [turn]="game?.turn" [players]="players" [hostId]="game.hostId" [isHost]="game.hostId === currentUser.uid"
-            (playerRemoval)="removePlayer($event)" [pointsToWin]="pointsToWin"></memer-player-list>
+          <memer-player-list [turn]="game?.turn" [players]="players" [hostId]="game.hostId"
+            [isHost]="game.hostId === currentUser.uid" (playerRemoval)="removePlayer($event)"
+            [pointsToWin]="pointsToWin"></memer-player-list>
         </div>
 
         <!-- Button for Host to start the game -->
@@ -18,8 +19,9 @@
           <h2 class="text-indicator waiting-indicator">WAITING FOR OTHER PLAYERS</h2>
           <div class="row">
             <div class="col-sm-6 offset-sm-3">
-              <button *ngIf="game.hostId === currentUser.uid && !game?.hasStarted" (click)="beginGame()" [disabled]="(players|activePlayers)?.length < 2"
-                class="btn btn-outline-info btn-block">START GAME</button>
+              <button *ngIf="game.hostId === currentUser.uid && !game?.hasStarted" (click)="beginGame()"
+                [disabled]="(players|activePlayers)?.length < 2" class="btn btn-outline-info btn-block">START
+                GAME</button>
               <span *ngIf="currentUser?.id !== game.hostId && !game?.hasStarted" class="spinner spinner-lg">
                 Waiting...
               </span>
@@ -49,24 +51,27 @@
               IT'S YOUR TURN!
             </h2>
 
-            <!-- STANDARD ROUND -->
+            <!-- Standard Round -->
             <div *ngIf="isStandardRound">
               <h2 *ngIf="game.tagOptions.length && !game.tagSelection" class="animated pulse infinite">SELECT A TAG</h2>
             </div>
 
-            <!-- REVERSE ROUND -->
+            <!-- Reverse Round -->
             <div *ngIf="isReverseRound && !game.memeTemplate" class="round-description">
               <clr-icon class="round-icon animated rotateIn" shape="repeat" size="72"></clr-icon>
               <h3 class="round-type">REVERSE ROUND!</h3>
               <p>SELECT A CARD FROM YOUR HAND AND LET OTHER PLAYERS FIND THE RIGHT GIF</p>
             </div>
 
-            <button *ngIf="!game.tagOptions.length && !isReverseRound" class="btn btn-outline-primary btn-block" (click)="beginTurn()">START</button>
-            <button *ngIf="game.winner && isHost && !canShowModal" class="btn btn-outline-primary btn-block" (click)="resetGame()">
+            <button *ngIf="!game.tagOptions.length && !isReverseRound" class="btn btn-outline-primary btn-block"
+              (click)="beginTurn()">START</button>
+            <button *ngIf="game.winner && isHost && !canShowModal" class="btn btn-outline-primary btn-block"
+              (click)="resetGame()">
               NEW GAME
             </button>
           </div>
-          <div *ngIf="!isCurrentUsersTurn && !game.tagSelection && !game.memeTemplate" class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+          <div *ngIf="!isCurrentUsersTurn && !game.tagSelection && !game.memeTemplate"
+            class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
             <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] === 'S'">
               <h2>
                 <span class="username">{{game.turnUsername | uppercase}}'</span>
@@ -82,18 +87,20 @@
           </div>
         </div>
 
-        <!-- STANDARD ROUND -->
+        <!-- Standard Round -->
         <div *ngIf="isStandardRound" class="standard-round">
 
           <!-- Giphy Tags to choose from -->
           <div *ngIf="game?.tagOptions && !game.tagSelection">
-            <memer-tag-selection [playerCanSelect]="isCurrentUsersTurn" [tags]="game.tagOptions" (tagSelect)="selectTag($event)"></memer-tag-selection>
+            <memer-tag-selection [playerCanSelect]="isCurrentUsersTurn" [tags]="game.tagOptions"
+              (tagSelect)="selectTag($event)"></memer-tag-selection>
           </div>
 
           <!-- Gif Options to choose from -->
           <div *ngIf="game?.gifOptionURLs && !game.memeTemplate">
             <memer-gif-options [playerCanSelect]="isCurrentUsersTurn" [usernameSelecting]="game.turnUsername"
-              (optionSelect)="selectGif($event)" [options]="game.gifOptionURLs" [chosenTag]="game.tagSelection"></memer-gif-options>
+              (optionSelect)="selectGif($event)" [options]="game.gifOptionURLs" [chosenTag]="game.tagSelection">
+            </memer-gif-options>
           </div>
 
           <!-- Gif that judge has selected -->
@@ -103,7 +110,8 @@
                 <div class="d-flex align-items-center flex-column meme-container">
                   <h2 *ngIf="!isCurrentUsersTurn && !player.memePlayed" class="animated pulse infinite">SUBMIT A
                     CAPTION</h2>
-                  <h2 *ngIf="(isCurrentUsersTurn || (player.memePlayed && !game.roundWinner)) && !game.isVotingRound">WAITING
+                  <h2 *ngIf="(isCurrentUsersTurn || (player.memePlayed && !game.roundWinner)) && !game.isVotingRound">
+                    WAITING
                     FOR OTHER PLAYERS...</h2>
                   <div class="animated bounceIn">
                     <memer-meme [meme]="{ bottom: '????', photoURL: game.memeTemplate.photoURL }"></memer-meme>
@@ -114,12 +122,12 @@
           </div>
         </div>
 
-        <!-- REVERSE ROUND -->
+        <!-- Reverse Round -->
         <div *ngIf="isReverseRound" class="reverse-round">
           <div *ngIf="!isCurrentUsersTurn && !game.memeTemplate" class="round-description">
-              <clr-icon class="round-icon animated rotateIn" shape="repeat" size="72"></clr-icon>
-              <h3 class="round-type">REVERSE ROUND!</h3>
-              <p>THIS ROUND, {{game.turnUsername | uppercase}} PICKS THE CAPTION AND YOU SUPPLY THE GIF</p>
+            <clr-icon class="round-icon animated rotateIn" shape="repeat" size="72"></clr-icon>
+            <h3 class="round-type">REVERSE ROUND!</h3>
+            <p>THIS ROUND, {{game.turnUsername | uppercase}} PICKS THE CAPTION AND YOU SUPPLY THE GIF</p>
           </div>
 
           <div *ngIf="players|currentUser:currentUser.uid as player">
@@ -128,7 +136,8 @@
                 <div class="d-flex align-items-center flex-column meme-container">
                   <h2 *ngIf="!isCurrentUsersTurn && !player.memePlayed" class="animated pulse infinite">SUBMIT A
                     GIF</h2>
-                  <h2 *ngIf="(isCurrentUsersTurn || (player.memePlayed && !game.roundWinner)) && !game.isVotingRound">WAITING
+                  <h2 *ngIf="(isCurrentUsersTurn || (player.memePlayed && !game.roundWinner)) && !game.isVotingRound">
+                    WAITING
                     FOR OTHER PLAYERS...</h2>
                   <div class="animated bounceIn">
                     <memer-meme [meme]="game.memeTemplate"></memer-meme>
@@ -149,7 +158,8 @@
         </div>
 
         <!-- Winning Meme -->
-        <clr-modal [(clrModalOpen)]="game.roundWinner && canShowModal" *ngIf="game?.roundWinner" [clrModalClosable]="false">
+        <clr-modal [(clrModalOpen)]="game.roundWinner && canShowModal" *ngIf="game?.roundWinner"
+          [clrModalClosable]="false">
           <h2 *ngIf="!game.winner" class="modal-title animated pulse infinite winner-header">
             <span class="winner-name">{{game.roundWinner.username | uppercase}} </span> WINS THE ROUND!
           </h2>
@@ -173,12 +183,8 @@
             <div *ngIf="cards$|async as cards">
               <memer-round-timer
                 *ngIf="game.memeTemplate && !player.memePlayed && !isCurrentUsersTurn && game.timeLimit"
-                (timerComplete)="selectCaption($event)"
-                [limit]="game.timeLimit"
-                [reverseRound]="false"
-                [cards]="cards"
-                [memeTemplate]="game.memeTemplate"
-                [templateTimestamp]="game.memeTemplateTimeStamp">
+                (timerComplete)="selectCaption($event)" [limit]="game.timeLimit" [reverseRound]="false" [cards]="cards"
+                [memeTemplate]="game.memeTemplate" [templateTimestamp]="game.memeTemplateTimeStamp">
               </memer-round-timer>
               <memer-player-hand *ngIf="!game.winner" [playerCanSelect]="playerCanSelect(player, game)"
                 [playerHand]="cards" (cardSelect)="selectCaption($event)">
@@ -190,15 +196,12 @@
         <!-- Giphy Search for Reverse Round -->
         <div *ngIf="players|currentUser:currentUser.uid as player">
           <div *ngIf="isReverseRound && !isCurrentUsersTurn && game.memeTemplate">
-            <memer-round-timer
-              *ngIf="game.memeTemplate && !player.memePlayed && !isCurrentUsersTurn && game.timeLimit"
-              (reverseTimerComplete)="playReverseRoundGif($event)"
-              [limit]="game.timeLimit"
-              [reverseRound]="true"
-              [memeTemplate]="game.memeTemplate"
-              [templateTimestamp]="game.memeTemplateTimeStamp">
+            <memer-round-timer *ngIf="game.memeTemplate && !player.memePlayed && !isCurrentUsersTurn && game.timeLimit"
+              (reverseTimerComplete)="playReverseRoundGif($event)" [limit]="game.timeLimit" [reverseRound]="true"
+              [memeTemplate]="game.memeTemplate" [templateTimestamp]="game.memeTemplateTimeStamp">
             </memer-round-timer>
-            <memer-giphy-search *ngIf="!player.memePlayed" (gifSelected)="playReverseRoundGif($event)"></memer-giphy-search>
+            <memer-giphy-search *ngIf="!player.memePlayed" (gifSelected)="playReverseRoundGif($event)">
+            </memer-giphy-search>
           </div>
         </div>
 

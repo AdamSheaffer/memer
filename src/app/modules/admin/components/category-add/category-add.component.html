@@ -4,7 +4,8 @@
       <label for="description" class="required">Category</label>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-      <label for="validDescription" aria-haspopup="true" role="tooltip" [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.description.errors?.maxlength || form.controls.description.errors?.required}">
+      <label for="validDescription" aria-haspopup="true" role="tooltip"
+        [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.description.errors?.maxlength || form.controls.description.errors?.required}">
         <input formControlName="description" class="form-control" type="text" id="description" size="120">
         <span *ngIf="form.controls.description.errors?.maxlength" class="tooltip-content">Category is too long</span>
         <span *ngIf="form.controls.description.errors?.required" class="tooltip-content">Category is required</span>

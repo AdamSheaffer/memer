@@ -1,25 +1,34 @@
+<!-- Player Images -->
 <div class="players row">
   <div *ngFor="let player of players | activePlayers" class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <div *ngIf="player.isActive" [ngClass]="{'current-turn': player.uid === turn, 'pending-selection': !player.memePlayed && player.uid !== turn }">
+    <div *ngIf="player.isActive"
+      [ngClass]="{'current-turn': player.uid === turn, 'pending-selection': !player.memePlayed && player.uid !== turn }">
       <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-name">
-        <clr-icon shape="success-standard" size="26" *ngIf="player.uid !== turn" [ngClass]="{'is-solid': player.memePlayed}" [title]="player.memePlayed ? 'Submitted': 'Waiting'"
+        <clr-icon shape="success-standard" size="26" *ngIf="player.uid !== turn"
+          [ngClass]="{'is-solid': player.memePlayed}" [title]="player.memePlayed ? 'Submitted': 'Waiting'"
           class="is-success voting-indicator"></clr-icon>
         <span>{{player.username | uppercase}}</span>
         <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-xs tooltip-right">
-          <clr-icon *ngIf="isHost && player.uid !== hostId" (click)="stagePlayerToRemove(player)" shape="thumbs-down" class="is-error remove-player-button"></clr-icon>
+          <clr-icon *ngIf="isHost && player.uid !== hostId" (click)="stagePlayerToRemove(player)" shape="thumbs-down"
+            class="is-error remove-player-button"></clr-icon>
           <span class="tooltip-content">Remove {{player.username}}</span>
         </a>
         <div>
           <img class="player-img" [src]="player.thumbnailURL" [ngClass]="{'player-img-turn': player.uid === turn}">
         </div>
       </div>
-      <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-score">SCORE: {{player.score}} / {{pointsToWin}}</div>
+
+      <!-- Player Score -->
+      <div [ngClass]="{'dark-theme': isDarkTheme}" class="player-details player-score">SCORE: {{player.score}} /
+        {{pointsToWin}}</div>
       <memer-player-score [player]="player" [pointsToWin]="pointsToWin"></memer-player-score>
     </div>
   </div>
 </div>
 
-<clr-modal *ngIf="playerStagedForRemoval && isHost" [(clrModalOpen)]="playerStagedForRemoval && isHost" [clrModalClosable]="false">
+<!-- Remove Player Confirmation Modal -->
+<clr-modal *ngIf="playerStagedForRemoval && isHost" [(clrModalOpen)]="playerStagedForRemoval && isHost"
+  [clrModalClosable]="false">
   <h3 class="modal-title">REMOVE {{playerStagedForRemoval.username | uppercase}}? ORLY?</h3>
   <div class="modal-body">
     <p>Do you want to remove {{playerStagedForRemoval.username}} from the game?</p>
