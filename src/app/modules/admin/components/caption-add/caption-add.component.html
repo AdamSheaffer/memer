@@ -1,4 +1,6 @@
 <form [formGroup]="form" (ngSubmit)="onSave()">
+
+  <!-- Safe For Work -->
   <div class="form-group row">
     <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
       <label for="safeForWork">Safe For Work</label>
@@ -9,29 +11,37 @@
       </clr-checkbox>
     </div>
   </div>
+
+  <!-- Top Label -->
   <div class="form-group row">
     <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
       <label for="top">Top</label>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-      <label for="validTop" aria-haspopup="true" role="tooltip" [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.top.errors?.maxlength}">
-          <input formControlName="top" class="form-control" type="text" id="top" size="120">
-          <span *ngIf="form.controls.top.errors?.maxlength" class="tooltip-content">Caption is too long</span>
-        </label>
+      <label for="validTop" aria-haspopup="true" role="tooltip"
+        [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.top.errors?.maxlength}">
+        <input formControlName="top" class="form-control" type="text" id="top" size="120">
+        <span *ngIf="form.controls.top.errors?.maxlength" class="tooltip-content">Caption is too long</span>
+      </label>
     </div>
   </div>
+
+  <!-- Bottom Label -->
   <div class="form-group row">
     <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
       <label for="bottom" class="required">Bottom</label>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-      <label for="validTop" aria-haspopup="true" role="tooltip" [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.bottom.errors?.maxlength || form.controls.bottom.errors?.required}">
-          <input formControlName="bottom" class="form-control" type="text" id="bottom" size="120">
-          <span *ngIf="form.controls.bottom.errors?.maxlength" class="tooltip-content">Caption is too long</span>
-          <span *ngIf="form.controls.bottom.errors?.required" class="tooltip-content">Bottom caption is required</span>
-        </label>
+      <label for="validTop" aria-haspopup="true" role="tooltip"
+        [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.bottom.errors?.maxlength || form.controls.bottom.errors?.required}">
+        <input formControlName="bottom" class="form-control" type="text" id="bottom" size="120">
+        <span *ngIf="form.controls.bottom.errors?.maxlength" class="tooltip-content">Caption is too long</span>
+        <span *ngIf="form.controls.bottom.errors?.required" class="tooltip-content">Bottom caption is required</span>
+      </label>
     </div>
   </div>
+
+  <!-- Controls -->
   <div class="btn-group btn-outline-primary">
     <button (click)="onCancel()" type="button" class="btn">CANCEL</button>
     <button [disabled]="!form.valid" type="submit" class="btn btn-primary">SAVE</button>
