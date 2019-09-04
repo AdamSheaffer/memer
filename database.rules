@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "playersOnline": {
+      ".read": true,
+      ".write": false
+    },
+    "status": {
+      "$uid": {
+     		".read": "auth.uid == $uid",
+    		".write": "auth.uid == $uid"
+      }
+    }
+  }
+}
