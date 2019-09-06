@@ -21,11 +21,13 @@
   border: 2px solid $accent-color;
   transition: all .2s linear;
   cursor: pointer;
+  transform: scale(.9);
 }
 
 .preview-img:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
   border: 2px solid $primary-color;
+  z-index: 100;
 }
 
 .dark-theme {

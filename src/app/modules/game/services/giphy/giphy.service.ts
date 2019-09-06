@@ -31,7 +31,7 @@ export class GiphyService {
     return this.http.get(this.baseURL, { params }).toPromise()
       .then((response: any) => {
         return response.data.map(i => {
-          const thumbnail = i.images.fixed_width_small.url;
+          const thumbnail = i.images.fixed_width_downsampled.url;
           const img = i.images.fixed_height.url;
           return { thumbnail, img };
         });
