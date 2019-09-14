@@ -14,3 +14,231 @@ $impact: 'Anton', sans-serif;
 $theme-transition: all .4s linear;
 $quick-transition: all .2s linear;
 $secondary-font: Metropolis,Avenir Next,Helvetica Neue,Arial,sans-serif;
+
+// Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
+// This software is released under MIT license.
+// The full license information can be found in LICENSE in the root directory of this project.
+
+// Neutral palette -- text, backgrounds, and content
+
+$clr-color-hue: 201 !default;
+$clr-color-neutral-saturation: 0% !default;
+
+$clr-color-neutral-0: hsl($clr-color-hue, $clr-color-neutral-saturation, 100%) !default;
+$clr-color-neutral-50: hsl($clr-color-hue, $clr-color-neutral-saturation, 98%) !default;
+$clr-color-neutral-100: hsl($clr-color-hue, $clr-color-neutral-saturation, 95%) !default;
+$clr-color-neutral-200: hsl($clr-color-hue, $clr-color-neutral-saturation, 93%) !default;
+$clr-color-neutral-300: hsl($clr-color-hue, $clr-color-neutral-saturation, 87%) !default;
+$clr-color-neutral-400: hsl($clr-color-hue, $clr-color-neutral-saturation, 80%) !default;
+$clr-color-neutral-500: hsl($clr-color-hue, $clr-color-neutral-saturation, 60%) !default;
+$clr-color-neutral-600: hsl($clr-color-hue, $clr-color-neutral-saturation, 45%) !default;
+$clr-color-neutral-700: hsl($clr-color-hue, $clr-color-neutral-saturation, 34%) !default;
+$clr-color-neutral-800: hsl($clr-color-hue, $clr-color-neutral-saturation, 27%) !default;
+$clr-color-neutral-900: hsl($clr-color-hue, $clr-color-neutral-saturation, 19%) !default;
+$clr-color-neutral-1000: hsl($clr-color-hue, $clr-color-neutral-saturation, 0%) !default;
+
+$clr-color-on-neutral-0: $clr-color-neutral-1000 !default;
+$clr-color-on-neutral-50: $clr-color-neutral-1000 !default;
+$clr-color-on-neutral-100: $clr-color-neutral-1000 !default;
+$clr-color-on-neutral-200: $clr-color-neutral-1000 !default;
+$clr-color-on-neutral-300: $clr-color-neutral-1000 !default;
+$clr-color-on-neutral-400: $clr-color-neutral-1000 !default;
+$clr-color-on-neutral-500: $clr-color-neutral-1000 !default;
+$clr-color-on-neutral-600: $clr-color-neutral-0 !default;
+$clr-color-on-neutral-700: $clr-color-neutral-0 !default;
+$clr-color-on-neutral-800: $clr-color-neutral-0 !default;
+$clr-color-on-neutral-900: $clr-color-neutral-0 !default;
+$clr-color-on-neutral-1000: $clr-color-neutral-0 !default;
+
+// Action palette -- buttons and clickable items
+$clr-color-action-50: lighten($primary-color, 25%) !default;
+$clr-color-action-100: lighten($primary-color, 15%) !default;
+$clr-color-action-200: lighten($primary-color, 12%) !default;
+$clr-color-action-300: lighten($primary-color, 8%) !default;
+$clr-color-action-400: lighten($primary-color, 5%) !default;
+$clr-color-action-500: $primary-color !default;
+$clr-color-action-600: darken($primary-color, 5%) !default;
+$clr-color-action-700: darken($primary-color, 10%) !default;
+$clr-color-action-800: darken($primary-color, 20%) !default;
+$clr-color-action-900: darken($primary-color, 50%) !default;
+$clr-color-action-1000: darken($primary-color, 80%) !default;
+
+$clr-color-on-action-50: $clr-color-neutral-1000 !default;
+$clr-color-on-action-100: $clr-color-neutral-1000 !default;
+$clr-color-on-action-200: $clr-color-neutral-1000 !default;
+$clr-color-on-action-300: $clr-color-neutral-1000 !default;
+$clr-color-on-action-400: $clr-color-neutral-1000 !default;
+$clr-color-on-action-500: $clr-color-neutral-1000 !default;
+$clr-color-on-action-600: $clr-color-neutral-0 !default;
+$clr-color-on-action-700: $clr-color-neutral-0 !default;
+$clr-color-on-action-800: $clr-color-neutral-0 !default;
+$clr-color-on-action-900: $clr-color-neutral-0 !default;
+$clr-color-on-action-1000: $clr-color-neutral-0 !default;
+
+// Secondary Action palette -- actions but off-the-beaten-path actions, like drag-and-drop
+
+$clr-color-secondary-action-50: hsl(271, 100%, 95%) !default;
+$clr-color-secondary-action-50: lighten($accent-color, 25%) !default;
+$clr-color-secondary-action-100: lighten($accent-color, 15%) !default;
+$clr-color-secondary-action-200: lighten($accent-color, 12%) !default;
+$clr-color-secondary-action-300: lighten($accent-color, 8%) !default;
+$clr-color-secondary-action-400: lighten($accent-color, 5%) !default;
+$clr-color-secondary-action-500: $accent-color !default;
+$clr-color-secondary-action-600: darken($accent-color, 5%) !default;
+$clr-color-secondary-action-700: darken($accent-color, 10%) !default;
+$clr-color-secondary-action-800: darken($accent-color, 20%) !default;
+$clr-color-secondary-action-900: darken($accent-color, 50%) !default;
+$clr-color-secondary-action-1000: darken($accent-color, 80%) !default;
+
+$clr-color-on-secondary-action-50: $clr-color-neutral-1000 !default;
+$clr-color-on-secondary-action-100: $clr-color-neutral-1000 !default;
+$clr-color-on-secondary-action-200: $clr-color-neutral-1000 !default;
+$clr-color-on-secondary-action-300: $clr-color-neutral-1000 !default;
+$clr-color-on-secondary-action-400: $clr-color-neutral-1000 !default;
+$clr-color-on-secondary-action-500: $clr-color-neutral-0 !default;
+$clr-color-on-secondary-action-600: $clr-color-neutral-0 !default;
+$clr-color-on-secondary-action-700: $clr-color-neutral-0 !default;
+$clr-color-on-secondary-action-800: $clr-color-neutral-0 !default;
+$clr-color-on-secondary-action-900: $clr-color-neutral-0 !default;
+$clr-color-on-secondary-action-1000: $clr-color-neutral-0 !default;
+
+// Stoplight Danger color: alerts, error messaging, danger buttons
+$clr-color-danger-50: lighten($red, 80%) !default;
+$clr-color-danger-100: lighten($red, 50%) !default;
+$clr-color-danger-200: lighten($red, 20%) !default;
+$clr-color-danger-300: lighten($red, 10%) !default;
+$clr-color-danger-400: lighten($red, 5%) !default;
+$clr-color-danger-500: $red !default;
+$clr-color-danger-600: darken($red, 5%) !default;
+$clr-color-danger-700: darken($red, 10%) !default;
+$clr-color-danger-800: darken($red, 20%) !default;
+$clr-color-danger-900: darken($red, 50%) !default;
+$clr-color-danger-1000: darken($red, 80%) !default;
+
+$clr-color-on-danger-50: $clr-color-neutral-1000 !default;
+$clr-color-on-danger-100: $clr-color-neutral-1000 !default;
+$clr-color-on-danger-200: $clr-color-neutral-1000 !default;
+$clr-color-on-danger-300: $clr-color-neutral-1000 !default;
+$clr-color-on-danger-400: $clr-color-neutral-1000 !default;
+$clr-color-on-danger-500: $clr-color-neutral-1000 !default;
+$clr-color-on-danger-600: $clr-color-neutral-1000 !default;
+$clr-color-on-danger-700: $clr-color-neutral-0 !default;
+$clr-color-on-danger-800: $clr-color-neutral-0 !default;
+$clr-color-on-danger-900: $clr-color-neutral-0 !default;
+$clr-color-on-danger-1000: $clr-color-neutral-0 !default;
+
+// Stoplight Warning color: alerts, warning messages
+
+$clr-color-warning-50: hsl(52, 100%, 95%) !default;
+$clr-color-warning-100: hsl(51, 97%, 85%) !default;
+$clr-color-warning-200: hsl(51, 100%, 69%) !default;
+$clr-color-warning-300: hsl(51, 100%, 52%) !default;
+$clr-color-warning-400: hsl(49, 98%, 51%) !default;
+$clr-color-warning-500: hsl(47, 100%, 49%) !default;
+$clr-color-warning-600: hsl(45, 100%, 46%) !default;
+$clr-color-warning-700: hsl(43, 100%, 44%) !default;
+$clr-color-warning-800: hsl(41, 100%, 41%) !default;
+$clr-color-warning-900: hsl(38, 100%, 38%) !default;
+$clr-color-warning-1000: hsl(13, 100%, 19%) !default;
+
+$clr-color-on-warning-50: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-100: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-200: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-300: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-400: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-500: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-600: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-700: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-800: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-900: $clr-color-neutral-1000 !default;
+$clr-color-on-warning-1000: $clr-color-neutral-0 !default;
+
+// Stoplight Success color: alerts, success messaging, success buttons
+$clr-color-success-50: lighten($green, 25%) !default;
+$clr-color-success-100: lighten($green, 15%) !default;
+$clr-color-success-200: lighten($green, 12%) !default;
+$clr-color-success-300: lighten($green, 8%) !default;
+$clr-color-success-400: lighten($green, 5%) !default;
+$clr-color-success-500: $green !default;
+$clr-color-success-600: darken($green, 5%) !default;
+$clr-color-success-700: darken($green, 10%) !default;
+$clr-color-success-800: darken($green, 20%) !default;
+$clr-color-success-900: darken($green, 50%) !default;
+$clr-color-success-1000: darken($green, 80%) !default;
+
+$clr-color-on-success-50: $clr-color-neutral-1000 !default;
+$clr-color-on-success-100: $clr-color-neutral-1000 !default;
+$clr-color-on-success-200: $clr-color-neutral-1000 !default;
+$clr-color-on-success-300: $clr-color-neutral-1000 !default;
+$clr-color-on-success-400: $clr-color-neutral-1000 !default;
+$clr-color-on-success-500: $clr-color-neutral-1000 !default;
+$clr-color-on-success-600: $clr-color-neutral-1000 !default;
+$clr-color-on-success-700: $clr-color-neutral-0 !default;
+$clr-color-on-success-800: $clr-color-neutral-0 !default;
+$clr-color-on-success-900: $clr-color-neutral-0 !default;
+$clr-color-on-success-1000: $clr-color-neutral-0 !default;
+
+// @deprecated in 2.0
+// Old naming convention that was tied to specific colors  is being replaced by
+// a utility based naming convention.
+$clr-white: $clr-color-neutral-0 !default;
+$clr-near-white: $clr-color-neutral-50 !default;
+$clr-light-gray: $clr-color-neutral-200 !default;
+$clr-lighter-midtone-gray: $clr-color-neutral-300 !default;
+$clr-light-midtone-gray: $clr-color-neutral-400 !default;
+$clr-dark-midtone-gray: $clr-color-neutral-500 !default;
+$clr-gray: $clr-color-neutral-600 !default;
+$clr-dark-gray: $clr-color-neutral-700 !default;
+$clr-near-black: $clr-color-neutral-900 !default;
+$clr-black: $clr-color-neutral-1000 !default;
+
+$clr-blue: $clr-color-action-700 !default;
+$clr-action-blue-lightest: $clr-color-action-50 !default;
+$clr-action-blue-lighter: $clr-color-action-300 !default;
+$clr-action-blue-light: $clr-color-action-400 !default;
+$clr-action-blue-light-midtone: $clr-color-action-500 !default;
+$clr-action-blue: $clr-color-action-600 !default;
+$clr-action-blue-accessible: $clr-color-action-600 !default;
+$clr-action-blue-dark-midtone: $clr-color-action-600 !default;
+$clr-action-blue-dark: $clr-color-action-800 !default;
+$clr-action-blue-darker: $clr-color-action-900 !default;
+$clr-action-blue-darkest: $clr-color-action-1000 !default;
+
+$clr-action-purple-lightest: $clr-color-secondary-action-50 !default;
+$clr-action-purple-lighter: $clr-color-secondary-action-100 !default;
+$clr-action-purple-light: $clr-color-secondary-action-300 !default;
+$clr-action-purple-light-midtone: $clr-color-secondary-action-500 !default;
+$clr-action-purple: $clr-color-secondary-action-700 !default;
+$clr-action-purple-dark-midtone: $clr-color-secondary-action-700 !default;
+$clr-action-purple-dark: $clr-color-secondary-action-800 !default;
+$clr-action-purple-darker: $clr-color-secondary-action-900 !default;
+$clr-action-purple-darkest: $clr-color-secondary-action-1000 !default;
+
+$clr-green-lightest: $clr-color-success-50 !default;
+$clr-green-lighter: $clr-color-success-100 !default;
+$clr-green: $clr-color-success-400 !default;
+$clr-green-light-midtone: $clr-color-success-500 !default;
+$clr-green-accessible: $clr-color-success-700 !default;
+$clr-green-dark-midtone: $clr-color-success-700 !default;
+$clr-green-dark: $clr-color-success-800 !default;
+$clr-green-darker: $clr-color-success-900 !default;
+$clr-green-darkest: $clr-color-success-1000 !default;
+
+$clr-yellow-lightest: $clr-color-warning-50 !default;
+$clr-yellow-lighter: $clr-color-warning-100 !default;
+$clr-yellow: $clr-color-warning-300 !default;
+$clr-yellow-light-midtone: $clr-color-warning-500 !default;
+$clr-yellow-dark-midtone: $clr-color-warning-700 !default;
+$clr-yellow-dark: $clr-color-warning-800 !default;
+$clr-yellow-darker: $clr-color-warning-900 !default;
+$clr-yellow-darkest: $clr-color-warning-1000 !default;
+
+$clr-red-lightest: $clr-color-danger-50 !default;
+$clr-red-lighter: $clr-color-danger-100 !default;
+$clr-red-light: $clr-color-danger-200 !default;
+$clr-red-light-midtone: $clr-color-danger-700 !default;
+$clr-red: $clr-color-danger-800 !default;
+$clr-red-dark-midtone: $clr-color-danger-800 !default;
+$clr-red-dark: $clr-color-danger-900 !default;
+$clr-red-darker: $clr-color-danger-1000 !default;
+$clr-red-darkest: $clr-color-danger-1000 !default;
