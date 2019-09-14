@@ -2,7 +2,7 @@
 <memer-game-setup id="game-setup" *ngIf="showGameSetup" [user]="user" [show]="showGameSetup"
   (cancelled)="showGameSetup = false" (createdGame)="onGameCreated($event)"></memer-game-setup>
 
-<div class="row flex-items-xs-between top-indicators">
+<div class="clr-row flex-items-xs-between top-indicators">
   <!-- Online Players Counter -->
   <memer-online-player-count></memer-online-player-count>
 
@@ -15,12 +15,12 @@
 </div>
 
 <div class="home">
-  <div class="row flex-items-xs-center">
+  <div class="clr-row clr-justify-content-xs-center">
     <div class="col-xs-12">
       <img class="logo" src="assets/logo2.png" alt="logo">
       <img id="giphy-logo" src="assets/Poweredby_100px-Black_VertLogo.png" alt="Powered By Giphy">
     </div>
-    <div class="login-group col-xs-12 row flex-items-xs-center">
+    <div class="login-group col-xs-12 clr-row clr-justify-content-xs-center">
       <div class="col-xs-12 col-sm-10 col-md-6 col-lg-4">
         <div *ngIf="!games?.length" class="col-xs-12">
           <button (click)="findOpenGames()"
@@ -39,9 +39,9 @@
   </div>
 
   <!-- OPEN GAMES -->
-  <div *ngIf="showOpenGames" class="row flex-items-xs-center">
+  <div *ngIf="showOpenGames" class="clr-row clr-justify-content-xs-center">
     <div class="col-xs-12">
-      <div class="col-xs-12 row flex-items-xs-center">
+      <div class="col-xs-12 clr-row clr-justify-content-xs-center">
         <span *ngIf="isLoading" class="spinner spinner-inverse">
           Loading...
         </span>
@@ -50,7 +50,7 @@
 
     <!-- No Games Indicator -->
     <div *ngIf="!isLoading && !games?.length" class="col-xs-12">
-      <div class="col-xs-12 row flex-items-xs-center">
+      <div class="col-xs-12 clr-row clr-justify-content-xs-center">
         <span class="p6 games-message">
           There are no games open right now. Try hosting a
           <a (click)="hostGame()">NEW GAME</a>
@@ -61,9 +61,9 @@
     <!-- Available Games -->
     <div class="col-xs-12 col-md-6 col-xl-4">
       <div *ngFor="let game of games" class="card col-xs-12">
-        <div class="row game-listing">
+        <div class="clr-row game-listing">
           <div class="col-xs-8">
-            <div class="game-details row">
+            <div class="game-details clr-row">
               <img [src]="game.hostPhotoURL" class="host-img" alt="Host Photo">
               <div>
                 <div class="p6 open-game-timestamp">
@@ -75,7 +75,7 @@
               </div>
             </div>
           </div>
-          <div class="col-xs-4 col-xs flex-xs-middle">
+          <div class="col-xs-4 col-xs clr-justify-content-xs-center">
             <button (click)="joinGame(game.id)" class="btn btn-link join-btn">JOIN</button>
           </div>
         </div>

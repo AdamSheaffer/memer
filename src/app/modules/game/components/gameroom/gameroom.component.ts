@@ -14,7 +14,7 @@ import * as firebase from 'firebase/app';
   styleUrls: ['./gameroom.component.scss']
 })
 export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('chat', { read: ElementRef }) chatEl: ElementRef;
+  @ViewChild('chat', { static: false }) chatEl: ElementRef;
   destroy$: Subject<boolean> = new Subject<boolean>();
   gameId: string;
   cardsInHand = 7;
@@ -123,8 +123,8 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
         this.beginStandardTurn(round);
         break;
       case RoundType.Reverse:
-      const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-      this.gameService.updateGame({ lastUpdated, round });
+        const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+        this.gameService.updateGame({ lastUpdated, round });
     }
   }
 
