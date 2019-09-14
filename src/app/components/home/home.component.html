@@ -3,8 +3,11 @@
   (cancelled)="showGameSetup = false" (createdGame)="onGameCreated($event)"></memer-game-setup>
 
 <div class="row flex-items-xs-between top-indicators">
-  <!-- Online Players Counter -->
-  <memer-online-player-count></memer-online-player-count>
+  <div>
+    <a [routerLink]="['profile', user.uid]">
+      <img [src]="user.thumbnailURL" class="user-img" alt="User Photo" title="Profile">
+    </a>
+  </div>
 
   <!-- SFW Toggle -->
   <div class="toggle-switch">
@@ -19,7 +22,9 @@
     <div class="col-xs-12">
       <img class="logo" src="assets/logo2.png" alt="logo">
       <img id="giphy-logo" src="assets/Poweredby_100px-Black_VertLogo.png" alt="Powered By Giphy">
+      <!-- Online Players Counter -->
     </div>
+    <memer-online-player-count></memer-online-player-count>
     <div class="login-group col-xs-12 row flex-items-xs-center">
       <div class="col-xs-12 col-sm-10 col-md-6 col-lg-4">
         <div *ngIf="!games?.length" class="col-xs-12">
@@ -64,7 +69,7 @@
         <div class="row game-listing">
           <div class="col-xs-8">
             <div class="game-details row">
-              <img [src]="game.hostPhotoURL" class="host-img" alt="Host Photo">
+              <img [src]="game.hostPhotoURL" class="user-img host-img" alt="Host Photo">
               <div>
                 <div class="p6 open-game-timestamp">
                   Started {{game.beginDate|fromFBDate|amTimeAgo}}
