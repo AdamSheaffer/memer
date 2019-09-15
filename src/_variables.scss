@@ -110,10 +110,10 @@ $clr-color-danger-300: lighten($red, 10%) !default;
 $clr-color-danger-400: lighten($red, 5%) !default;
 $clr-color-danger-500: $red !default;
 $clr-color-danger-600: darken($red, 5%) !default;
-$clr-color-danger-700: darken($red, 10%) !default;
-$clr-color-danger-800: darken($red, 20%) !default;
-$clr-color-danger-900: darken($red, 50%) !default;
-$clr-color-danger-1000: darken($red, 80%) !default;
+$clr-color-danger-700: darken($red, 8%) !default;
+$clr-color-danger-800: darken($red, 10%) !default;
+$clr-color-danger-900: darken($red, 15%) !default;
+$clr-color-danger-1000: darken($red, 20%) !default;
 
 $clr-color-on-danger-50: $clr-color-neutral-1000 !default;
 $clr-color-on-danger-100: $clr-color-neutral-1000 !default;

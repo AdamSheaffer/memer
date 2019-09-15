@@ -1,52 +1,41 @@
-<form [formGroup]="form">
+<div class="clr-row clr-justify-content-start">
+  <form clrForm [formGroup]="form" class="clr-col-12">
+    <!-- Top Label -->
+    <clr-input-container>
+      <label class="clr-col-12 clr-col-md-2" for="top">Top</label>
+      <input class="clr-col-12 clr-col-md-10" clrInput formControlName="top" type="text" id="top" size="30" />
+      <clr-control-error *ngIf="form.controls.top.errors?.maxlength">
+        Caption is too long
+      </clr-control-error>
+    </clr-input-container>
 
-  <!-- Safe For Work -->
-  <div class="form-group row">
-    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-      <label for="safeForWork">Safe For Work</label>
-    </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-      <clr-checkbox formControlName="safeForWork" type="checkbox" name="safeForWork" id="safeForWork">
-        {{form.controls.safeForWork?.value ? 'YES' : 'NO'}}
-      </clr-checkbox>
-    </div>
-  </div>
+    <!-- Bottom Label -->
+    <clr-input-container>
+      <label class="clr-col-12 clr-col-md-2" for="bottom">Bottom</label>
+      <input class="clr-col-12 clr-col-md-10" clrInput formControlName="bottom" type="text" id="bottom" size="30" />
+      <clr-control-error *ngIf="form.controls.bottom.errors?.maxlength">
+        Caption is too long
+      </clr-control-error>
+      <clr-control-error *ngIf="form.controls.bottom.errors?.required">
+        Bottom caption is required
+      </clr-control-error>
+    </clr-input-container>
 
-  <!-- Top Label -->
-  <div class="form-group row">
-    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-      <label for="top">Top</label>
+    <!-- Safe For Work -->
+    <div class="checkbox">
+      <clr-checkbox-wrapper>
+        <input formControlName="safeForWork" clrCheckbox name="safeForWork" type="checkbox" id="safeForWork" />
+        <label for="safeForWork">Safe For Work</label>
+      </clr-checkbox-wrapper>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-      <label for="validTop" aria-haspopup="true" role="tooltip"
-        [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.top.errors?.maxlength}">
-        <input formControlName="top" class="form-control" type="text" id="top" size="120">
-        <span *ngIf="form.controls.top.errors?.maxlength" class="tooltip-content">Caption is too long</span>
-      </label>
-    </div>
-  </div>
 
-  <!-- Bottom Label -->
-  <div class="form-group row">
-    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
-      <label for="bottom" class="required">Bottom</label>
+    <!-- Controls -->
+    <div class="btn-group btn-outline-primary">
+      <button class="btn btn-outline-danger" (click)="stageDelete()" type="button">DELETE</button>
+      <button [disabled]="!form.valid" (click)="onSave()" type="submit" class="btn">UPDATE</button>
     </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-      <label for="validTop" aria-haspopup="true" role="tooltip"
-        [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.bottom.errors?.maxlength || form.controls.bottom.errors?.required}">
-        <input formControlName="bottom" class="form-control" type="text" id="bottom" size="120">
-        <span *ngIf="form.controls.bottom.errors?.maxlength" class="tooltip-content">Caption is too long</span>
-        <span *ngIf="form.controls.bottom.errors?.required" class="tooltip-content">Bottom caption is required</span>
-      </label>
-    </div>
-  </div>
-
-  <!-- Controls -->
-  <div class="btn-group btn-outline-primary">
-    <button class="btn btn-outline-danger" (click)="stageDelete()" type="button">DELETE</button>
-    <button [disabled]="!form.valid" (click)="onSave()" type="submit" class="btn">UPDATE</button>
-  </div>
-</form>
+  </form>
+</div>
 
 <!-- Delete Confirmation Modal -->
 <clr-modal [(clrModalOpen)]="showDeleteConfirmation">
