@@ -1,12 +1,13 @@
 <h3 class="heading">CAPTION MANAGER</h3>
-<div class="row flex-items-xs-center">
+<div class="clr-row clr-justify-content-center">
   <div>
-    <memer-caption-add *ngIf="showingNewCardForm" (save)="add($event)" (cancel)="showAddForm(false)"></memer-caption-add>
+    <memer-caption-add *ngIf="showingNewCardForm" (save)="add($event)" (cancel)="showAddForm(false)">
+    </memer-caption-add>
     <button *ngIf="!showingNewCardForm" (click)="showAddForm(true)" class="btn btn-primary">ADD CARD</button>
   </div>
 </div>
-<div *ngIf="captions" class="row flex-items-xs-center">
-  <clr-datagrid class="datagrid-compact col-xs-12">
+<div *ngIf="captions" class="clr-row clr-justify-content-center">
+  <clr-datagrid class="datagrid-compact clr-col-12">
     <clr-dg-column [clrDgField]="'top'">Caption Top</clr-dg-column>
     <clr-dg-column [clrDgField]="'bottom'">Caption Bottom</clr-dg-column>
     <clr-dg-column [clrDgField]="'safeForWork'">SFW</clr-dg-column>

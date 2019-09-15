@@ -1,16 +1,18 @@
-<div [ngClass]="{'dark-theme': isDarkTheme}" class="row flex-items-xs-center">
-  <div class="col-lg-6 col-xs-12">
+<div [ngClass]="{'dark-theme': isDarkTheme}" class="clr-row clr-justify-content-center">
+  <div class="clr-col-lg-6 clr-col-xs-12">
 
     <!-- Search Input -->
-    <label class="search-label">
-      <clr-icon class="search-icon" shape="search" size="24"></clr-icon>
-      <input (keyup)="searchText$.next($event.target.value)" placeholder="SEARCH GIPHY" type="text"
-        class="searchbar-input">
-    </label>
+    <form>
+      <label class="search-label">
+        <clr-icon class="search-icon" shape="search" size="24"></clr-icon>
+        <input clrInput (keyup)="searchText$.next($event.target.value)" placeholder="SEARCH GIPHY" type="text"
+          class="searchbar-input">
+      </label>
+    </form>
 
     <!-- Image Results -->
     <div *ngIf="searchText$|async">
-      <div *ngIf="searchResults$|async as results" class="row flex-items-xs-center">
+      <div *ngIf="searchResults$|async as results" class="clr-row clr-justify-content-center">
         <img *ngFor="let item of results" (click)="select(item.img)" [src]="item.thumbnail" class="preview-img">
         <button (click)="nextPage()" class="btn btn-link">LOAD MORE</button>
       </div>

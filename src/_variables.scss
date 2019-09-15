@@ -77,7 +77,6 @@ $clr-color-on-action-1000: $clr-color-neutral-0 !default;
 
 // Secondary Action palette -- actions but off-the-beaten-path actions, like drag-and-drop
 
-$clr-color-secondary-action-50: hsl(271, 100%, 95%) !default;
 $clr-color-secondary-action-50: lighten($accent-color, 25%) !default;
 $clr-color-secondary-action-100: lighten($accent-color, 15%) !default;
 $clr-color-secondary-action-200: lighten($accent-color, 12%) !default;
@@ -103,10 +102,10 @@ $clr-color-on-secondary-action-900: $clr-color-neutral-0 !default;
 $clr-color-on-secondary-action-1000: $clr-color-neutral-0 !default;
 
 // Stoplight Danger color: alerts, error messaging, danger buttons
-$clr-color-danger-50: lighten($red, 80%) !default;
-$clr-color-danger-100: lighten($red, 50%) !default;
-$clr-color-danger-200: lighten($red, 20%) !default;
-$clr-color-danger-300: lighten($red, 10%) !default;
+$clr-color-danger-50: lighten($red, 25%) !default;
+$clr-color-danger-100: lighten($red, 15%) !default;
+$clr-color-danger-200: lighten($red, 12%) !default;
+$clr-color-danger-300: lighten($red, 8%) !default;
 $clr-color-danger-400: lighten($red, 5%) !default;
 $clr-color-danger-500: $red !default;
 $clr-color-danger-600: darken($red, 5%) !default;

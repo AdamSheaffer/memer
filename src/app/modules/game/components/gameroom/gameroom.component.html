@@ -17,8 +17,8 @@
         <!-- Button for Host to start the game -->
         <div *ngIf="!game?.hasStarted">
           <h2 class="text-indicator waiting-indicator">WAITING FOR OTHER PLAYERS</h2>
-          <div class="row">
-            <div class="col-sm-6 offset-sm-3">
+          <div class="clr-row">
+            <div class="clr-col-sm-6 clr-offset-sm-3">
               <button *ngIf="game.hostId === currentUser.uid && !game?.hasStarted" (click)="beginGame()"
                 [disabled]="(players|activePlayers)?.length < 2" class="btn btn-outline-info btn-block">START
                 GAME</button>
@@ -44,8 +44,9 @@
         </div>
 
         <!-- Button to begin when it's your turn -->
-        <div *ngIf="game?.hasStarted" class="row">
-          <div *ngIf="isCurrentUsersTurn" class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+        <div *ngIf="game?.hasStarted" class="clr-row">
+          <div *ngIf="isCurrentUsersTurn"
+            class="text-indicator clr-col-12 clr-col-sm-8 clr-col-md-6 clr-offset-sm-2 clr-offset-md-3">
             <h2 *ngIf="!game.tagOptions.length && !game.memeTemplate" class="animated pulse infinite">
               <span class="username">{{currentUser.username | uppercase}}</span>
               IT'S YOUR TURN!
@@ -71,7 +72,7 @@
             </button>
           </div>
           <div *ngIf="!isCurrentUsersTurn && !game.tagSelection && !game.memeTemplate"
-            class="text-indicator col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
+            class="text-indicator clr-col-12 clr-col-sm-8 clr-col-md-6 clr-offset-sm-2 clr-offset-md-3">
             <div *ngIf="game.turnUsername.toUpperCase()[game.turnUsername.length - 1] === 'S'">
               <h2>
                 <span class="username">{{game.turnUsername | uppercase}}'</span>
@@ -106,8 +107,8 @@
           <!-- Gif that judge has selected -->
           <div *ngIf="players|currentUser:currentUser.uid as player">
             <div *ngIf="game?.memeTemplate && !game.isVotingRound" class="selected-gif">
-              <div class="row align-items-center">
-                <div class="d-flex align-items-center flex-column meme-container">
+              <div class="clr-row clr-align-items-center">
+                <div class="d-flex clr-align-items-center flex-column meme-container">
                   <h2 *ngIf="!isCurrentUsersTurn && !player.memePlayed" class="animated pulse infinite">SUBMIT A
                     CAPTION</h2>
                   <h2 *ngIf="(isCurrentUsersTurn || (player.memePlayed && !game.roundWinner)) && !game.isVotingRound">
@@ -132,8 +133,8 @@
 
           <div *ngIf="players|currentUser:currentUser.uid as player">
             <div *ngIf="game?.memeTemplate && !game.isVotingRound" class="selected-gif">
-              <div class="row align-items-center">
-                <div class="d-flex align-items-center flex-column meme-container">
+              <div class="clr-row clr-align-items-center">
+                <div class="d-flex clr-align-items-center flex-column meme-container">
                   <h2 *ngIf="!isCurrentUsersTurn && !player.memePlayed" class="animated pulse infinite">SUBMIT A
                     GIF</h2>
                   <h2 *ngIf="(isCurrentUsersTurn || (player.memePlayed && !game.roundWinner)) && !game.isVotingRound">
@@ -149,8 +150,9 @@
         </div>
 
         <!-- Memes submitted -->
-        <div *ngIf="game?.memeTemplate && game.isVotingRound && !game.roundWinner" class="row flex-items-xs-center">
-          <div *ngFor="let player of players|shuffle" class="flex-xs-bottom">
+        <div *ngIf="game?.memeTemplate && game.isVotingRound && !game.roundWinner"
+          class="clr-row clr-justify-content-center">
+          <div *ngFor="let player of players|shuffle" class="clr-flex-bottom">
             <div *ngIf="game?.turn !== player.uid" class="player-submission">
               <memer-meme (click)="selectFavoriteCaption(player)" [meme]="player.memePlayed"></memer-meme>
             </div>
@@ -167,7 +169,7 @@
             <span class="winner-name">{{game.roundWinner.username | uppercase}}</span> WINS THE GAME!
           </h2>
           <div class="modal-body">
-            <div class="row flex-items-xs-center animated bounceIn">
+            <div class="clr-row clr-justify-content-center animated bounceIn">
               <memer-meme [meme]="game.roundWinner.memePlayed"></memer-meme>
             </div>
           </div>

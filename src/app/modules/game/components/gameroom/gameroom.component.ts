@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Renderer2, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { filter, take, map, skip, takeUntil } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import * as firebase from 'firebase/app';
   templateUrl: './gameroom.component.html',
   styleUrls: ['./gameroom.component.scss']
 })
-export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GameroomComponent implements OnInit, OnDestroy {
   @ViewChild('chat', { static: false }) chatEl: ElementRef;
   destroy$: Subject<boolean> = new Subject<boolean>();
   gameId: string;
@@ -47,7 +47,6 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private themeService: ThemeService,
-    private renderer: Renderer2,
     private roundPicker: RoundPickerService,
     private presenceService: PresenceService
   ) {
@@ -88,12 +87,6 @@ export class GameroomComponent implements OnInit, AfterViewInit, OnDestroy {
       });
       this.game$.pipe(takeUntil(this.destroy$)).subscribe(game => this.gameState = game); // keep copy of game state
     });
-  }
-
-  // To position the chat at the bottom
-  ngAfterViewInit(): void {
-    const el = this.chatEl.nativeElement.getElementsByClassName('nav-content')[0];
-    this.renderer.setStyle(el, 'flex-direction', 'column-reverse');
   }
 
   beginGame() {
