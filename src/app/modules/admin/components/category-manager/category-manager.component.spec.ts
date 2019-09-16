@@ -12,27 +12,33 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 describe('CategoryManagerComponent', () => {
   let component: CategoryManagerComponent;
   let fixture: ComponentFixture<CategoryManagerComponent>;
-  let categoryService: jasmine.SpyObj<CategoryService>;
-  categoryService = jasmine.createSpyObj('CategoryService', ['getAll', 'add', 'delete']);
-  const cats = () => ([
+  let categoryServiceSpy: jasmine.SpyObj<CategoryService>;
+  const cats: () => Category[] = () => ([
     { id: '1', safeForWork: true, description: 'CCR' },
     { id: '2', safeForWork: false, description: 'LOG JAMMIN' },
     { id: '3', safeForWork: false, description: 'NIHILISM' }
   ]);
-  const CATEGORIES: Category[] = cats();
-  categoryService.getAll.and.returnValue(Promise.resolve(cats()));
-  categoryService.delete.and.returnValue(Promise.resolve());
-  categoryService.add.and.callFake((cat: Category) => {
-    return Promise.resolve({ id: '4', ...cat });
-  });
+
+  // const categoryServiceFake = {
+  //   getAll: () => Promise.resolve(cats()),
+  //   delete: () => Promise.resolve(),
+  //   add: (cat) => Promise.resolve({ id: '4', ...cat })
+  // };
+  // let deleteSpy;
+  // let addSpy;
 
   beforeEach(async(() => {
+    const spy = jasmine.createSpyObj<CategoryService>('CategoryService', ['getAll', 'add', 'delete']);
+    spy.getAll.and.returnValue(Promise.resolve(cats()));
+    spy.add.and.callFake((cat) => Promise.resolve({ id: '4', ...cat }));
+    spy.delete.and.returnValue(Promise.resolve());
+
     TestBed.configureTestingModule({
       imports: [ClarityModule, ReactiveFormsModule, NoopAnimationsModule],
       declarations: [CategoryManagerComponent, CategoryAddComponent],
       providers: [
         {
-          provide: CategoryService, useValue: categoryService
+          provide: CategoryService, useValue: spy
         }
       ]
     })
@@ -41,6 +47,7 @@ describe('CategoryManagerComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CategoryManagerComponent);
+    categoryServiceSpy = TestBed.get(CategoryService);
     component = fixture.componentInstance;
     fixture.detectChanges();
     component.categories = cats();
@@ -73,7 +80,7 @@ describe('CategoryManagerComponent', () => {
     categoryAddComponent.onSave();
     tick();
 
-    expect(categoryService.add).toHaveBeenCalled();
+    expect(categoryServiceSpy.add).toHaveBeenCalled();
     expect(component.categories.length).toBe(4);
   }));
 
@@ -107,7 +114,7 @@ describe('CategoryManagerComponent', () => {
     component.categoryStagedForDelete = null;
     component.delete();
 
-    expect(categoryService.delete).not.toHaveBeenCalled();
+    expect(categoryServiceSpy.delete).not.toHaveBeenCalled();
   });
 
   it('should delete a category', fakeAsync(() => {
