@@ -12,13 +12,19 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 describe('CategoryManagerComponent', () => {
   let component: CategoryManagerComponent;
   let fixture: ComponentFixture<CategoryManagerComponent>;
-  const categoryService: jasmine.SpyObj<CategoryService> = jasmine.createSpyObj('CategoryService', ['getAll', 'add', 'delete']);
+  let categoryService: jasmine.SpyObj<CategoryService>;
+  categoryService = jasmine.createSpyObj('CategoryService', ['getAll', 'add', 'delete']);
   const cats = () => ([
     { id: '1', safeForWork: true, description: 'CCR' },
     { id: '2', safeForWork: false, description: 'LOG JAMMIN' },
     { id: '3', safeForWork: false, description: 'NIHILISM' }
   ]);
   const CATEGORIES: Category[] = cats();
+  categoryService.getAll.and.returnValue(Promise.resolve(cats()));
+  categoryService.delete.and.returnValue(Promise.resolve());
+  categoryService.add.and.callFake((cat: Category) => {
+    return Promise.resolve({ id: '4', ...cat });
+  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,12 +37,6 @@ describe('CategoryManagerComponent', () => {
       ]
     })
       .compileComponents();
-
-    categoryService.getAll.and.returnValue(Promise.resolve(cats()));
-    categoryService.delete.and.returnValue(Promise.resolve());
-    categoryService.add.and.callFake((cat: Category) => {
-      return Promise.resolve({ id: '4', ...cat });
-    });
   }));
 
   beforeEach(() => {
