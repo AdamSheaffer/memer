@@ -4,7 +4,6 @@ import { PlayerHandComponent } from './player-hand.component';
 import { Renderer2 } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Card } from '../../../../../interfaces';
-import { detectChanges } from '@angular/core/src/render3';
 import { Theme, ThemeService } from '../../../../core/services';
 
 describe('PlayerHandComponent', () => {
@@ -16,7 +15,7 @@ describe('PlayerHandComponent', () => {
     themeService = { theme: Theme.LIGHT };
 
     TestBed.configureTestingModule({
-      declarations: [ PlayerHandComponent ],
+      declarations: [PlayerHandComponent],
       providers: [
         Renderer2,
         {
@@ -25,7 +24,7 @@ describe('PlayerHandComponent', () => {
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

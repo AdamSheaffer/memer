@@ -8,7 +8,7 @@ import { UserService, PlayerService, Theme, ThemeService, GameService } from '..
 import { CategoryService, ChatService, DeckService, GiphyService, RoundPickerService } from '../../services';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
-import { Game } from '../../../../interfaces';
+import { Game, Player } from '../../../../interfaces';
 
 describe('GameroomComponent', () => {
   let component: GameroomComponent;
@@ -28,12 +28,12 @@ describe('GameroomComponent', () => {
   beforeEach(async(() => {
     // UserService
     userService = jasmine.createSpyObj<UserService>('UserService', ['getPlayer']);
-    userService.getPlayer.and.returnValue({ uid: '123abc', username: 'Jeff Lebowski' });
+    userService.getPlayer.and.returnValue({ uid: '123abc', username: 'Jeff Lebowski' } as Player);
 
     // Player Service
     playerService = jasmine.createSpyObj<PlayerService>('PlayerService', ['init', 'join', 'getCurrentPlayersHand', 'update']);
-    playerService.init.and.returnValue(of([{ uid: '123abc', username: 'Jeff Lebowksi' }]));
-    playerService.join.and.returnValue(Promise.resolve('player123'));
+    playerService.init.and.returnValue(of([{ uid: '123abc', username: 'Jeff Lebowksi' } as Player]));
+    playerService.join.and.returnValue(Promise.resolve(null));
     playerService.getCurrentPlayersHand.and.returnValue(of([]));
 
     // Category Service
@@ -142,7 +142,7 @@ describe('GameroomComponent', () => {
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -74,8 +74,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
-              "node_modules/@webcomponents/custom-elements/custom-elements.min.js",
-              "node_modules/@clr/icons/clr-icons.min.js"
+              "node_modules/@webcomponents/custom-elements/custom-elements.min.js"
             ],
             "styles": [
               "node_modules/@clr/icons/clr-icons.min.css",

@@ -73,7 +73,11 @@ describe('HomeComponent', () => {
       uid: '123',
       username: 'Jackie Treehorn',
       isActive: true,
-      score: 0
+      score: 0,
+      fullName: 'Jackie Treehorn',
+      photoURL: null,
+      thumbnailURL: null,
+      roles: null
     });
     userService.logout.and.returnValue(Promise.resolve());
 
@@ -96,7 +100,7 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [MomentModule],
-      declarations: [ HomeComponent, FromFBDatePipe, GameSetupComponent  ],
+      declarations: [HomeComponent, FromFBDatePipe, GameSetupComponent],
       providers: [
         {
           provide: UserService,
@@ -116,7 +120,7 @@ describe('HomeComponent', () => {
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -6,7 +6,7 @@ import { CaptionService } from '../../services/caption.service';
 import { UserService } from '../../../core/services';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { detectChanges } from '@angular/core/src/render3';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DeckManagerComponent', () => {
   let component: DeckManagerComponent;
@@ -16,8 +16,8 @@ describe('DeckManagerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ ClarityModule, ReactiveFormsModule ],
-      declarations: [ DeckManagerComponent, CaptionAddComponent, CaptionEditComponent ],
+      imports: [ClarityModule, ReactiveFormsModule, NoopAnimationsModule],
+      declarations: [DeckManagerComponent, CaptionAddComponent, CaptionEditComponent],
       providers: [
         {
           provide: CaptionService,
@@ -29,7 +29,7 @@ describe('DeckManagerComponent', () => {
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     captionService.getAll.and.returnValue(Promise.resolve([
       { id: '1', top: 'CARD TOP 1', bottom: 'CARD BOTTOM 1' },

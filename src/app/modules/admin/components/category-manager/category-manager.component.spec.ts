@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 
 import { CategoryManagerComponent } from './category-manager.component';
 import { CategoryService } from '../../../game/services';
-import {ClarityModule} from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { CategoryAddComponent } from '../category-add/category-add.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Category } from '../../../../interfaces';
@@ -13,25 +13,27 @@ describe('CategoryManagerComponent', () => {
   let component: CategoryManagerComponent;
   let fixture: ComponentFixture<CategoryManagerComponent>;
   const categoryService: jasmine.SpyObj<CategoryService> = jasmine.createSpyObj('CategoryService', ['getAll', 'add', 'delete']);
-  const CATEGORIES: Category[] = [
+  const cats = () => ([
     { id: '1', safeForWork: true, description: 'CCR' },
     { id: '2', safeForWork: false, description: 'LOG JAMMIN' },
     { id: '3', safeForWork: false, description: 'NIHILISM' }
-  ];
+  ]);
+  const CATEGORIES: Category[] = cats();
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ClarityModule, ReactiveFormsModule, NoopAnimationsModule],
-      declarations: [ CategoryManagerComponent, CategoryAddComponent ],
+      declarations: [CategoryManagerComponent, CategoryAddComponent],
       providers: [
         {
           provide: CategoryService, useValue: categoryService
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
-    categoryService.getAll.and.returnValue(Promise.resolve(CATEGORIES));
+    categoryService.getAll.and.returnValue(Promise.resolve(cats()));
+    categoryService.delete.and.returnValue(Promise.resolve());
     categoryService.add.and.callFake((cat: Category) => {
       return Promise.resolve({ id: '4', ...cat });
     });
@@ -41,7 +43,7 @@ describe('CategoryManagerComponent', () => {
     fixture = TestBed.createComponent(CategoryManagerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.categories = CATEGORIES;
+    component.categories = cats();
   });
 
   it('should create', () => {
@@ -49,13 +51,14 @@ describe('CategoryManagerComponent', () => {
   });
 
   it('should show list of categories', () => {
-    component.categories = CATEGORIES;
+    const categories = cats();
+    component.categories = categories;
     fixture.detectChanges();
     const listingElements = fixture.debugElement.queryAll(By.css('.description'));
-    expect(listingElements.length).toBe(CATEGORIES.length);
-    expect(listingElements[0].nativeElement.textContent).toBe(CATEGORIES[0].description);
-    expect(listingElements[1].nativeElement.textContent).toBe(CATEGORIES[1].description);
-    expect(listingElements[2].nativeElement.textContent).toBe(CATEGORIES[2].description);
+    expect(listingElements.length).toBe(cats().length);
+    expect(listingElements[0].nativeElement.textContent).toBe(categories[0].description);
+    expect(listingElements[1].nativeElement.textContent).toBe(categories[1].description);
+    expect(listingElements[2].nativeElement.textContent).toBe(categories[2].description);
   });
 
   it('should save a new category and add it to the list', fakeAsync(() => {
@@ -101,13 +104,13 @@ describe('CategoryManagerComponent', () => {
   });
 
   it('should cancel a cetegory deletion if nothing to delete', () => {
+    component.categoryStagedForDelete = null;
     component.delete();
 
     expect(categoryService.delete).not.toHaveBeenCalled();
   });
 
   it('should delete a category', fakeAsync(() => {
-    categoryService.delete.and.returnValue(Promise.resolve());
     const categoryToDelete = component.categories[0];
     component.stageCategoryForDelete(categoryToDelete);
     fixture.detectChanges();
