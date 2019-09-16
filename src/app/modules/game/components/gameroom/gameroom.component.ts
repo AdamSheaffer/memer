@@ -116,7 +116,7 @@ export class GameroomComponent implements OnInit, OnDestroy {
         this.beginStandardTurn(round);
         break;
       case RoundType.Reverse:
-        const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+        const lastUpdated = firebase.firestore.Timestamp.fromDate(new Date());
         this.gameService.updateGame({ lastUpdated, round });
     }
   }
@@ -128,7 +128,7 @@ export class GameroomComponent implements OnInit, OnDestroy {
     this.categoryService.getNCategories(4)
       .then(categories => {
         const tagOptions = categories.map(c => c.description);
-        const lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+        const lastUpdated = firebase.firestore.Timestamp.fromDate(new Date());
         this.gameService.updateGame({ tagOptions, lastUpdated, round });
       });
   }
@@ -145,7 +145,7 @@ export class GameroomComponent implements OnInit, OnDestroy {
     };
     this.gameService.updateGame({
       memeTemplate,
-      memeTemplateTimeStamp: firebase.firestore.FieldValue.serverTimestamp()
+      memeTemplateTimeStamp: firebase.firestore.Timestamp.fromDate(new Date())
     });
   }
 
@@ -172,7 +172,7 @@ export class GameroomComponent implements OnInit, OnDestroy {
 
         if (this.isReverseRound) {
           meme.photoURL = 'assets/question-mark.jpg';
-          const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+          const timestamp = firebase.firestore.Timestamp.fromDate(new Date());
           this.gameService.updateGame({ memeTemplate: meme, memeTemplateTimeStamp: timestamp });
         } else {
           meme.photoURL = !!this.gameState.memeTemplate ? this.gameState.memeTemplate.photoURL : null;

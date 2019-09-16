@@ -25,12 +25,12 @@ export class PresenceService {
 
   private firestoreOffline: OnlineStatus = {
     state: Presence.OFFLINE,
-    lastChanged: firebase.firestore.FieldValue.serverTimestamp(),
+    lastChanged: firebase.firestore.Timestamp.fromDate(new Date()),
   };
 
   private firestoreOnline: OnlineStatus = {
     state: Presence.ONLINE,
-    lastChanged: firebase.firestore.FieldValue.serverTimestamp(),
+    lastChanged: firebase.firestore.Timestamp.fromDate(new Date()),
   };
 
   userStatusDatabaseRef: firebase.database.Reference;

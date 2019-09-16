@@ -65,14 +65,14 @@ export class GameService {
   private newGame(host: Player, gameSettings: GameSettings): Game {
     return {
       hasStarted: false,
-      beginDate: firebase.firestore.FieldValue.serverTimestamp(),
+      beginDate: firebase.firestore.Timestamp.fromDate(new Date()),
       hostId: host.uid,
       hostPhotoURL: host.thumbnailURL,
       tagOptions: [],
       gifOptionURLs: [],
       captionDeck: [],
       isVotingRound: false,
-      lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+      lastUpdated: firebase.firestore.Timestamp.fromDate(new Date()),
       safeForWork: gameSettings.sfw,
       maxPlayers: gameSettings.maxPlayers,
       pointsToWin: gameSettings.pointsToWin,

@@ -32,7 +32,7 @@ export class ChatService {
       photoURL: player.photoURL,
       username: player.username,
       userUID: player.uid,
-      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+      timeStamp: firebase.firestore.Timestamp.fromDate(new Date()),
       content
     };
 
@@ -44,7 +44,7 @@ export class ChatService {
       photoURL: 'assets/header_logo_thumb.png',
       username: 'MEMER',
       userUID: null,
-      timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
+      timeStamp: firebase.firestore.Timestamp.fromDate(new Date()),
       content
     };
 
