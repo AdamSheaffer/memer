@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 
 import { CategoryManagerComponent } from './category-manager.component';
 import { CategoryService } from '../../../game/services';
-import {ClarityModule} from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { CategoryAddComponent } from '../category-add/category-add.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Category } from '../../../../interfaces';
@@ -12,36 +12,45 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 describe('CategoryManagerComponent', () => {
   let component: CategoryManagerComponent;
   let fixture: ComponentFixture<CategoryManagerComponent>;
-  const categoryService: jasmine.SpyObj<CategoryService> = jasmine.createSpyObj('CategoryService', ['getAll', 'add', 'delete']);
-  const CATEGORIES: Category[] = [
+  let categoryServiceSpy: jasmine.SpyObj<CategoryService>;
+  const cats: () => Category[] = () => ([
     { id: '1', safeForWork: true, description: 'CCR' },
     { id: '2', safeForWork: false, description: 'LOG JAMMIN' },
     { id: '3', safeForWork: false, description: 'NIHILISM' }
-  ];
+  ]);
+
+  // const categoryServiceFake = {
+  //   getAll: () => Promise.resolve(cats()),
+  //   delete: () => Promise.resolve(),
+  //   add: (cat) => Promise.resolve({ id: '4', ...cat })
+  // };
+  // let deleteSpy;
+  // let addSpy;
 
   beforeEach(async(() => {
+    const spy = jasmine.createSpyObj<CategoryService>('CategoryService', ['getAll', 'add', 'delete']);
+    spy.getAll.and.returnValue(Promise.resolve(cats()));
+    spy.add.and.callFake((cat) => Promise.resolve({ id: '4', ...cat }));
+    spy.delete.and.returnValue(Promise.resolve());
+
     TestBed.configureTestingModule({
       imports: [ClarityModule, ReactiveFormsModule, NoopAnimationsModule],
-      declarations: [ CategoryManagerComponent, CategoryAddComponent ],
+      declarations: [CategoryManagerComponent, CategoryAddComponent],
       providers: [
         {
-          provide: CategoryService, useValue: categoryService
+          provide: CategoryService, useValue: spy
         }
       ]
     })
-    .compileComponents();
-
-    categoryService.getAll.and.returnValue(Promise.resolve(CATEGORIES));
-    categoryService.add.and.callFake((cat: Category) => {
-      return Promise.resolve({ id: '4', ...cat });
-    });
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CategoryManagerComponent);
+    categoryServiceSpy = TestBed.get(CategoryService);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    component.categories = CATEGORIES;
+    component.categories = cats();
   });
 
   it('should create', () => {
@@ -49,13 +58,14 @@ describe('CategoryManagerComponent', () => {
   });
 
   it('should show list of categories', () => {
-    component.categories = CATEGORIES;
+    const categories = cats();
+    component.categories = categories;
     fixture.detectChanges();
     const listingElements = fixture.debugElement.queryAll(By.css('.description'));
-    expect(listingElements.length).toBe(CATEGORIES.length);
-    expect(listingElements[0].nativeElement.textContent).toBe(CATEGORIES[0].description);
-    expect(listingElements[1].nativeElement.textContent).toBe(CATEGORIES[1].description);
-    expect(listingElements[2].nativeElement.textContent).toBe(CATEGORIES[2].description);
+    expect(listingElements.length).toBe(cats().length);
+    expect(listingElements[0].nativeElement.textContent).toBe(categories[0].description);
+    expect(listingElements[1].nativeElement.textContent).toBe(categories[1].description);
+    expect(listingElements[2].nativeElement.textContent).toBe(categories[2].description);
   });
 
   it('should save a new category and add it to the list', fakeAsync(() => {
@@ -70,7 +80,7 @@ describe('CategoryManagerComponent', () => {
     categoryAddComponent.onSave();
     tick();
 
-    expect(categoryService.add).toHaveBeenCalled();
+    expect(categoryServiceSpy.add).toHaveBeenCalled();
     expect(component.categories.length).toBe(4);
   }));
 
@@ -101,13 +111,13 @@ describe('CategoryManagerComponent', () => {
   });
 
   it('should cancel a cetegory deletion if nothing to delete', () => {
+    component.categoryStagedForDelete = null;
     component.delete();
 
-    expect(categoryService.delete).not.toHaveBeenCalled();
+    expect(categoryServiceSpy.delete).not.toHaveBeenCalled();
   });
 
   it('should delete a category', fakeAsync(() => {
-    categoryService.delete.and.returnValue(Promise.resolve());
     const categoryToDelete = component.categories[0];
     component.stageCategoryForDelete(categoryToDelete);
     fixture.detectChanges();

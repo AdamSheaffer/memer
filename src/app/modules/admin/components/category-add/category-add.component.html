@@ -1,18 +1,13 @@
-<form [formGroup]="form" (ngSubmit)="onSave()">
-  <div class="form-group row">
-    <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12">
+<form clrForm [formGroup]="form" (ngSubmit)="onSave()">
+  <div class="clr-row">
+    <clr-input-container>
       <label for="description" class="required">Category</label>
-    </div>
-    <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
-      <label for="validDescription" aria-haspopup="true" role="tooltip"
-        [ngClass]="{'tooltip tooltip-validation invalid tooltip-sm tooltip-bottom-right': form.controls.description.errors?.maxlength || form.controls.description.errors?.required}">
-        <input formControlName="description" class="form-control" type="text" id="description" size="120">
-        <span *ngIf="form.controls.description.errors?.maxlength" class="tooltip-content">Category is too long</span>
-        <span *ngIf="form.controls.description.errors?.required" class="tooltip-content">Category is required</span>
-      </label>
-    </div>
+      <input clrInput formControlName="description" type="text" id="description" size="30">
+      <clr-control-error *ngIf="form.controls.description.errors?.maxlength">Category is too long</clr-control-error>
+      <clr-control-error *ngIf="form.controls.description.errors?.required">This is required</clr-control-error>
+    </clr-input-container>
   </div>
-  <div class="btn-group btn-outline-primary">
+  <div class="btn-group btn-outline-primary form-actions">
     <button (click)="onCancel()" type="button" class="btn">CANCEL</button>
     <button [disabled]="!form.valid" type="submit" class="btn btn-primary">SAVE</button>
   </div>

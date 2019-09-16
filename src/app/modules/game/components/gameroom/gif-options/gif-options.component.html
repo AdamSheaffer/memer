@@ -1,7 +1,7 @@
-<div *ngIf="options && options.length" class="container option-container row">
+<div *ngIf="options && options.length" class="container option-container clr-row">
 
   <!-- If it's your turn -->
-  <div *ngIf="playerCanSelect" class="col-xs-12">
+  <div *ngIf="playerCanSelect" class="clr-col-12">
     <h2>
       SELECT A GIF FOR
       <span class="tag">{{chosenTag | uppercase}}</span>
@@ -17,7 +17,7 @@
   </div>
 
   <!-- Gif Options Controls -->
-  <div *ngIf="playerCanSelect" class="col-xs-12 col-md-4 offset-md-4 row flex-items-xs-center">
+  <div *ngIf="playerCanSelect" class="clr-col-12 clr-col-md-4 clr-offset-md-4 clr-row clr-justify-content-center">
     <button (click)="previous()" class="btn btn-outline-info gif-nav-btn">
       <clr-icon shape="caret" dir="left"></clr-icon>
       PREV
@@ -29,7 +29,7 @@
   </div>
 
   <!-- If it's not your turn -->
-  <div *ngIf="!playerCanSelect" class="col-xs-12 text-indicator">
+  <div *ngIf="!playerCanSelect" class="clr-col-12 text-indicator">
     <h2>
       {{usernameSelecting | uppercase}} PICKED
       <span class="tag">{{chosenTag | uppercase}}</span>

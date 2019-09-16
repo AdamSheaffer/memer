@@ -1,9 +1,7 @@
-<div class="row hand flex-items-xs-center player-hand-container">
-  <div
-    *ngFor="let caption of playerHand"
-    (click)="selectCard(caption, cardBlock)"
+<div class="clr-row hand clr-justify-content-center player-hand-container">
+  <div *ngFor="let caption of playerHand" (click)="selectCard(caption, cardBlock)"
     [ngClass]="{'dark-theme': isDarkTheme}"
-    class="clickable card col-xs-6 col-sm-4 col-md-3 col-lg-2 player-card animated faster">
+    class="clickable card clr-col-6 clr-col-sm-4 clr-col-md-3 clr-col-lg-2 player-card animated faster">
     <div #cardBlock class="card-block">
       <div class="card-title">
         {{caption.top | uppercase}} {{caption.bottom | uppercase}}

@@ -85,8 +85,13 @@
   cursor: pointer;
 }
 
+:host ::ng-deep .nav-content {
+  flex-direction: column-reverse;
+}
+
 #chat {
   order: inherit;
+
 }
 
 #chat.dark-theme {

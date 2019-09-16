@@ -14,7 +14,7 @@
     <div>
       <span>What's the max # of players?</span>
     </div>
-    <div class="row flex-items-xs-center setting-count-container">
+    <div class="clr-row clr-justify-content-center setting-count-container">
       <clr-icon shape="users" size="96"></clr-icon>
       <h2 class="setting-count">{{gameSettings.maxPlayers}}</h2>
     </div>
@@ -27,7 +27,7 @@
     <div>
       <span>How many points to win?</span>
     </div>
-    <div class="row flex-items-xs-center setting-count-container">
+    <div class="clr-row clr-justify-content-center setting-count-container">
       <clr-icon shape="heart" size="96"></clr-icon>
       <h2 class="setting-count">{{gameSettings.pointsToWin}}</h2>
     </div>
@@ -40,7 +40,7 @@
     <div>
       <span>How often should there be reverse rounds?</span>
     </div>
-    <div class="row flex-items-xs-center setting-count-container">
+    <div class="clr-row clr-justify-content-center setting-count-container">
       <div>
         <clr-icon shape="repeat" size="96"></clr-icon>
       </div>
@@ -57,12 +57,12 @@
     <div>
       <span>How long should players have to submit?</span>
     </div>
-    <div class="row flex-items-xs-center setting-count-container">
+    <div class="clr-row clr-justify-content-center setting-count-container">
       <div>
         <clr-icon shape="clock" size="96"></clr-icon>
       </div>
     </div>
-    <div class="row flex-items-xs-center">
+    <div class="clr-row clr-justify-content-center">
       <div class="btn-group">
         <div class="radio btn">
           <input [(ngModel)]="gameSettings.roundTimer" type="radio" [value]="0" name="btn-group-limit-radios"
@@ -90,10 +90,10 @@
       <span>Should the game be safe for work?</span>
     </div>
     <div class="setting-count-container">
-      <div class="row flex-items-xs-center">
+      <div class="clr-row clr-justify-content-center">
         <clr-icon shape="briefcase" size="96" [ngClass]="{'is-solid': gameSettings.sfw}"></clr-icon>
       </div>
-      <div class="row flex-items-xs-center">
+      <div class="clr-row clr-justify-content-center">
         <div class="btn-group">
           <div class="radio btn">
             <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="true" name="btn-group-sfw-radios"

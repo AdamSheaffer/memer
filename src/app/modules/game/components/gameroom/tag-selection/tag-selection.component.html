@@ -1,7 +1,8 @@
-<div class="row">
-  <div class="row col-xs-12 col-lg-10 offset-lg-1">
-    <div class="col-sm-12 col-md-6 option-container" *ngFor="let tag of tags">
-      <button [disabled]="!playerCanSelect" class="btn btn-outline-warning btn-block" (click)="selectTag(tag)">{{tag}}</button>
+<div class="clr-row">
+  <div class="clr-row clr-col-12 clr-col-lg-10 clr-offset-lg-1">
+    <div class="clr-col-12 clr-col-md-6 option-container" *ngFor="let tag of tags">
+      <button [disabled]="!playerCanSelect" class="btn btn-outline-warning btn-block"
+        (click)="selectTag(tag)">{{tag}}</button>
     </div>
   </div>
 </div>

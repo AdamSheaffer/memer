@@ -3,10 +3,12 @@
     <div *ngFor="let message of messages$|async">
       <div class="user-photo">
         <img *ngIf="message.photoURL" [src]="message.photoURL" [alt]="message.username" [title]="message.username">
-        <p class="message-content" [ngClass]="{'current-user-message': message.userUID === currentUser.uid}">{{message.content}}</p>
+        <p class="message-content" [ngClass]="{'current-user-message': message.userUID === currentUser.uid}">
+          {{message.content}}</p>
       </div>
     </div>
   </div>
-  <textarea [value]="messageContent" (input)="messageContent = $event.target.value;" (keyup.enter)="send()" class="form-control message"
-    placeholder="Message..." class="message-textarea"></textarea>
+  <textarea [value]="messageContent" (input)="messageContent = $event.target.value;" (keyup.enter)="send()"
+    placeholder="Message..." class="message message-textarea">
+  </textarea>
 </div>

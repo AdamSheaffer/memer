@@ -8,10 +8,10 @@ import { Card, Meme } from '../../../../interfaces';
 })
 export class MemeComponent implements AfterViewInit {
   @Input() meme: Meme = { top: null, bottom: '????' };
-  @ViewChild('memeEl', { read: ElementRef }) memeEl: ElementRef;
-  @ViewChild('memetop', { read: ElementRef }) topCaption: ElementRef;
-  @ViewChild('memeimg', { read: ElementRef }) img: ElementRef;
-  @ViewChild('memebottom', { read: ElementRef }) bottomCaption: ElementRef;
+  @ViewChild('memeEl', { static: false }) memeEl: ElementRef;
+  @ViewChild('memetop', { static: false }) topCaption: ElementRef;
+  @ViewChild('memeimg', { static: false }) img: ElementRef;
+  @ViewChild('memebottom', { static: false }) bottomCaption: ElementRef;
   get cssBackgroundImageValue() { return `url(${this.meme.photoURL})`; }
 
   private maxFontSize = 62;

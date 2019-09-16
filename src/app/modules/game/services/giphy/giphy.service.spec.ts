@@ -29,7 +29,7 @@ describe('GiphyService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should return a promise of giphy urls', () => {
+  it('should return a promise of giphy urls', fakeAsync(() => {
     const giphyResponse = {
       data: [
         {
@@ -47,21 +47,23 @@ describe('GiphyService', () => {
 
     const req = httpMock.match((_r) => true);
     req.forEach(r => r.flush(giphyResponse));
-  });
+  }));
 
-  it('should fetch page one of a paginated list of gifs', () => {
+  it('should fetch page one of a paginated list of gifs', fakeAsync(() => {
     const giphyResponse = {
       data: [
         {
           images: {
             fixed_height: { url: 'foo.jpg' },
-            fixed_width_small: { url: 'small_foo.jpg' }
+            fixed_width_small: { url: 'small_foo.jpg' },
+            fixed_width_downsampled: { url: 'small_foo.jpg' },
           }
         },
         {
           images: {
             fixed_height: { url: 'foo2.jpg' },
-            fixed_width_small: { url: 'small_foo_2.jpg' }
+            fixed_width_small: { url: 'small_foo_2.jpg' },
+            fixed_width_downsampled: { url: 'small_foo.jpg' },
           }
         }
       ]
@@ -81,7 +83,7 @@ describe('GiphyService', () => {
     expect(params.get('limit')).toBe('12');
     expect(params.get('offset')).toBe('0');
     req.flush(giphyResponse);
-  });
+  }));
 
   it('should fetch page two of a paginated list of gifs', () => {
     const query = 'Evil Dead 2';

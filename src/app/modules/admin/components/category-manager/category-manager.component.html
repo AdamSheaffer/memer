@@ -1,12 +1,13 @@
-<div class="row flex-items-xs-center">
-  <div class="col-xs-12">
+<div class="clr-row clr-justify-content-center">
+  <div class="clr-col-12">
     <h3 class="heading">CATEGORY MANAGER</h3>
   </div>
-  <div class="col-xs-12 row flex-items-xs-center">
-    <button *ngIf="!showingNewCategoryForm" (click)="showNewCategoryForm()" class="btn btn-primary">ADD CATEGORY</button>
+  <div class="clr-col-12 clr-row clr-justify-content-center">
+    <button *ngIf="!showingNewCategoryForm" (click)="showNewCategoryForm()" class="btn btn-primary">ADD
+      CATEGORY</button>
   </div>
-  <div class="col-xs-12 row flex-items-xs-center">
-    <div class="col-xs-12 col-md-10 col-lg-8">
+  <div class="clr-col-12 clr-row clr-justify-content-center">
+    <div class="clr-col-12 clr-col-md-10 clr-col-lg-8">
       <memer-category-add *ngIf="showingNewCategoryForm" (save)="save($event)" (cancel)="cancel()"></memer-category-add>
       <clr-datagrid *ngIf="categories">
         <clr-dg-column></clr-dg-column>
@@ -14,7 +15,8 @@
 
         <clr-dg-row *clrDgItems="let category of categories">
           <clr-dg-cell>
-            <clr-icon (click)="stageCategoryForDelete(category)" shape="trash" class="delete is-danger" title="delete"></clr-icon>
+            <clr-icon (click)="stageCategoryForDelete(category)" shape="trash" class="delete is-danger" title="delete">
+            </clr-icon>
           </clr-dg-cell>
           <clr-dg-cell class="description">{{category.description|uppercase}}</clr-dg-cell>
         </clr-dg-row>

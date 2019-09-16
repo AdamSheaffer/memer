@@ -12,7 +12,7 @@ describe('GifOptionsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      declarations: [ GifOptionsComponent ],
+      declarations: [GifOptionsComponent],
       providers: [
         {
           provide: ThemeService,
@@ -20,7 +20,7 @@ describe('GifOptionsComponent', () => {
         }
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -34,15 +34,6 @@ describe('GifOptionsComponent', () => {
       }
     };
   });
-
-  it('should create', fakeAsync(() => {
-    component.ngOnInit();
-    tick(1000); // calling tick and destory for time interval
-    component.ngOnDestroy();
-    fixture.whenStable().then(() => {
-      expect(component).toBeTruthy();
-    });
-  }));
 
   it('should label elipsis', fakeAsync(() => {
     component.selectingIndicator = 'SELECTING...';

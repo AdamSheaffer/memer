@@ -14,7 +14,7 @@ export class GameSetupComponent implements OnInit {
   @Input() user: Player;
   @Output() cancelled = new EventEmitter<void>();
   @Output() createdGame = new EventEmitter<string>();
-  @ViewChild('wizard') wizard: ClrWizard;
+  @ViewChild('wizard', { static: false }) wizard: ClrWizard;
 
   gameSettings: GameSettings;
   creatingGame = false;

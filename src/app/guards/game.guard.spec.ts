@@ -1,8 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { GameGuard } from './';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { Router, ActivatedRoute, Params, ActivatedRouteSnapshot } from '@angular/router';
 import { GameService } from '../modules/core/services';
+import { Action, DocumentSnapshot } from 'angularfire2/firestore';
+import { Game } from '../interfaces';
 
 describe('AuthGuard', () => {
   let guard: GameGuard;
@@ -33,7 +35,7 @@ describe('AuthGuard', () => {
   it('allows navigation to existing game', (done: DoneFn) => {
     gameService.getGameById.and.returnValue(of({
       payload: { exists: true }
-    }));
+    } as Action<DocumentSnapshot<Game>>));
     const route = new ActivatedRouteSnapshot();
     route.params = { id: 'existing-game' };
 
@@ -46,7 +48,7 @@ describe('AuthGuard', () => {
   it('redirects and rejects non existing games', (done: DoneFn) => {
     gameService.getGameById.and.returnValue(of({
       payload: { exists: false }
-    }));
+    } as Action<DocumentSnapshot<Game>>));
     const route = new ActivatedRouteSnapshot();
     route.params = { id: 'non-existing-game' };
 
