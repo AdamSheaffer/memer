@@ -9,24 +9,24 @@ export const registerGamePlayed = functions.firestore
     const player = playerSnapshot.data();
 
     if (!player) {
-      console.error('Function triggered but no player was added')
+      console.error('Function triggered but no player was added');
       return Promise.reject();
     }
 
     const userId = player.uid;
 
-    const userSnaphot = await admin.firestore().doc(`users/${userId}`).get()
+    const userSnaphot = await admin.firestore().doc(`users/${userId}`).get();
     const user = userSnaphot.data();
 
     if (!user) {
-      console.error('Player added did not match any document in /users')
+      console.error('Player added did not match any document in /users');
       return Promise.reject();
     }
 
     const gamesPlayed = user.gamesPlayed ? user.gamesPlayed + 1 : 1;
 
     return userSnaphot.ref.update({ gamesPlayed });
-});
+  });
 
 export const onUserStatusChanged = functions.database
   .ref('status/{uid}')
@@ -68,7 +68,7 @@ export const onUserStatusChanged = functions.database
     updates.push(userUpdate);
 
     return Promise.all(updates);
-});
+  });
 
 export const updateOnlineCounter = functions.database
   .ref('status/{uid}')
