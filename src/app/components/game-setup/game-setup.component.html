@@ -1,4 +1,9 @@
-<clr-wizard #wizard [(clrWizardOpen)]="show" clrWizardSize="md" (clrWizardOnCancel)="cancel()">
+<clr-wizard
+  #wizard
+  [(clrWizardOpen)]="show"
+  clrWizardSize="md"
+  (clrWizardOnCancel)="cancel()"
+>
   <clr-wizard-title>GAME SETTINGS</clr-wizard-title>
 
   <!-- Bottom Controls -->
@@ -16,9 +21,15 @@
     </div>
     <div class="clr-row clr-justify-content-center setting-count-container">
       <clr-icon shape="users" size="96"></clr-icon>
-      <h2 class="setting-count">{{gameSettings.maxPlayers}}</h2>
+      <h2 class="setting-count">{{ gameSettings.maxPlayers }}</h2>
     </div>
-    <input [(ngModel)]="gameSettings.maxPlayers" type="range" min="3" max="8" step="1">
+    <input
+      [(ngModel)]="gameSettings.maxPlayers"
+      type="range"
+      min="3"
+      max="10"
+      step="1"
+    />
   </clr-wizard-page>
 
   <!-- Scoring -->
@@ -29,9 +40,15 @@
     </div>
     <div class="clr-row clr-justify-content-center setting-count-container">
       <clr-icon shape="heart" size="96"></clr-icon>
-      <h2 class="setting-count">{{gameSettings.pointsToWin}}</h2>
+      <h2 class="setting-count">{{ gameSettings.pointsToWin }}</h2>
     </div>
-    <input [(ngModel)]="gameSettings.pointsToWin" type="range" min="1" max="10" step="1">
+    <input
+      [(ngModel)]="gameSettings.pointsToWin"
+      type="range"
+      min="1"
+      max="10"
+      step="1"
+    />
   </clr-wizard-page>
 
   <!-- Reverse Round Frequency -->
@@ -45,10 +62,31 @@
         <clr-icon shape="repeat" size="96"></clr-icon>
       </div>
     </div>
-    <input [(ngModel)]="gameSettings.reverseRoundFrequency" type="range" min="0" max="0.5" step="0.25">
-    <h3 *ngIf="gameSettings.reverseRoundFrequency === 0" class="value-description">NEVER</h3>
-    <h3 *ngIf="gameSettings.reverseRoundFrequency === 0.25" class="value-description">OCCASIONALLY</h3>
-    <h3 *ngIf="gameSettings.reverseRoundFrequency === 0.5" class="value-description">HALF N' HALF</h3>
+    <input
+      [(ngModel)]="gameSettings.reverseRoundFrequency"
+      type="range"
+      min="0"
+      max="0.5"
+      step="0.25"
+    />
+    <h3
+      *ngIf="gameSettings.reverseRoundFrequency === 0"
+      class="value-description"
+    >
+      NEVER
+    </h3>
+    <h3
+      *ngIf="gameSettings.reverseRoundFrequency === 0.25"
+      class="value-description"
+    >
+      OCCASIONALLY
+    </h3>
+    <h3
+      *ngIf="gameSettings.reverseRoundFrequency === 0.5"
+      class="value-description"
+    >
+      HALF N' HALF
+    </h3>
   </clr-wizard-page>
 
   <!-- Round Timer -->
@@ -65,18 +103,33 @@
     <div class="clr-row clr-justify-content-center">
       <div class="btn-group">
         <div class="radio btn">
-          <input [(ngModel)]="gameSettings.roundTimer" type="radio" [value]="0" name="btn-group-limit-radios"
-            id="limit-radio-0">
+          <input
+            [(ngModel)]="gameSettings.roundTimer"
+            type="radio"
+            [value]="0"
+            name="btn-group-limit-radios"
+            id="limit-radio-0"
+          />
           <label for="limit-radio-0">NO LIMIT</label>
         </div>
         <div class="radio btn">
-          <input [(ngModel)]="gameSettings.roundTimer" type="radio" [value]="30" name="btn-group-limit-radios"
-            id="limit-radio-30">
+          <input
+            [(ngModel)]="gameSettings.roundTimer"
+            type="radio"
+            [value]="30"
+            name="btn-group-limit-radios"
+            id="limit-radio-30"
+          />
           <label for="limit-radio-30">30 SEC</label>
         </div>
         <div class="radio btn">
-          <input [(ngModel)]="gameSettings.roundTimer" type="radio" [value]="60" name="btn-group-limit-radios"
-            id="limit-radio-60">
+          <input
+            [(ngModel)]="gameSettings.roundTimer"
+            type="radio"
+            [value]="60"
+            name="btn-group-limit-radios"
+            id="limit-radio-60"
+          />
           <label for="limit-radio-60">60 SEC</label>
         </div>
       </div>
@@ -91,18 +144,32 @@
     </div>
     <div class="setting-count-container">
       <div class="clr-row clr-justify-content-center">
-        <clr-icon shape="briefcase" size="96" [ngClass]="{'is-solid': gameSettings.sfw}"></clr-icon>
+        <clr-icon
+          shape="briefcase"
+          size="96"
+          [ngClass]="{ 'is-solid': gameSettings.sfw }"
+        ></clr-icon>
       </div>
       <div class="clr-row clr-justify-content-center">
         <div class="btn-group">
           <div class="radio btn">
-            <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="true" name="btn-group-sfw-radios"
-              id="btn-radio-yes">
+            <input
+              [(ngModel)]="gameSettings.sfw"
+              type="radio"
+              [value]="true"
+              name="btn-group-sfw-radios"
+              id="btn-radio-yes"
+            />
             <label for="btn-radio-yes">YES</label>
           </div>
           <div class="radio btn">
-            <input [(ngModel)]="gameSettings.sfw" type="radio" [value]="false" name="btn-group-sfw-radios"
-              id="btn-radio-no">
+            <input
+              [(ngModel)]="gameSettings.sfw"
+              type="radio"
+              [value]="false"
+              name="btn-group-sfw-radios"
+              id="btn-radio-no"
+            />
             <label for="btn-radio-no">NO</label>
           </div>
         </div>
