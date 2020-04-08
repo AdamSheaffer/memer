@@ -1,34 +1,27 @@
 language: node_js
 node_js:
   - "10"
-
 branches:
   only:
     - master
-
 addons:
   chrome: stable
-
 before_install:
   - npm install -g firebase-tools
   - npm install -g @angular/cli
-
 install:
   - cd ./functions && npm install && cd ..
   - npm install
-
 cache:
   directories:
     - node_modules
-
 script:
   - ng lint
   - npm run test-headless
   - ng build --prod
-
 deploy:
   provider: firebase
   skip_cleanup: true
   token:
-    secure: $FIREBASE_TOKEN
-  project: "default"
+    secure: "FLo3W3GfbY2+Gngbg/zxwT6Q5YFMOP65g1GggSjQf5jxrwcyEKZQ2agkduKTWpSILw+09YfSyaO15sewgxfYCOaaqxajpO2Y5Uw4L2i8HY67v55/6qrgiB42Hwg4gzKO5Z+rCljD0NrMQwF/EeaPF6H/aLOcaULvXQ3aRzwpNbZ0vyjQxVCibhbHdQCrpm57L1hEymNbyepQFSt+XU6f3fdyuma6OENswyzs+C9o8llNhZWfp4cTiW9T1TcnqGrKCa/zAPY/yJMiXsu7Kg93w3m6K98HryfWYq3FYT2yEC5XqlYmNlUgv+WHj969YL6a2R/iAcyi20kjGxdFcv7YF1y2CYap6KCkXT9kF66Uewq4y1UKw76o+T50DvTHYCGfJZpr8u7/TcY4C9ro5RchBS0uXJ7bbmPFoCjlnCP8rllcWZR6wDPy5rVv3FedDaEX9YQHWRY3DMzCWT7hxHJvZ/cjJJ62W/Jf0MuwXa7ZGIphnYSVTY3xMHrXOC1FftVT5TXsi2fa/WgPbB0406Oyo47XgTzipj2MT7LCQEHRUlJLarBTKdErm4JJTqcuOttU5+OgSAjKexoxA792kP5j8+CqMzCVKu5z/6M5wO0uc/FKoimWvb3MbA/UVPVnm4aCP1k1IbCFJKfWeXNHwHEZuf3SRl897FbRF0QgrFoRNDU="
+  project: default
