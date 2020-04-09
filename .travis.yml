@@ -22,4 +22,4 @@ script:
 deploy:
   provider: firebase
   skip_cleanup: true
-  script: firebase deploy --token "$FIREBASE_TOKEN" --project=i-memer
+  script: firebase use default && firebase deploy --token "$FIREBASE_TOKEN"
