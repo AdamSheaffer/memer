@@ -22,4 +22,6 @@ script:
 deploy:
   provider: firebase
   skip_cleanup: true
-  script: firebase use default && firebase deploy --token "$FIREBASE_TOKEN"
+  token:
+    secure: "VAIbKfzkZ7t3aV80Bmo+jBPvvG1ZQfzNwPtbE7Zyp96KDRAMjZ7SR2jjnnK33DOwve17hKRHllCrZLNUGTwNdFDeK3u1QeA25UMzsdiKVD1cyNbnWp1h+t82i5V/4EI24KKV9XNAstI+vEpd6wJ7Ul0PpteEfx9KvSXDre6FMiGH6LTAUPDlw0rvK227onPr8R1AKFQLuewlkQZ+dFV1NEyd6Ua1QOJpK1ey2JDBv3P/p/dxjOUszy94ZVL6JjafTV64SOsucGJUHycq+Bp+dbQL5uymKhTzEx6p7Dl+/U7PE6cyE5zyXJeQ0D0q7cgJnhtdA6kp1SDSwPLlz6ZRcDEldPlzdIGcFoeOgjvEM4O9XmO4VDFKzIlw/9MzYMwuapRTq0g7+YNBpZnS7dV5GXZSs2iL7Yd/tz9D8LQo1Gsar5JLK8uP2YxmQVu8JSNra13GUU2k/pZJBbM6nWO7A271ircTUOnKT4cXMnSw09g7licSDgK6E8fN4+6YtxEdXjCTWAg7ln6DCMnpXW8I8KdxJ5FRNzZf4GcBOcRfyXmWR2uxThX6wqEkcvxJYYcI79x00KEjCShjHNFiEsD4DHL470lUoBI3Je9Mm9H+w/8Qhe/s1QYiPb4ICLWU145w7KOFbS89zpTu3TMhvlQrFjxNLcgiEZM91tMdE8ubZVM="
+  project: default
