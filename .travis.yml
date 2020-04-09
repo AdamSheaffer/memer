@@ -22,9 +22,4 @@ script:
 deploy:
   provider: firebase
   skip_cleanup: true
-  token:
-    secure: "$FIREBASE_TOKEN"
-  project: i-memer
-env:
-  global:
-    secure: RNpwviuQbZBjym093ROmLIBOeU9n1DbWnoUTCLnogRNb5Ib3teycVtzaIfx8o5zrlRJ2q4oeko7gJ0RvBPHZkx0wPIRp9nTcw0YcRjxHy9KHu21wMPO3ox+eYaBgWugP6pDpCQQNmX3293uddh+Ba6Vn0f7xbXt8h2M2abKPpBvPnxsf8AbPe39MfEpWolAIJXAI1YdylpKNL1kzkJPzhzdhvUa1h8xL9H3dTzqWXqKzpw4vsPh2QJ0CAxd9jQUzsiI5vQe9qWrIj5TMGqa8+LvWpaDYgjKfjIZE6fbzom1kQJpP83Q2Fq39gDNvBlxoUVrn9WpQWAuRYpZ53z9i9zvKvKtw7i1UFYSlUzLSH3GT4z390lMn1m2Pmq02LmVLPuak9cd6D37FiI7j7ppR2kcPtViYniAPfhoEj5smoMRDqYDpsDa2+zvZEsyjc3JsPr5xaZEvGddoz4Bhdn1qFkHtvxiKNfU6J2b7dI3Yl1sBACF4lUunwknNOaaoeRY8hzot/nhKsOWqpFn/YX+r8q1t2kfdx+PfwQJU2h/pwB6e8zShXgGKMfPWwGiZK4YnO4k2xTae81mUeZVxU6u4LdeyhZ7nM4/P/PLCRRIzaPD4wsfNnMYKTycJOyN/4mppvBh0uySjf8QT1QyNiHMsxW1lzmT5yeMugU5jPvkR+B4=
+  script: firebase deploy --token "$FIREBASE_TOKEN" --project=i-memer
