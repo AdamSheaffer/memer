@@ -15,16 +15,17 @@ install:
 cache:
   directories:
     - node_modules
-script:
-  - ng build --prod
 jobs:
   include:
     - stage: test
       script: ng lint
     - script: npm run test-headless
+    - stage: compile
+    - script: ng build --prod
     - stage: deploy
-    - script: firebase deploy --token "$FIREBASE_TOKEN"
+    - script: firebase deploy --token "$FIREBASE_TOKEN" --project=i-memer
 stages:
   - test
+  - compile
   - name: deploy
     if: branch = master
